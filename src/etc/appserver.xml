@@ -1,0 +1,40 @@
+<appserver>
+    <containers>
+        <!--
+            This is an example of a container that uses a socket for
+            sending and receiving messages. This solution can be used
+            for clients connecting over a network.
+        -->
+        <container type="TechDivision\PersistenceContainer\Container">
+            <receiver type="TechDivision\ApplicationServer\SocketReceiver">
+	           	<worker type="TechDivision\PersistenceContainer\RequestHandler"/>
+	           	<stackable type="TechDivision\PersistenceContainer\WorkerRequest"/>
+                <params workerNumber="8" address="0.0.0.0" port="8585"/>
+            </receiver>
+        </container>
+        <!--
+            This is an example of a servlet container that uses a socket for
+            sending and receiving messages. This solution can be used for
+            clients connecting over a network.
+        -->
+        <container type="TechDivision\ServletContainer\Container">
+            <receiver type="TechDivision\ApplicationServer\SocketReceiver">
+	           	<worker type="TechDivision\ServletContainer\RequestHandler"/>
+	           	<stackable type="TechDivision\ServletContainer\WorkerRequest"/>
+                <params workerNumber="4" address="0.0.0.0" port="8586"/>
+            </receiver>
+        </container>
+        <!--
+            This is an example of a message queue that uses a socket to
+            receive messages. This solution can be used for clients connecting 
+            over a network.
+        -->
+        <container type="TechDivision\MessageQueue\Container">
+            <receiver type="TechDivision\MessageQueue\SocketReceiver">
+	           	<worker type="TechDivision\MessageQueue\RequestHandler"/>
+	           	<stackable type="TechDivision\MessageQueue\WorkerRequest"/>
+                <params workerNumber="10" address="0.0.0.0" port="8587"/>
+            </receiver>
+        </container>
+    </containers>
+</appserver>

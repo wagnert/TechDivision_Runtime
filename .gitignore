@@ -1,0 +1,10 @@
+/target
+/cookbooks
+/tmp
+/lib
+/instance-src
+/.vagrant
+/.idea
+url-pattern.txt
+Cheffile.lock
+build.properties

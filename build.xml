@@ -1,0 +1,427 @@
+<?xml version="1.0"?>
+<project name="ApplicationServer" default="deploy" basedir=".">
+
+    <property file="${basedir}/build.properties"/>
+    <property file="${basedir}/build.default.properties"/>
+    <property file="${basedir}/build.${os.family}.properties"/>
+    <property environment="env" />
+    <property name="namespace" value="ApplicationServer" />
+    <property name="codepool" value="core"/>
+    <property name="unique.name" value="${codepool}/${namespace}" />
+    <property name="lib.dir" value="${basedir}/lib" />
+    <property name="php-src.dir" value="${basedir}/src" />
+    <property name="php-test.dir" value="${basedir}/tests" />
+    <property name="php-target.dir" value="${basedir}/target"/>
+
+    <!-- ==================================================================== -->
+    <!-- Cleans the directories with the generated source files				  -->
+    <!-- ==================================================================== -->
+    <target name="clean" description="Cleans almost everything, so use carefully.">
+        <delete dir="${php-target.dir}" includeemptydirs="true" quiet="false" verbose="true" failonerror="true"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Prepares all the required directories								  -->
+    <!-- ==================================================================== -->
+    <target name="prepare" depends="clean" description="Prepares all the required directories.">
+        <mkdir dir="${php-target.dir}" />
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Copies the sources to the target directory							  -->
+    <!-- ==================================================================== -->
+    <target name="copy" depends="prepare" description="Copies the sources to the target directory.">
+        <copy todir="${php-target.dir}" preservelastmodified="true" overwrite="true">
+            <fileset dir="${php-src.dir}">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+    </target>
+    <!-- ==================================================================== -->
+    <!-- Copies the sources to the deploy directory     					  -->
+    <!-- ==================================================================== -->
+    <target name="deploy" depends="copy" description="Copies the sources to the deploy directory.">
+        <copy todir="${dir.www}/${deploy.dir}" preservelastmodified="true" overwrite="true">
+            <fileset dir="${php-target.dir}">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Generates the API documentation                                      -->
+    <!-- ==================================================================== -->
+    <target name="apidoc" description="Generates the API documentation.">
+        <exec executable="phpdoc">
+            <arg line="-ct type -ue on -s on -t ${php-target.dir}/docs -o HTML:frames:earthli -d ${php-src.dir}/app/code/core"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Runs the code sniffer and generates a report                         -->
+    <!-- ==================================================================== -->
+    <target name="phpcs" depends="apidoc" description="Runs the code sniffer and generates a report.">
+        <exec executable="phpcs" output="${php-target.dir}/reports/checkstyle.xml">
+            <arg line="--standard=ZEND --report=checkstyle ${php-src.dir}"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Runs the copy and paste detection                                    -->
+    <!-- ==================================================================== -->
+    <target name="phpcpd" depends="phpcs" description="Runs the copy and paste detection.">
+        <exec executable="phpcpd">
+            <arg line="--log-pmd ${php-target.dir}/reports/pmd-cpd.xml ${php-src.dir}"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Generate phploc.csv                                                  -->
+    <!-- ==================================================================== -->
+    <target name="phploc" depends="phpcpd" description="Generate phploc.csv">
+        <exec executable="phploc">
+            <arg line="--log-xml ${php-target.dir}/reports/phploc.xml ${php-src.dir}"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Runs the PHPDepend tool and generats a graphs                        -->
+    <!-- ==================================================================== -->
+    <target name="pdepend" depends="phploc" description="Runs the PHPDepend tool and generats a graphs.">
+        <exec executable="pdepend">
+            <arg line="--summary-xml=${php-target.dir}/reports/pdepend.xml --jdepend-xml=${php-target.dir}/reports/jdepend.xml --jdepend-chart=${php-target.dir}/reports/jdepend.svg --overview-pyramid=${php-target.dir}/reports/pdepend-pyramid.svg ${php-src.dir}" />
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Runs the PHP mess detector tool                                      -->
+    <!-- ==================================================================== -->
+    <target name="phpmd" depends="pdepend" description="Runs the PHP Mess detector tool.">
+        <exec executable="phpmd">
+            <arg line="${php-src.dir} xml codesize,unusedcode --reportfile ${php-target.dir}/reports/pmd.xml" />
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Copies the test sources to the target directory					  -->
+    <!-- ==================================================================== -->
+    <target name="copy-tests" depends="copy" description="Copies the test sources to the target directory.">
+        <copy todir="${php-target.dir}">
+            <fileset dir="${php-test.dir}">
+                <include name="**/*" />
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Runs the PHPUnit tests and generates a report                        -->
+    <!-- ==================================================================== -->
+    <target name="run-tests" depends="copy-tests" description="Runs the PHPUnit tests and generates a report.">
+        <exec executable="phpunit" dir="${php-target.dir}">
+            <arg line="--bootstrap bootstrap.php --configuration phpunit.xml.dist" />
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Runs the PHPUnit tests and generates a report						  -->
+    <!-- ==================================================================== -->
+    <target name="build" description="Runs the PHPUnit tests and generates a report.">
+        <antcall target="phpmd"/>
+        <antcall target="run-tests"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Prepares all the required directories								  -->
+    <!-- ==================================================================== -->
+    <target name="UPDATE-prepare" depends="clean" description="Prepares all the required directories.">
+        <mkdir dir="${php-target.dir}/pear/cfg" />
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Copies the sources to the target directory                           -->
+    <!-- ==================================================================== -->
+    <target name="UPDATE-copy" depends="UPDATE-prepare" description="Copies the sources to the target directory.">
+        <copy todir="${php-target.dir}/pear" preservelastmodified="true">
+            <fileset dir="${php-src.dir}">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+        <chmod file="${php-target.dir}/pear/bin/webapp" perm="ugo+rx" />
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Prepares the PEAR channel in the target directory, necessary for the -->
+    <!-- packages this project is related                                     -->
+    <!-- ==================================================================== -->
+    <target name="UPDATE-prepare-pear" depends="UPDATE-copy" description="Prepares the PEAR channel in the target directory, necessary for the packages this project is related.">
+        <!-- initialize the PEAR directory -->
+        <exec dir="${php-target.dir}" executable="${pear.bin}">
+            <arg value="config-create" />
+            <arg value="${php-target.dir}" />
+            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
+        </exec>
+        <exec dir="${php-target.dir}" executable="${pear.bin}">
+            <arg value="-c" />
+            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
+            <arg value="config-set" />
+            <arg value="preferred_state" />
+            <arg value="beta" />
+        </exec>
+        <exec dir="${php-target.dir}" executable="${pear.bin}">
+            <arg value="-c" />
+            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
+            <arg value="config-set" />
+            <arg value="www_dir" />
+            <arg value="${php-target.dir}/pear" />
+        </exec>
+        <exec dir="${php-target.dir}" executable="${pear.bin}">
+            <arg value="-c" />
+            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
+            <arg value="config-set" />
+            <arg value="php_dir" />
+            <arg value="${php-target.dir}/pear/app/code/lib" />
+        </exec>
+        <exec dir="${php-target.dir}" executable="${pear.bin}">
+            <arg value="-c" />
+            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
+            <arg value="config-set" />
+            <arg value="bin_dir" />
+            <arg value="${php-target.dir}/pear/bin" />
+        </exec>
+        <exec dir="${php-target.dir}" executable="${pear.bin}">
+            <arg value="-c" />
+            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
+            <arg value="config-set" />
+            <arg value="cache_dir" />
+            <arg value="${php-target.dir}/pear/var/cache" />
+        </exec>
+        <exec dir="${php-target.dir}" executable="${pear.bin}">
+            <arg value="-c" />
+            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
+            <arg value="config-set" />
+            <arg value="download_dir" />
+            <arg value="${php-target.dir}/pear/var/download" />
+        </exec>
+        <exec dir="${php-target.dir}" executable="${pear.bin}">
+            <arg value="-c" />
+            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
+            <arg value="config-set" />
+            <arg value="temp_dir" />
+            <arg value="${php-target.dir}/pear/var/temp" />
+        </exec>
+        <exec dir="${php-target.dir}" executable="${pear.bin}">
+            <arg value="-c" />
+            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
+            <arg value="config-set" />
+            <arg value="data_dir" />
+            <arg value="${php-target.dir}/pear/data" />
+        </exec>
+        <exec dir="${php-target.dir}" executable="${pear.bin}">
+            <arg value="-c" />
+            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
+            <arg value="install" />
+            <arg value="PEAR" />
+        </exec>
+        <exec dir="${php-target.dir}" executable="${pear.bin}">
+            <arg value="-c" />
+            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
+            <arg value="channel-update" />
+            <arg value="pear.php.net" />
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Initializes the PEAR channel in the target directory, necessary for  -->
+    <!-- the packages this project is related                                 -->
+    <!-- ==================================================================== -->
+    <target name="UPDATE-setup" depends="UPDATE-prepare-pear">
+        <exec dir="${php-target.dir}/pear" executable="${php-target.dir}/pear/bin/webapp">
+            <arg value="setup" />
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Merges the PEAR files with the TDProject sources                     -->
+    <!-- ==================================================================== -->
+    <target name="UPDATE-merge" depends="UPDATE-setup" description="Merges the PEAR files with the TDProject sources.">
+        <move todir="${php-target.dir}/appserver-${appserver.version}">
+            <fileset dir="${php-target.dir}/pear">
+                <include name="**/*"/>
+            </fileset>
+        </move>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Creates the zipped TAR file                                 		  -->
+    <!-- ==================================================================== -->
+    <target name="UPDATE-pack" depends="UPDATE-merge" description="Creates the zipped TAR file.">
+        <tar destfile="${php-target.dir}/appserver-${appserver.version}.tar.gz" compression="gzip">
+            <tarfileset dir="${php-target.dir}">
+                <include name="appserver-${appserver.version}/**/*"/>
+            </tarfileset>
+        </tar>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if PHP Source Package has been downloaded yet  		 	      -->
+    <!-- ==================================================================== -->
+    <target name="check-php-src-present" description="Check if PHP Source Package has been downloaded yet.">
+        <available file="${lib.dir}/php-${appserver.php.version}.tar.gz" property="php-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if pthreads Source Package has been downloaded yet  		 	  -->
+    <!-- ==================================================================== -->
+    <target name="check-pthreads-src-present" description="Check if pthreads Source Package has been downloaded yet.">
+        <available file="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" property="pthreads-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get PHP Source Package by given version number		  		          -->
+    <!-- ==================================================================== -->
+    <target name="get-php-src" depends="check-php-src-present" unless="php-src.present">
+        <get src="https://github.com/php/php-src/archive/php-${appserver.php.version}.tar.gz" dest="${lib.dir}"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get pthreads Source Package by given version number		  		  -->
+    <!-- ==================================================================== -->
+    <target name="get-pthreads-src" depends="check-pthreads-src-present" unless="pthreads-src.present">
+        <get src="${php-target.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${lib.dir}"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Compiles the ApplicationServer runtime environment                   -->
+    <!-- ==================================================================== -->
+    <target name="build-runtime" description="Compiles the ApplicationServer runtime environment.">
+
+        <antcall target="prepare"/>
+        <antcall target="get-php-src"/>
+        <antcall target="get-pthreads-src"/>
+
+        <untar src="${lib.dir}/php-${appserver.php.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+        <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+
+        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/pthreads">
+            <fileset dir="${php-target.dir}/pthreads-${appserver.pthreads.version}"/>
+        </move>
+
+        <chmod perm="755" dir="${php-target.dir}/php-src-php-${appserver.php.version}/build" includes="**/*"/>
+
+        <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="sh">
+            <arg value="buildconf"/>
+            <arg line="--force"/>
+        </exec>
+
+        <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="sh">
+            <arg value="configure"/>
+            <arg value="--prefix=${appserver.compile.prefix}"/>
+            <arg value="--with-libdir=${appserver.compile.libdir}"/>
+            <arg value="--with-config-file-path=${appserver.compile.prefix}/etc"/>
+            <arg value="--with-config-file-scan-dir=${appserver.compile.prefix}/etc/conf.d"/>
+            <arg value="--enable-libxml"/>
+            <arg value="--enable-session"/>
+            <arg value="--with-pcre-regex"/>
+            <arg value="--enable-xml"/>
+            <arg value="--enable-simplexml"/>
+            <arg value="--enable-filter"/>
+            <arg value="--disable-debug"/>
+            <arg value="--enable-inline-optimization"/>
+            <arg value="--disable-rpath"/>
+            <arg value="--disable-static"/>
+            <arg value="--enable-shared"/>
+            <arg value="--with-pic"/>
+            <arg value="--with-gnu-ld"/>
+            <arg value="--with-mysql"/>
+            <arg value="--with-gd"/>
+            <arg value="--with-jpeg-dir"/>
+            <arg value="--with-png-dir"/>
+            <arg value="--enable-exif"/>
+            <arg value="--with-zlib"/>
+            <arg value="--with-bz2"/>
+            <arg value="--with-curl"/>
+            <arg value="--with-mysqli"/>
+            <arg value="--with-freetype-dir"/>
+            <arg value="--enable-sockets"/>
+            <arg value="--enable-mbstring"/>
+            <arg value="--enable-gd-native-ttf"/>
+            <arg value="--enable-bcmath"/>
+            <arg value="--enable-zip"/>
+            <arg value="--with-pear=${appserver.compile.prefix}/app/lib"/>
+            <arg value="--with-openssl"/>
+            <arg value="--enable-phar"/>
+            <arg value="--enable-pdo"/>
+            <arg value="--with-pdo-mysql"/>
+            <arg value="--with-mysqli"/>
+            <arg value="--enable-maintainer-zts"/>
+            <arg value="--enable-roxen-zts"/>
+            <arg value="--with-mcrypt"/>
+            <arg value="--with-tsrm-pthreads"/>
+            <arg value="--enable-pcntl"/>
+            <arg value="--enable-pthreads=static"/>
+        </exec>
+
+        <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="make"/>
+
+        <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="make">
+            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+
+    </target>
+
+    <target name="prepare-runtime">
+
+        <copy todir="${php-target.dir}/re${appserver.compile.prefix}">
+            <fileset dir="${php-src.dir}">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="MAC-build-package">
+
+        <copy todir="${php-target.dir}/re">
+            <fileset dir="${basedir}/buildfiles/macosx">
+                <include name="**/*"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Creates a DEBIAN package with the local ApplicationServer runtime    -->
+    <!-- ==================================================================== -->
+    <target name="DEBIAN-build-package" description="Creates a DEBIAN package with the local ApplicationServer runtime.">
+
+        <!--
+        <antcall target="compile-runtime"/>
+
+        <copy todir="${php-target.dir}/re">
+            <fileset dir="${php-target.dir}/tmp">
+                <include name="${appserver.compile.prefix}/**"/>
+            </fileset>
+        </copy>
+        -->
+
+        <copy todir="${php-target.dir}/re">
+            <fileset dir="${basedir}/buildfiles/debian">
+                <include name="**/*"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+
+        <exec dir="${php-target.dir}" executable="dpkg-deb">
+            <arg line="--build ${php-target.dir}/re td-appserver-php5-re_${appserver.version}_amd64.deb"/>
+        </exec>
+
+    </target>
+</project>
