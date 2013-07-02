@@ -283,7 +283,7 @@
     <!-- Get PHP Source Package by given version number		  		          -->
     <!-- ==================================================================== -->
     <target name="get-php-src" depends="check-php-src-present" unless="php-src.present">
-        <get src="https://github.com/php/php-src/archive/php-${appserver.php.version}.tar.gz" dest="${lib.dir}"/>
+        <get src="http://de1.php.net/distributions/php-${appserver.php.version}.tar.gz" dest="${lib.dir}"/>
     </target>
 
     <!-- ==================================================================== -->
