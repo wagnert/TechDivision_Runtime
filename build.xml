@@ -25,6 +25,7 @@
     <!-- ==================================================================== -->
     <target name="prepare" depends="clean" description="Prepares all the required directories.">
         <mkdir dir="${php-target.dir}" />
+        <mkdir dir="${lib.dir}" />
     </target>
 
     <!-- ==================================================================== -->
@@ -305,18 +306,18 @@
         <untar src="${lib.dir}/php-${appserver.php.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
 
-        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/pthreads">
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/pthreads">
             <fileset dir="${php-target.dir}/pthreads-${appserver.pthreads.version}"/>
         </move>
 
-        <chmod perm="755" dir="${php-target.dir}/php-src-php-${appserver.php.version}/build" includes="**/*"/>
+        <chmod perm="755" dir="${php-target.dir}/php-${appserver.php.version}/build" includes="**/*"/>
 
-        <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="sh">
+        <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="sh">
             <arg value="buildconf"/>
             <arg line="--force"/>
         </exec>
 
-        <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="sh">
+        <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="sh">
             <arg value="configure"/>
             <arg value="--prefix=${appserver.compile.prefix}"/>
             <arg value="--with-libdir=${appserver.compile.libdir}"/>
@@ -364,9 +365,9 @@
             <arg value="--enable-pthreads=static"/>
         </exec>
 
-        <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="make"/>
+        <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make"/>
 
-        <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="make">
+        <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make">
             <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
