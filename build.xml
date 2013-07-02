@@ -312,6 +312,8 @@
 
         <chmod perm="755" dir="${php-target.dir}/php-${appserver.php.version}/build" includes="**/*"/>
 
+        <delete file="${php-target.dir}/php-${appserver.php.version}/configure"/>
+
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="sh">
             <arg value="buildconf"/>
             <arg line="--force"/>
