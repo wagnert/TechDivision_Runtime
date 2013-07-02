@@ -290,7 +290,7 @@
     <!-- Get pthreads Source Package by given version number		  		  -->
     <!-- ==================================================================== -->
     <target name="get-pthreads-src" depends="check-pthreads-src-present" unless="pthreads-src.present">
-        <get src="${php-target.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${lib.dir}"/>
+        <get src="http://pecl.php.net/get/pthreads-${appserver.pthreads.version}.tgz" dest="${lib.dir}"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -400,15 +400,13 @@
     <!-- ==================================================================== -->
     <target name="DEBIAN-build-package" description="Creates a DEBIAN package with the local ApplicationServer runtime.">
 
-        <!--
-        <antcall target="compile-runtime"/>
+        <antcall target="build-runtime"/>
 
         <copy todir="${php-target.dir}/re">
             <fileset dir="${php-target.dir}/tmp">
                 <include name="${appserver.compile.prefix}/**"/>
             </fileset>
         </copy>
-        -->
 
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/debian">
