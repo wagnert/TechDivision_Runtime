@@ -404,12 +404,6 @@
         <antcall target="build-runtime"/>
 
         <copy todir="${php-target.dir}/re">
-            <fileset dir="${php-target.dir}/tmp">
-                <include name="${appserver.compile.prefix}/**"/>
-            </fileset>
-        </copy>
-
-        <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/debian">
                 <include name="**/*"/>
             </fileset>
