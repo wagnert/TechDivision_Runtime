@@ -283,14 +283,14 @@
     <!-- Get PHP Source Package by given version number		  		          -->
     <!-- ==================================================================== -->
     <target name="get-php-src" depends="check-php-src-present" unless="php-src.present">
-        <get src="http://de1.php.net/distributions/php-${appserver.php.version}.tar.gz" dest="${lib.dir}"/>
+        <get src="http://de1.php.net/distributions/php-${appserver.php.version}.tar.gz" dest="${lib.dir}/php-${appserver.php.version}.tar.gz"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get pthreads Source Package by given version number		  		  -->
     <!-- ==================================================================== -->
     <target name="get-pthreads-src" depends="check-pthreads-src-present" unless="pthreads-src.present">
-        <get src="http://pecl.php.net/get/pthreads-${appserver.pthreads.version}.tgz" dest="${lib.dir}"/>
+        <get src="http://pecl.php.net/get/pthreads-${appserver.pthreads.version}.tgz" dest="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz"/>
     </target>
 
     <!-- ==================================================================== -->
