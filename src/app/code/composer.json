@@ -12,6 +12,9 @@
         "techdivision/persistencecontainer": "dev-master",
         "techdivision/persistencecontainerclient": "dev-master",
         "techdivision/messagequeue": "dev-master",
-        "techdivision/messagequeueclient": "dev-master"
+        "techdivision/messagequeueclient": "dev-master",
+        "doctrine/orm": "*",
+        "psr/log": "*",
+        "symfony/symfony": "*"
     }
 }

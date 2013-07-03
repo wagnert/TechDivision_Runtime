@@ -249,7 +249,7 @@
     <!-- ==================================================================== -->
     <!-- Creates a .pkg package with the local ApplicationServer runtime      -->
     <!-- ==================================================================== -->
-    <target name="create-pkg" depends="build-runtime">
+    <target name="create-pkg" depends="build-runtime" description="Creates a .pkg package with the local ApplicationServer runtime.">
         <exec dir="${basedir}" executable="pkgbuild">
             <arg value="--root"/>
             <arg value="${php-target.dir}/re/opt"/>
@@ -261,7 +261,7 @@
             <arg value="${appserver.version}"/>
             <arg value="--identifier"/>
             <arg value="com.techdivision.appserver"/>
-            <arg value="/tmp/ApplicationServer-${appserver.version}.pkg"/>
+            <arg value="${php-target.dir}/ApplicationServer-${appserver.version}.pkg"/>
         </exec>
     </target>
 
