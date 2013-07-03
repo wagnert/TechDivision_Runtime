@@ -333,8 +333,8 @@
             <arg value="--disable-debug"/>
             <arg value="--enable-inline-optimization"/>
             <arg value="--disable-rpath"/>
-            <arg value="--disable-static"/>
-            <arg value="--enable-shared"/>
+            <arg value="--disable-shared"/>
+            <arg value="--enable-static"/>
             <arg value="--with-pic"/>
             <arg value="--with-gnu-ld"/>
             <arg value="--with-mysql"/>
