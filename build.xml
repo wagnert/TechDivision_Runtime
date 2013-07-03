@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="ApplicationServer" default="deploy" basedir=".">
+<project name="TechDivision_Runtime" default="deploy" basedir=".">
 
     <property file="${basedir}/build.properties"/>
     <property file="${basedir}/build.default.properties"/>
@@ -134,138 +134,6 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Prepares all the required directories								  -->
-    <!-- ==================================================================== -->
-    <target name="UPDATE-prepare" depends="clean" description="Prepares all the required directories.">
-        <mkdir dir="${php-target.dir}/pear/cfg" />
-    </target>
-
-    <!-- ==================================================================== -->
-    <!-- Copies the sources to the target directory                           -->
-    <!-- ==================================================================== -->
-    <target name="UPDATE-copy" depends="UPDATE-prepare" description="Copies the sources to the target directory.">
-        <copy todir="${php-target.dir}/pear" preservelastmodified="true">
-            <fileset dir="${php-src.dir}">
-                <include name="**/*" />
-            </fileset>
-        </copy>
-        <chmod file="${php-target.dir}/pear/bin/webapp" perm="ugo+rx" />
-    </target>
-
-    <!-- ==================================================================== -->
-    <!-- Prepares the PEAR channel in the target directory, necessary for the -->
-    <!-- packages this project is related                                     -->
-    <!-- ==================================================================== -->
-    <target name="UPDATE-prepare-pear" depends="UPDATE-copy" description="Prepares the PEAR channel in the target directory, necessary for the packages this project is related.">
-        <!-- initialize the PEAR directory -->
-        <exec dir="${php-target.dir}" executable="${pear.bin}">
-            <arg value="config-create" />
-            <arg value="${php-target.dir}" />
-            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
-        </exec>
-        <exec dir="${php-target.dir}" executable="${pear.bin}">
-            <arg value="-c" />
-            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
-            <arg value="config-set" />
-            <arg value="preferred_state" />
-            <arg value="beta" />
-        </exec>
-        <exec dir="${php-target.dir}" executable="${pear.bin}">
-            <arg value="-c" />
-            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
-            <arg value="config-set" />
-            <arg value="www_dir" />
-            <arg value="${php-target.dir}/pear" />
-        </exec>
-        <exec dir="${php-target.dir}" executable="${pear.bin}">
-            <arg value="-c" />
-            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
-            <arg value="config-set" />
-            <arg value="php_dir" />
-            <arg value="${php-target.dir}/pear/app/code/lib" />
-        </exec>
-        <exec dir="${php-target.dir}" executable="${pear.bin}">
-            <arg value="-c" />
-            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
-            <arg value="config-set" />
-            <arg value="bin_dir" />
-            <arg value="${php-target.dir}/pear/bin" />
-        </exec>
-        <exec dir="${php-target.dir}" executable="${pear.bin}">
-            <arg value="-c" />
-            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
-            <arg value="config-set" />
-            <arg value="cache_dir" />
-            <arg value="${php-target.dir}/pear/var/cache" />
-        </exec>
-        <exec dir="${php-target.dir}" executable="${pear.bin}">
-            <arg value="-c" />
-            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
-            <arg value="config-set" />
-            <arg value="download_dir" />
-            <arg value="${php-target.dir}/pear/var/download" />
-        </exec>
-        <exec dir="${php-target.dir}" executable="${pear.bin}">
-            <arg value="-c" />
-            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
-            <arg value="config-set" />
-            <arg value="temp_dir" />
-            <arg value="${php-target.dir}/pear/var/temp" />
-        </exec>
-        <exec dir="${php-target.dir}" executable="${pear.bin}">
-            <arg value="-c" />
-            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
-            <arg value="config-set" />
-            <arg value="data_dir" />
-            <arg value="${php-target.dir}/pear/data" />
-        </exec>
-        <exec dir="${php-target.dir}" executable="${pear.bin}">
-            <arg value="-c" />
-            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
-            <arg value="install" />
-            <arg value="PEAR" />
-        </exec>
-        <exec dir="${php-target.dir}" executable="${pear.bin}">
-            <arg value="-c" />
-            <arg value="${php-target.dir}/pear/cfg/.pearrc" />
-            <arg value="channel-update" />
-            <arg value="pear.php.net" />
-        </exec>
-    </target>
-
-    <!-- ==================================================================== -->
-    <!-- Initializes the PEAR channel in the target directory, necessary for  -->
-    <!-- the packages this project is related                                 -->
-    <!-- ==================================================================== -->
-    <target name="UPDATE-setup" depends="UPDATE-prepare-pear">
-        <exec dir="${php-target.dir}/pear" executable="${php-target.dir}/pear/bin/webapp">
-            <arg value="setup" />
-        </exec>
-    </target>
-
-    <!-- ==================================================================== -->
-    <!-- Merges the PEAR files with the TDProject sources                     -->
-    <!-- ==================================================================== -->
-    <target name="UPDATE-merge" depends="UPDATE-setup" description="Merges the PEAR files with the TDProject sources.">
-        <move todir="${php-target.dir}/appserver-${appserver.version}">
-            <fileset dir="${php-target.dir}/pear">
-                <include name="**/*"/>
-            </fileset>
-        </move>
-    </target>
-
-    <!-- ==================================================================== -->
-    <!-- Creates the zipped TAR file                                 		  -->
-    <!-- ==================================================================== -->
-    <target name="UPDATE-pack" depends="UPDATE-merge" description="Creates the zipped TAR file.">
-        <tar destfile="${php-target.dir}/appserver-${appserver.version}.tar.gz" compression="gzip">
-            <tarfileset dir="${php-target.dir}">
-                <include name="appserver-${appserver.version}/**/*"/>
-            </tarfileset>
-        </tar>
-    </target>
-
-    <!-- ==================================================================== -->
     <!-- Check if PHP Source Package has been downloaded yet  		 	      -->
     <!-- ==================================================================== -->
     <target name="check-php-src-present" description="Check if PHP Source Package has been downloaded yet.">
@@ -280,17 +148,60 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Check if memcached Source Package has been downloaded yet  		  -->
+    <!-- ==================================================================== -->
+    <target name="check-memcached-src-present" description="Check if memcached Source Package has been downloaded yet.">
+        <available file="${lib.dir}/memcached-${appserver.memcached.version}.tgz" property="memcached-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Get PHP Source Package by given version number		  		          -->
     <!-- ==================================================================== -->
     <target name="get-php-src" depends="check-php-src-present" unless="php-src.present">
-        <get src="https://github.com/php/php-src/archive/php-${appserver.php.version}.tar.gz" dest="${lib.dir}"/>
+        <get src="https://github.com/php/php-src/archive/php-${appserver.php.version}.tar.gz" dest="${lib.dir}/php-${appserver.php.version}.tar.gz"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get pthreads Source Package by given version number		  		  -->
     <!-- ==================================================================== -->
     <target name="get-pthreads-src" depends="check-pthreads-src-present" unless="pthreads-src.present">
-        <get src="${php-target.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${lib.dir}"/>
+        <get src="http://pecl.php.net/get/pthreads-${appserver.pthreads.version}.tgz" dest="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get memcached Source Package by given version number		  		  -->
+    <!-- ==================================================================== -->
+    <target name="get-memcached-src" depends="check-memcached-src-present" unless="memcached-src.present">
+        <get src="http://pecl.php.net/get/memcached-${appserver.memcached.version}.tgz" dest="${lib.dir}/memcached-${appserver.memcached.version}.tgz"/>
+    </target>
+
+    <target name="prepare-source" description="Perpares the PHP sources">
+
+        <antcall target="prepare"/>
+        <antcall target="get-php-src"/>
+
+        <!--
+        <antcall target="get-pthreads-src"/>
+        <antcall target="get-memcached-src"/>
+        -->
+
+        <untar src="${lib.dir}/php-${appserver.php.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+
+        <!--
+        <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <untar src="${lib.dir}/memcached-${appserver.memcached.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+
+        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/pthreads">
+            <fileset dir="${php-target.dir}/pthreads-${appserver.pthreads.version}"/>
+        </move>
+
+        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/memcached">
+            <fileset dir="${php-target.dir}/memcached-${appserver.memcached.version}"/>
+        </move>
+        -->
+
+        <chmod perm="755" dir="${php-target.dir}/php-src-php-${appserver.php.version}/build" includes="**/*"/>
+
     </target>
 
     <!-- ==================================================================== -->
@@ -298,18 +209,7 @@
     <!-- ==================================================================== -->
     <target name="build-runtime" description="Compiles the ApplicationServer runtime environment.">
 
-        <antcall target="prepare"/>
-        <antcall target="get-php-src"/>
-        <antcall target="get-pthreads-src"/>
-
-        <untar src="${lib.dir}/php-${appserver.php.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
-        <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-
-        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/pthreads">
-            <fileset dir="${php-target.dir}/pthreads-${appserver.pthreads.version}"/>
-        </move>
-
-        <chmod perm="755" dir="${php-target.dir}/php-src-php-${appserver.php.version}/build" includes="**/*"/>
+        <antcall target="prepare-source"/>
 
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="sh">
             <arg value="buildconf"/>
@@ -350,18 +250,17 @@
             <arg value="--enable-gd-native-ttf"/>
             <arg value="--enable-bcmath"/>
             <arg value="--enable-zip"/>
-            <arg value="--with-pear=${appserver.compile.prefix}/app/lib"/>
+            <arg value="--with-pear=${appserver.compile.prefix}/app/code/lib"/>
             <arg value="--with-openssl"/>
             <arg value="--enable-phar"/>
             <arg value="--enable-pdo"/>
             <arg value="--with-pdo-mysql"/>
             <arg value="--with-mysqli"/>
-            <arg value="--enable-maintainer-zts"/>
             <arg value="--enable-roxen-zts"/>
             <arg value="--with-mcrypt"/>
-            <arg value="--with-tsrm-pthreads"/>
             <arg value="--enable-pcntl"/>
-            <arg value="--enable-pthreads=static"/>
+            <arg value="--with-tsrm-pthreads"/>
+            <arg value="--enable-maintainer-zts"/>
         </exec>
 
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="make"/>
@@ -373,19 +272,41 @@
 
     </target>
 
+    <!--
+    <target name="build-pthreads">
+
+        <exec dir="${php-target.dir}/re/opt/appserver" executable="${php-target.dir}/re/opt/appserver/bin/pecl">
+            <arg line="install -R ${php-target.dir}/re/opt/appserver pthreads"/>
+        </exec>
+
+    </target>
+    -->
+
     <target name="prepare-runtime">
+
+        <!--
+        <antcall target="build-runtime"/>
+        -->
 
         <copy todir="${php-target.dir}/re${appserver.compile.prefix}">
             <fileset dir="${php-src.dir}">
                 <include name="**/*"/>
             </fileset>
         </copy>
+
+        <!--
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/app/code" executable="composer">
+            <arg value="install"/>
+        </exec>
+        -->
+
     </target>
 
+    <!--
     <target name="MAC-build-package">
 
         <copy todir="${php-target.dir}/re">
-            <fileset dir="${basedir}/buildfiles/macosx">
+            <fileset dir="${php-src.dir}">
                 <include name="**/*"/>
             </fileset>
             <filterchain>
@@ -394,6 +315,7 @@
         </copy>
 
     </target>
+    -->
 
     <!-- ==================================================================== -->
     <!-- Creates a DEBIAN package with the local ApplicationServer runtime    -->
@@ -424,4 +346,29 @@
         </exec>
 
     </target>
+
+    <target name="create-pkg">
+
+        <!--
+        <antcall target="prepare-runtime"/>
+        -->
+
+        <exec dir="${basedir}" executable="pkgbuild">
+
+            <arg value="--root"/>
+            <arg value="${php-target.dir}/re/opt"/>
+            <arg value="--scripts"/>
+            <arg value="${basedir}/buildfiles/macosx/scripts"/>
+            <arg value="--install-location"/>
+            <arg value="/opt"/>
+            <arg value="--version"/>
+            <arg value="${appserver.version}"/>
+            <arg value="--identifier"/>
+            <arg value="com.techdivision.appserver"/>
+            <arg value="/tmp/ApplicationServer-${appserver.version}.pkg"/>
+
+        </exec>
+
+    </target>
+
 </project>
