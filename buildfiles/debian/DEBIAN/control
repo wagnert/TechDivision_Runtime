@@ -1,7 +1,8 @@
-Package: td-appserver-php5-re
+Package: appserver
 Section: php
 Priority: optional
 Maintainer: Philipp Dittert <p.dittert@techdivision.com>
+Uploaders: Johann Zelger <j.zelger@techdivision.com>
 Depends: libc6,
   libbz2-1.0,
   libcomerr2,
@@ -24,7 +25,7 @@ Depends: libc6,
   libpng12-0,
   libjpeg62,
   libcurl3
-Architecture: amd64
+Architecture: ${appserver.architecture}
 Version: ${appserver.version}
-Homepage: https://github.com/techdivision/ApplicationServer
-Description: php-${appserver.php.version} compiled with ptheads and memcached
+Homepage: https://github.com/techdivision/TechDivision_Runtime
+Description: php appserver
