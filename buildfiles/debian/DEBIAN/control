@@ -2,7 +2,6 @@ Package: appserver
 Section: php
 Priority: optional
 Maintainer: Philipp Dittert <p.dittert@techdivision.com>
-Uploaders: Johann Zelger <j.zelger@techdivision.com>
 Depends: libc6,
   libbz2-1.0,
   libcomerr2,
