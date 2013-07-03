@@ -297,7 +297,7 @@
     <!-- ==================================================================== -->
     <!-- Compiles the ApplicationServer runtime environment                   -->
     <!-- ==================================================================== -->
-    <target name="build-runtime" description="Compiles the ApplicationServer runtime environment.">
+    <target name="build-runtime" depends="prepare-runtime" description="Compiles the ApplicationServer runtime environment.">
 
         <antcall target="prepare"/>
         <antcall target="get-php-src"/>
@@ -366,18 +366,14 @@
             <arg value="--enable-pcntl"/>
             <arg value="--enable-pthreads=static"/>
         </exec>
-
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make"/>
-
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make">
             <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
-
     </target>
 
     <target name="prepare-runtime">
-
         <copy todir="${php-target.dir}/re${appserver.compile.prefix}">
             <fileset dir="${php-src.dir}">
                 <include name="**/*"/>
@@ -386,7 +382,6 @@
     </target>
 
     <target name="MAC-build-package">
-
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/macosx">
                 <include name="**/*"/>
@@ -415,7 +410,7 @@
         </copy>
 
         <exec dir="${php-target.dir}" executable="dpkg-deb">
-            <arg line="--build ${php-target.dir}/re td-appserver-php5-re_${appserver.version}_amd64.deb"/>
+            <arg line="--build ${php-target.dir}/re appserver-${appserver.version}_${appserver.architecture}.deb"/>
         </exec>
 
     </target>
