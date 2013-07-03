@@ -299,7 +299,6 @@
     <!-- ==================================================================== -->
     <target name="build-runtime" depends="prepare-runtime" description="Compiles the ApplicationServer runtime environment.">
 
-        <antcall target="prepare"/>
         <antcall target="get-php-src"/>
         <antcall target="get-pthreads-src"/>
 
@@ -373,7 +372,7 @@
         </exec>
     </target>
 
-    <target name="prepare-runtime">
+    <target name="prepare-runtime" depends="prepare">
         <copy todir="${php-target.dir}/re${appserver.compile.prefix}">
             <fileset dir="${php-src.dir}">
                 <include name="**/*"/>
