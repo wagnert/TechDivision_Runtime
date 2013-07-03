@@ -24,7 +24,14 @@ Depends: libc6,
   libmcrypt4,
   libpng12-0,
   libjpeg62,
-  libcurl3
+  libcurl3,
+  libltdl7,
+  libjpeg8,
+  libmemcached-dev,
+  curl,
+  make,
+  autoconf
+
 Architecture: ${appserver.architecture}
 Version: ${appserver.version}
 Homepage: https://github.com/techdivision/TechDivision_Runtime
