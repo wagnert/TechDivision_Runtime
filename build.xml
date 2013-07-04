@@ -294,6 +294,7 @@
                 <expandproperties/>
             </filterchain>
         </copy>
+        <chmod perm="755" file="${php-target.dir}/re/DEBIAN/postinst" />
         <exec dir="${php-target.dir}" executable="dpkg-deb">
             <arg line="--build ${php-target.dir}/re appserver-${appserver.version}_${appserver.architecture}.deb"/>
         </exec>
