@@ -14,4 +14,6 @@ ln -s /opt/appserver/bin/composer.phar /opt/appserver/bin/composer
 chmod +x /opt/appserver/appserver
 #ln -s /opt/appserver/appserver /usr/local/bin/appserver
 
+libtool --finish /opt/appserver/lib
+
 exit 0
