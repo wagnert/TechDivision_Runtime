@@ -30,7 +30,6 @@ Depends: libc6,
   curl,
   make,
   autoconf
-
 Architecture: ${appserver.architecture}
 Version: ${appserver.version}
 Homepage: https://github.com/techdivision/TechDivision_Runtime

@@ -4,12 +4,10 @@
 /opt/appserver/bin/pecl upgrade memcached
 
 curl -sS https://getcomposer.org/installer | sudo /opt/appserver/bin/php -- --install-dir /opt/appserver/bin
-echo "/opt/appserver/bin/php /opt/appserver/bin/composer.phar" >> /opt/appserver/bin/composer
 
-/opt/appserver/bin/composer --working-dir=/opt/appserver/app/code update
+chmod 755 /opt/appserver/appserver
+chmod 755 -R /opt/appserver/bin
 
-chmod a+x /opt/appserver/appserver
-chmod a+x -R /opt/appserver/bin
-#ln -s /opt/appserver/appserver /usr/local/bin/appserver
+/opt/appserver/bin/composer update
 
 exit 0
