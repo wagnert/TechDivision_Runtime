@@ -4,12 +4,12 @@
 # description: appserver daemon
 # processname: appserver
 
-DAEMON_PATH="/opt/appserver/bin/appserver"
+DAEMON_PATH="/opt/appserver"
 
-DAEMON=appserver
+DAEMON="./appserver"
 DAEMONOPTS=""
 
-NAME=appserver
+NAME="appserver"
 DESC="appserver daemon init script"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
