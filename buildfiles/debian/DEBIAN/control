@@ -29,7 +29,8 @@ Depends: libc6,
   libmemcached-dev,
   curl,
   make,
-  autoconf
+  autoconf,
+  git
 Architecture: ${appserver.architecture}
 Version: ${appserver.version}
 Homepage: https://github.com/techdivision/TechDivision_Runtime
