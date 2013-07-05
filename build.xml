@@ -160,10 +160,9 @@
     <target name="prepare-libjpeg">
         <untar src="${lib.dir}/jpegsrc.v9.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <exec dir="${php-target.dir}/jpeg-9" executable="sh">
+            <env key="CC" value="gcc -arch x86_64"/>
             <arg value="configure"/>
             <arg value="--prefix=${appserver.compile.prefix}"/>
-            <arg value="--enable-shared=no"/>
-            <arg value="--enable-static"/>
         </exec>
         <chmod perm="755" dir="${php-target.dir}/jpeg-9" includes="install-sh"/>
         <exec dir="${php-target.dir}/jpeg-9" executable="make"/>
@@ -176,10 +175,9 @@
     <target name="prepare-libpng">
         <untar src="${lib.dir}/libpng-1.6.2.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <exec dir="${php-target.dir}/libpng-1.6.2" executable="sh">
+            <env key="CC" value="gcc -arch x86_64"/>
             <arg value="configure"/>
             <arg value="--prefix=${appserver.compile.prefix}"/>
-            <arg value="--enable-shared=no"/>
-            <arg value="--enable-static"/>
         </exec>
         <chmod perm="755" dir="${php-target.dir}/libpng-1.6.2" includes="install-sh"/>
         <exec dir="${php-target.dir}/libpng-1.6.2" executable="make"/>
@@ -192,10 +190,9 @@
     <target name="prepare-freetype">
         <untar src="${lib.dir}/freetype-2.5.0.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <exec dir="${php-target.dir}/freetype-2.5.0" executable="sh">
+            <env key="CC" value="gcc -arch x86_64"/>
             <arg value="configure"/>
             <arg value="--prefix=${appserver.compile.prefix}"/>
-            <arg value="--enable-shared=no"/>
-            <arg value="--enable-static"/>
         </exec>
         <chmod perm="755" dir="${php-target.dir}/freetype-2.5.0/builds" includes="**/*"/>
         <exec dir="${php-target.dir}/freetype-2.5.0" executable="make"/>
@@ -245,23 +242,27 @@
             <arg value="--disable-debug"/>
             <arg value="--enable-inline-optimization"/>
             <arg value="--disable-rpath"/>
-            <arg value="--enable-shared"/>
+            <arg value="--disable-shared"/>
             <arg value="--enable-static"/>
             <arg value="--with-pic"/>
             <arg value="--with-gnu-ld"/>
             <arg value="--with-mysql"/>
             <arg value="--with-gd"/>
+            <arg value="--with-jpeg-dir"/>
+            <arg value="--with-png-dir"/>
             <arg value="--enable-exif"/>
             <arg value="--with-zlib"/>
             <arg value="--with-bz2"/>
             <arg value="--with-curl"/>
             <arg value="--with-mysqli"/>
+            <arg value="--with-freetype-dir"/>
             <arg value="--enable-sockets"/>
             <arg value="--enable-mbstring"/>
             <arg value="--enable-gd-native-ttf"/>
             <arg value="--enable-bcmath"/>
             <arg value="--enable-zip"/>
             <arg value="--with-pear=${appserver.compile.prefix}/app/code/lib"/>
+            <arg value="--with-openssl"/>
             <arg value="--enable-phar"/>
             <arg value="--enable-pdo"/>
             <arg value="--with-pdo-mysql"/>
@@ -271,9 +272,6 @@
             <arg value="--enable-pcntl"/>
             <arg value="--with-tsrm-pthreads"/>
             <arg value="--enable-maintainer-zts"/>
-            <arg value="--with-freetype-dir=${php-target.dir}/re${appserver.compile.prefix}/include"/>
-            <arg value="--with-jpeg-dir=${php-target.dir}/re${appserver.compile.prefix}/include"/>
-            <arg value="--with-png-dir=${php-target.dir}/re${appserver.compile.prefix}/include"/>
         </exec>
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="make"/>
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="make">
