@@ -5,6 +5,7 @@
 /instance-src
 /.vagrant
 /.idea
+.DS_Store
 url-pattern.txt
 Cheffile.lock
 build.properties
