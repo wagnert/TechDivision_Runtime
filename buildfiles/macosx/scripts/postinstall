@@ -1,19 +1,10 @@
 #!/bin/sh
 
-export PHP_AUTOCONF=/usr/local/bin/autoconf
-export PHP_AUTOHEADER=/usr/local/bin/autoheader
-
-/opt/appserver/bin/pecl upgrade pthreads
-/opt/appserver/bin/pecl upgrade memcached
-
 curl -sS https://getcomposer.org/installer | sudo /opt/appserver/bin/php -- --install-dir /opt/appserver/bin
-ln -s /opt/appserver/bin/composer.phar /opt/appserver/bin/composer
+chmod +x /opt/appserver/bin/composer
 
-/opt/appserver/bin/composer --working-dir=/opt/appserver/app/code update
+/opt/appserver/bin/composer update
 
 chmod +x /opt/appserver/appserver
-#ln -s /opt/appserver/appserver /usr/local/bin/appserver
-
-libtool --finish /opt/appserver/lib
 
 exit 0

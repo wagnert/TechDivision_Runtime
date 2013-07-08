@@ -142,6 +142,20 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Check if PHP source package has been downloaded yet  		 	      -->
+    <!-- ==================================================================== -->
+    <target name="check-memcached-src-present" description="Check if PHP Source Package has been downloaded yet.">
+        <available file="${lib.dir}/memcached-${appserver.memcached.version}.tgz" property="memcached-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if PHP source package has been downloaded yet  		 	      -->
+    <!-- ==================================================================== -->
+    <target name="check-pthreads-src-present" description="Check if PHP Source Package has been downloaded yet.">
+        <available file="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" property="pthreads-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Get PHP source package by given version number		  		          -->
     <!-- ==================================================================== -->
     <target name="get-php-src" depends="check-php-src-present" unless="php-src.present">
@@ -149,54 +163,102 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Get memcached source package by given version number		          -->
+    <!-- ==================================================================== -->
+    <target name="get-memcached-src" depends="check-memcached-src-present" unless="memcached-src.present">
+        <get src="http://pecl.php.net/get/memcached-${appserver.memcached.version}.tgz" dest="${lib.dir}/memcached-${appserver.memcached.version}.tgz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get memcached source package by given version number		          -->
+    <!-- ==================================================================== -->
+    <target name="get-pthreads-src" depends="check-pthreads-src-present" unless="pthreads-src.present">
+        <get src="http://pecl.php.net/get/pthreads-${appserver.pthreads.version}.tgz" dest="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Prepares the PHP sources for the runtime                             -->
     <!-- ==================================================================== -->
     <target name="prepare-source" depends="prepare" description="Prepares the PHP sources for the runtime.">
+
         <antcall target="get-php-src"/>
+        <antcall target="get-memcached-src"/>
+        <antcall target="get-pthreads-src"/>
+
         <untar src="${lib.dir}/php-${appserver.php.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <chmod perm="755" dir="${php-target.dir}/php-src-php-${appserver.php.version}/build" includes="**/*"/>
+
+        <untar src="${lib.dir}/memcached-${appserver.memcached.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+
+        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/memcached">
+            <fileset dir="${php-target.dir}/memcached-${appserver.memcached.version}"/>
+        </move>
+
+        <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+
+        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/pthreads">
+            <fileset dir="${php-target.dir}/pthreads-${appserver.pthreads.version}"/>
+        </move>
+
     </target>
 
-    <target name="prepare-libjpeg">
-        <untar src="${lib.dir}/jpegsrc.v9.tar.gz" dest="${php-target.dir}" compression="gzip"/>
-        <exec dir="${php-target.dir}/jpeg-9" executable="sh">
+    <target name="build-libjpeg">
+        <untar src="${lib.dir}/jpegsrc.v8d.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/jpeg-8d" executable="sh">
             <env key="CC" value="gcc -arch x86_64"/>
             <arg value="configure"/>
             <arg value="--prefix=${appserver.compile.prefix}"/>
         </exec>
-        <chmod perm="755" dir="${php-target.dir}/jpeg-9" includes="install-sh"/>
-        <exec dir="${php-target.dir}/jpeg-9" executable="make"/>
-        <exec dir="${php-target.dir}/jpeg-9" executable="make">
+        <chmod perm="755" dir="${php-target.dir}/jpeg-8d" includes="install-sh"/>
+        <exec dir="${php-target.dir}/jpeg-8d" executable="make"/>
+        <exec dir="${php-target.dir}/jpeg-8d" executable="make">
             <arg value="DESTDIR=${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
 
-    <target name="prepare-libpng">
-        <untar src="${lib.dir}/libpng-1.6.2.tar.gz" dest="${php-target.dir}" compression="gzip"/>
-        <exec dir="${php-target.dir}/libpng-1.6.2" executable="sh">
+    <target name="build-libpng">
+        <untar src="${lib.dir}/libpng-1.5.13.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/libpng-1.5.13" executable="sh">
             <env key="CC" value="gcc -arch x86_64"/>
             <arg value="configure"/>
             <arg value="--prefix=${appserver.compile.prefix}"/>
         </exec>
-        <chmod perm="755" dir="${php-target.dir}/libpng-1.6.2" includes="install-sh"/>
-        <exec dir="${php-target.dir}/libpng-1.6.2" executable="make"/>
-        <exec dir="${php-target.dir}/libpng-1.6.2" executable="make">
+        <chmod perm="755" dir="${php-target.dir}/libpng-1.5.13" includes="install-sh"/>
+        <exec dir="${php-target.dir}/libpng-1.5.13" executable="make"/>
+        <exec dir="${php-target.dir}/libpng-1.5.13" executable="make">
             <arg value="DESTDIR=${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
 
-    <target name="prepare-freetype">
-        <untar src="${lib.dir}/freetype-2.5.0.tar.gz" dest="${php-target.dir}" compression="gzip"/>
-        <exec dir="${php-target.dir}/freetype-2.5.0" executable="sh">
+    <target name="build-freetype">
+        <untar src="${lib.dir}/freetype-2.4.10.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+        <chmod perm="755" dir="${php-target.dir}/freetype-2.4.10/builds" includes="**/*"/>
+        <exec dir="${php-target.dir}/freetype-2.4.10" executable="sh">
+            <env key="CC" value="gcc -arch x86_64"/>
+            <env key="LIBS" value="-L/opt/appserver/lib -lfreetype -lz -lbz2"/>
+            <env key="CFLAGS" value="-I/opt/appserver/include/freetype2 -I/opt/appserver/include"/>
+            <arg value="configure"/>
+            <arg value="--prefix=${appserver.compile.prefix}"/>
+        </exec>
+        <exec dir="${php-target.dir}/freetype-2.4.10" executable="make"/>
+        <exec dir="${php-target.dir}/freetype-2.4.10" executable="make">
+            <arg value="DESTDIR=${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <target name="build-libmemcached">
+        <untar src="${lib.dir}/libmemcached-1.0.8.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+        <chmod perm="755" dir="${php-target.dir}/libmemcached-1.0.8/config" includes="**/*"/>
+        <exec dir="${php-target.dir}/libmemcached-1.0.8" executable="sh">
             <env key="CC" value="gcc -arch x86_64"/>
             <arg value="configure"/>
             <arg value="--prefix=${appserver.compile.prefix}"/>
         </exec>
-        <chmod perm="755" dir="${php-target.dir}/freetype-2.5.0/builds" includes="**/*"/>
-        <exec dir="${php-target.dir}/freetype-2.5.0" executable="make"/>
-        <exec dir="${php-target.dir}/freetype-2.5.0" executable="make">
+        <exec dir="${php-target.dir}/libmemcached-1.0.8" executable="make"/>
+        <exec dir="${php-target.dir}/libmemcached-1.0.8" executable="make">
             <arg value="DESTDIR=${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
@@ -205,13 +267,7 @@
     <!-- ==================================================================== -->
     <!-- Copies the PHP Application Server runtime sources                    -->
     <!-- ==================================================================== -->
-    <target name="prepare-runtime" description="Copies the PHP Application Server runtime sources.">
-
-        <antcall target="prepare-source"/>
-        <antcall target="prepare-libjpeg"/>
-        <antcall target="prepare-libpng"/>
-        <antcall target="prepare-freetype"/>
-
+    <target name="copy-runtime" description="Copies the PHP Application Server runtime sources.">
         <copy todir="${php-target.dir}/re${appserver.compile.prefix}">
             <fileset dir="${php-src.dir}">
                 <include name="**/*"/>
@@ -222,62 +278,88 @@
     <!-- ==================================================================== -->
     <!-- Builds the PHP source for the PHP Application Server runtime         -->
     <!-- ==================================================================== -->
-    <target name="build-runtime" depends="prepare-runtime" description="Compiles the ApplicationServer runtime environment.">
+    <target name="build-runtime" depends="prepare-source" description="Compiles the ApplicationServer runtime environment.">
+        <antcall target="build-libjpeg"/>
+        <antcall target="build-libpng"/>
+        <antcall target="build-freetype"/>
+        <antcall target="build-libmemcached"/>
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="sh">
             <arg value="buildconf"/>
             <arg line="--force"/>
         </exec>
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="sh">
+            <env key="CC" value="gcc -arch x86_64"/>
+            <env key="LIBS" value="-L/opt/appserver/lib"/>
+            <env key="LDFLAGS" value="-L/opt/appserver/lib -L/usr/local/lib"/>
+            <env key="CFLAGS" value="-I/opt/appserver/include -I/opt/appserver/include/php/main -I/opt/appserver/include/php/TSRM -I/opt/appserver/include/php/Zend -I/opt/appserver/include/php/ext -I/opt/appserver/include/php/ext/date/lib"/>
             <arg value="configure"/>
             <arg value="--prefix=${appserver.compile.prefix}"/>
-            <arg value="--with-libdir=${appserver.compile.libdir}"/>
-            <arg value="--with-config-file-path=${appserver.compile.prefix}/etc"/>
-            <arg value="--with-config-file-scan-dir=${appserver.compile.prefix}/etc/conf.d"/>
-            <arg value="--enable-libxml"/>
-            <arg value="--enable-session"/>
-            <arg value="--with-pcre-regex"/>
-            <arg value="--enable-xml"/>
-            <arg value="--enable-simplexml"/>
-            <arg value="--enable-filter"/>
+            <arg value="--libdir=${appserver.compile.prefix}/lib"/>
             <arg value="--disable-debug"/>
-            <arg value="--enable-inline-optimization"/>
             <arg value="--disable-rpath"/>
-            <arg value="--disable-shared"/>
-            <arg value="--enable-static"/>
             <arg value="--with-pic"/>
             <arg value="--with-gnu-ld"/>
             <arg value="--with-mysql"/>
             <arg value="--with-gd"/>
             <arg value="--with-jpeg-dir"/>
             <arg value="--with-png-dir"/>
-            <arg value="--enable-exif"/>
+            <arg value="--with-freetype-dir"/>
             <arg value="--with-zlib"/>
             <arg value="--with-bz2"/>
             <arg value="--with-curl"/>
             <arg value="--with-mysqli"/>
-            <arg value="--with-freetype-dir"/>
+            <arg value="--with-tsrm-pthreads"/>
+            <arg value="--with-mcrypt"/>
+            <arg value="--with-mysqli"/>
+            <arg value="--with-openssl"/>
+            <arg value="--with-pdo-mysql"/>
+            <arg value="--with-pear=${appserver.compile.prefix}/app/code/lib"/>
+            <arg value="--with-libdir=${appserver.compile.libdir}"/>
+            <arg value="--with-config-file-path=${appserver.compile.prefix}/etc"/>
+            <arg value="--with-config-file-scan-dir=${appserver.compile.prefix}/etc/conf.d"/>
+            <arg value="--with-pcre-regex"/>
+            <arg value="--enable-static"/>
+            <arg value="--enable-exif"/>
+            <arg value="--enable-inline-optimization"/>
+            <arg value="--enable-xml"/>
+            <arg value="--enable-simplexml"/>
+            <arg value="--enable-filter"/>
+            <arg value="--enable-libxml"/>
+            <arg value="--enable-session"/>
             <arg value="--enable-sockets"/>
             <arg value="--enable-mbstring"/>
             <arg value="--enable-gd-native-ttf"/>
             <arg value="--enable-bcmath"/>
             <arg value="--enable-zip"/>
-            <arg value="--with-pear=${appserver.compile.prefix}/app/code/lib"/>
-            <arg value="--with-openssl"/>
             <arg value="--enable-phar"/>
             <arg value="--enable-pdo"/>
-            <arg value="--with-pdo-mysql"/>
-            <arg value="--with-mysqli"/>
             <arg value="--enable-roxen-zts"/>
-            <arg value="--with-mcrypt"/>
             <arg value="--enable-pcntl"/>
-            <arg value="--with-tsrm-pthreads"/>
             <arg value="--enable-maintainer-zts"/>
+            <arg value="--enable-memcached"/>
+            <arg value="--enable-pthreads"/>
         </exec>
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="make"/>
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="make">
             <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
+
+        <antcall target="copy-runtime"/>
+
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+            <arg line="-change /usr/local/lib/libpng15.15.dylib ${appserver.compile.prefix}/lib/libpng15.15.dylib php"/>
+        </exec>
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+            <arg line="-change /usr/local/lib/libjpeg.8.dylib ${appserver.compile.prefix}/lib/libjpeg.8.dylib php"/>
+        </exec>
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+            <arg line="-change /usr/local/lib/libfreetype.6.dylib ${appserver.compile.prefix}/lib/libfreetype.6.dylib php"/>
+        </exec>
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+            <arg line="-change /usr/local/lib/libmemcached.11.dylib ${appserver.compile.prefix}/lib/libmemcached.11.dylib php"/>
+        </exec>
+
     </target>
 
     <!-- ==================================================================== -->
