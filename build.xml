@@ -186,25 +186,29 @@
         <untar src="${lib.dir}/php-${appserver.php.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <chmod perm="755" dir="${php-target.dir}/php-src-php-${appserver.php.version}/build" includes="**/*"/>
 
-        <!--
+        <antcall target="get-memcached-src"/>
+
         <untar src="${lib.dir}/memcached-${appserver.memcached.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
 
         <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/memcached">
             <fileset dir="${php-target.dir}/memcached-${appserver.memcached.version}"/>
         </move>
 
+        <!--
         <replace file="${php-target.dir}/php-src-php-${appserver.php.version}/ext/memcached/php_libmemcached_compat.h" token="libmemcached-1.0" value="libmemcached"/>
 
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/memcached" executable="sed">
             <arg line="-e 's/libmemcached-1.0/libmemcached/g' php_libmemcached_compat.h"/>
         </exec>
+        -->
+
+        <antcall target="get-pthreads-src"/>
 
         <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
 
         <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/pthreads">
             <fileset dir="${php-target.dir}/pthreads-${appserver.pthreads.version}"/>
         </move>
-        -->
 
     </target>
 
@@ -265,6 +269,21 @@
         </exec>
         <exec dir="${php-target.dir}/libmemcached-1.0.17" executable="make"/>
         <exec dir="${php-target.dir}/libmemcached-1.0.17" executable="make">
+            <arg value="DESTDIR=${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <target name="build-libmcrypt">
+        <untar src="${lib.dir}/libmcrypt-2.5.8.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/libmcrypt-2.5.8" executable="sh">
+            <env key="CC" value="gcc -arch x86_64"/>
+            <arg value="configure"/>
+            <arg value="--prefix=${appserver.compile.prefix}"/>
+        </exec>
+        <chmod perm="755" dir="${php-target.dir}/libmcrypt-2.5.8" includes="install-sh"/>
+        <exec dir="${php-target.dir}/libmcrypt-2.5.8" executable="make"/>
+        <exec dir="${php-target.dir}/libmcrypt-2.5.8" executable="make">
             <arg value="DESTDIR=${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
@@ -334,6 +353,7 @@
         <antcall target="build-libpng"/>
         <antcall target="build-freetype"/>
         <antcall target="build-libmemcached"/>
+        <antcall target="build-libmcrypt"/>
 
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="sh">
             <arg value="buildconf"/>
@@ -349,6 +369,7 @@
             <arg value="--libdir=${appserver.compile.prefix}/lib"/>
             <arg value="--disable-debug"/>
             <arg value="--disable-rpath"/>
+            <arg value="--without-pear"/>
             <arg value="--with-pic"/>
             <arg value="--with-gnu-ld"/>
             <arg value="--with-mysql"/>
@@ -387,12 +408,11 @@
             <arg value="--enable-roxen-zts"/>
             <arg value="--enable-pcntl"/>
             <arg value="--enable-maintainer-zts"/>
-
-            <arg value="--enable-memcached=static"/>
             <arg value="--enable-pthreads=static"/>
-            <arg value="--without-pear"/>
+            <arg value="--enable-memcached=static"/>
 
             <!--
+            <arg value="-enable-memcached=static"/>
             <arg value="-with-pear=${appserver.compile.prefix}/app/code/lib"/>
             -->
 
@@ -403,8 +423,10 @@
             <arg value="install"/>
         </exec>
 
+        <!--
         <antcall target="build-pecl-memcached"/>
         <antcall target="build-pecl-pthreads"/>
+        -->
 
         <antcall target="copy-runtime"/>
 
@@ -418,7 +440,10 @@
             <arg line="-change /usr/local/lib/libfreetype.6.dylib ${appserver.compile.prefix}/lib/libfreetype.6.dylib php"/>
         </exec>
         <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
-            <arg line="-change /usr/local/lib/libmemcached.11.dylib ${appserver.compile.prefix}/lib/libmemcached.11.dylib php"/>
+            <arg line="-change /usr/local/lib/libmemcached.9.dylib ${appserver.compile.prefix}/lib/libmemcached.9.dylib php"/>
+        </exec>
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+            <arg line="-change /usr/local/lib/libmcrypt.4.dylib ${appserver.compile.prefix}/lib/libmcrypt.4.dylib php"/>
         </exec>
 
     </target>
