@@ -440,7 +440,7 @@
             <arg line="-change /usr/local/lib/libfreetype.6.dylib ${appserver.compile.prefix}/lib/libfreetype.6.dylib php"/>
         </exec>
         <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
-            <arg line="-change /usr/local/lib/libmemcached.9.dylib ${appserver.compile.prefix}/lib/libmemcached.9.dylib php"/>
+            <arg line="-change /usr/local/lib/libmemcached.11.dylib ${appserver.compile.prefix}/lib/libmemcached.11.dylib php"/>
         </exec>
         <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
             <arg line="-change /usr/local/lib/libmcrypt.4.dylib ${appserver.compile.prefix}/lib/libmcrypt.4.dylib php"/>
