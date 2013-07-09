@@ -370,22 +370,6 @@
         </exec>
         <!-- copy runtime files from src directory -->
         <antcall target="copy-runtime"/>
-        <!-- change dylib pathes -->
-        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
-            <arg line="-change /usr/local/lib/libpng${libpng.dylib.version}.dylib ${appserver.compile.prefix}/lib/libpng${libpng.dylib.version}.dylib php"/>
-        </exec>
-        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
-            <arg line="-change /usr/local/lib/libjpeg.${libjpeg.dylib.version}.dylib ${appserver.compile.prefix}/lib/libjpeg.${libjpeg.dylib.version}.dylib php"/>
-        </exec>
-        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
-            <arg line="-change /usr/local/lib/libfreetype.${libfreetype.dylib.version}.dylib ${appserver.compile.prefix}/lib/libfreetype.${libfreetype.dylib.version}.dylib php"/>
-        </exec>
-        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
-            <arg line="-change /usr/local/lib/libmemcached.${libmemcached.dylib.version}.dylib ${appserver.compile.prefix}/lib/libmemcached.${libmemcached.dylib.version}.dylib php"/>
-        </exec>
-        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
-            <arg line="-change /usr/local/lib/libmcrypt.${libmcrypt.dylib.version}.dylib ${appserver.compile.prefix}/lib/libmcrypt.${libmcrypt.dylib.version}.dylib php"/>
-        </exec>
         <!-- install composer packages -->
         <exec dir="${php-target.dir}" executable="composer">
             <arg line="--working-dir=re${appserver.compile.prefix}/app/code update"/>
@@ -411,9 +395,31 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Changes the dylib path for Mac OS X installation                     -->
+    <!-- ==================================================================== -->
+    <target name="change-dylib-path" depends="build-runtime" description="Changes the dylib path for Mac OS X installation.">
+        <!-- change dylib pathes -->
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+            <arg line="-change /usr/local/lib/libpng${libpng.dylib.version}.dylib ${appserver.compile.prefix}/lib/libpng${libpng.dylib.version}.dylib php"/>
+        </exec>
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+            <arg line="-change /usr/local/lib/libjpeg.${libjpeg.dylib.version}.dylib ${appserver.compile.prefix}/lib/libjpeg.${libjpeg.dylib.version}.dylib php"/>
+        </exec>
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+            <arg line="-change /usr/local/lib/libfreetype.${libfreetype.dylib.version}.dylib ${appserver.compile.prefix}/lib/libfreetype.${libfreetype.dylib.version}.dylib php"/>
+        </exec>
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+            <arg line="-change /usr/local/lib/libmemcached.${libmemcached.dylib.version}.dylib ${appserver.compile.prefix}/lib/libmemcached.${libmemcached.dylib.version}.dylib php"/>
+        </exec>
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+            <arg line="-change /usr/local/lib/libmcrypt.${libmcrypt.dylib.version}.dylib ${appserver.compile.prefix}/lib/libmcrypt.${libmcrypt.dylib.version}.dylib php"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Creates a .pkg package with the local ApplicationServer runtime      -->
     <!-- ==================================================================== -->
-    <target name="create-pkg" depends="build-runtime" description="Creates a .pkg package with the local ApplicationServer runtime.">
+    <target name="create-pkg" depends="change-dylib-path" description="Creates a .pkg package with the local ApplicationServer runtime.">
         <exec dir="${basedir}" executable="pkgbuild">
             <arg value="--root"/>
             <arg value="${php-target.dir}/re/opt"/>
