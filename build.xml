@@ -182,23 +182,29 @@
     <target name="prepare-source" depends="prepare" description="Prepares the PHP sources for the runtime.">
 
         <antcall target="get-php-src"/>
-        <antcall target="get-memcached-src"/>
-        <antcall target="get-pthreads-src"/>
 
         <untar src="${lib.dir}/php-${appserver.php.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <chmod perm="755" dir="${php-target.dir}/php-src-php-${appserver.php.version}/build" includes="**/*"/>
 
+        <!--
         <untar src="${lib.dir}/memcached-${appserver.memcached.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
 
         <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/memcached">
             <fileset dir="${php-target.dir}/memcached-${appserver.memcached.version}"/>
         </move>
 
+        <replace file="${php-target.dir}/php-src-php-${appserver.php.version}/ext/memcached/php_libmemcached_compat.h" token="libmemcached-1.0" value="libmemcached"/>
+
+        <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/memcached" executable="sed">
+            <arg line="-e 's/libmemcached-1.0/libmemcached/g' php_libmemcached_compat.h"/>
+        </exec>
+
         <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
 
         <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/pthreads">
             <fileset dir="${php-target.dir}/pthreads-${appserver.pthreads.version}"/>
         </move>
+        -->
 
     </target>
 
@@ -250,15 +256,15 @@
     </target>
 
     <target name="build-libmemcached">
-        <untar src="${lib.dir}/libmemcached-1.0.8.tar.gz" dest="${php-target.dir}" compression="gzip"/>
-        <chmod perm="755" dir="${php-target.dir}/libmemcached-1.0.8/config" includes="**/*"/>
-        <exec dir="${php-target.dir}/libmemcached-1.0.8" executable="sh">
+        <untar src="${lib.dir}/libmemcached-1.0.17.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+        <chmod perm="755" dir="${php-target.dir}/libmemcached-1.0.17/build-aux" includes="**/*"/>
+        <exec dir="${php-target.dir}/libmemcached-1.0.17" executable="sh">
             <env key="CC" value="gcc -arch x86_64"/>
             <arg value="configure"/>
             <arg value="--prefix=${appserver.compile.prefix}"/>
         </exec>
-        <exec dir="${php-target.dir}/libmemcached-1.0.8" executable="make"/>
-        <exec dir="${php-target.dir}/libmemcached-1.0.8" executable="make">
+        <exec dir="${php-target.dir}/libmemcached-1.0.17" executable="make"/>
+        <exec dir="${php-target.dir}/libmemcached-1.0.17" executable="make">
             <arg value="DESTDIR=${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
@@ -275,14 +281,60 @@
         </copy>
     </target>
 
+    <target name="build-pecl-memcached">
+
+        <antcall target="get-memcached-src"/>
+
+        <untar src="${lib.dir}/memcached-${appserver.memcached.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+
+        <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+
+        <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="sh">
+            <env key="CC" value="gcc -arch x86_64"/>
+            <arg value="configure"/>
+            <arg value="--prefix=${appserver.compile.prefix}"/>
+            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+        </exec>
+        <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="make"/>
+        <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="make">
+            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+
+    </target>
+
+    <target name="build-pecl-pthreads">
+
+        <antcall target="get-pthreads-src"/>
+
+        <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+
+        <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+
+        <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="sh">
+            <env key="CC" value="gcc -arch x86_64"/>
+            <arg value="configure"/>
+            <arg value="--prefix=${appserver.compile.prefix}"/>
+            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+        </exec>
+        <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="make"/>
+        <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="make">
+            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+
+    </target>
+
     <!-- ==================================================================== -->
     <!-- Builds the PHP source for the PHP Application Server runtime         -->
     <!-- ==================================================================== -->
     <target name="build-runtime" depends="prepare-source" description="Compiles the ApplicationServer runtime environment.">
+
         <antcall target="build-libjpeg"/>
         <antcall target="build-libpng"/>
         <antcall target="build-freetype"/>
         <antcall target="build-libmemcached"/>
+
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="sh">
             <arg value="buildconf"/>
             <arg line="--force"/>
@@ -313,7 +365,6 @@
             <arg value="--with-mysqli"/>
             <arg value="--with-openssl"/>
             <arg value="--with-pdo-mysql"/>
-            <arg value="--with-pear=${appserver.compile.prefix}/app/code/lib"/>
             <arg value="--with-libdir=${appserver.compile.libdir}"/>
             <arg value="--with-config-file-path=${appserver.compile.prefix}/etc"/>
             <arg value="--with-config-file-scan-dir=${appserver.compile.prefix}/etc/conf.d"/>
@@ -336,14 +387,24 @@
             <arg value="--enable-roxen-zts"/>
             <arg value="--enable-pcntl"/>
             <arg value="--enable-maintainer-zts"/>
-            <arg value="--enable-memcached"/>
-            <arg value="--enable-pthreads"/>
+
+            <arg value="--enable-memcached=static"/>
+            <arg value="--enable-pthreads=static"/>
+            <arg value="--without-pear"/>
+
+            <!--
+            <arg value="-with-pear=${appserver.compile.prefix}/app/code/lib"/>
+            -->
+
         </exec>
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="make"/>
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="make">
             <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
+
+        <antcall target="build-pecl-memcached"/>
+        <antcall target="build-pecl-pthreads"/>
 
         <antcall target="copy-runtime"/>
 
