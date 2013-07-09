@@ -2,9 +2,6 @@
 
 curl -sS https://getcomposer.org/installer | sudo /opt/appserver/bin/php -- --install-dir /opt/appserver/bin
 chmod +x /opt/appserver/bin/composer
-
-/opt/appserver/bin/composer update
-
 chmod +x /opt/appserver/appserver
 
 exit 0

@@ -289,6 +289,22 @@
         </exec>
     </target>
 
+    <target name="build-git">
+        <untar src="${lib.dir}/git-1.8.3.2.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/git-1.8.3.2" executable="sh">
+            <env key="CC" value="gcc -arch x86_64"/>
+            <arg value="configure"/>
+            <arg value="--prefix=${appserver.compile.prefix}"/>
+        </exec>
+        <chmod perm="755" dir="${php-target.dir}/git-1.8.3.2" includes="generate-cmdlist.sh"/>
+        <chmod perm="755" dir="${php-target.dir}/git-1.8.3.2" includes="check_bindir"/>
+        <exec dir="${php-target.dir}/git-1.8.3.2" executable="make"/>
+        <exec dir="${php-target.dir}/git-1.8.3.2" executable="make">
+            <arg value="DESTDIR=${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
     <!-- ==================================================================== -->
     <!-- Copies the PHP Application Server runtime sources                    -->
     <!-- ==================================================================== -->
@@ -354,6 +370,10 @@
         <antcall target="build-freetype"/>
         <antcall target="build-libmemcached"/>
         <antcall target="build-libmcrypt"/>
+
+        <!--
+        <antcall target="build-git"/>
+        -->
 
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="sh">
             <arg value="buildconf"/>
@@ -444,6 +464,10 @@
         </exec>
         <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
             <arg line="-change /usr/local/lib/libmcrypt.4.dylib ${appserver.compile.prefix}/lib/libmcrypt.4.dylib php"/>
+        </exec>
+
+        <exec dir="${php-target.dir}" executable="composer">
+            <arg line="--working-dir=re${appserver.compile.prefix}/app/code update"/>
         </exec>
 
     </target>
