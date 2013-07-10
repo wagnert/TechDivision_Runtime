@@ -154,6 +154,41 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Check if libfreetype sources has been downloaded yet   		 	  -->
+    <!-- ==================================================================== -->
+    <target name="check-libfreetype-src-present" description="Check if libfreetype sources has been downloaded yet.">
+        <available file="${lib.dir}/freetype-${libfreetype.version}.tgz" property="libfreetype-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if libmemcached sources has been downloaded yet   		 	  -->
+    <!-- ==================================================================== -->
+    <target name="check-libmemcached-src-present" description="Check if libmemcached sources has been downloaded yet.">
+        <available file="${lib.dir}/libmemcached-${libmemcached.version}.tgz" property="libmemcached-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if libmcrypt sources has been downloaded yet   		 	  -->
+    <!-- ==================================================================== -->
+    <target name="check-libmcrypt-src-present" description="Check if libmcrypt sources has been downloaded yet.">
+        <available file="${lib.dir}/libmcrypt-${libmcrypt.version}.tgz" property="libmcrypt-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if libpng sources has been downloaded yet   		 	          -->
+    <!-- ==================================================================== -->
+    <target name="check-libpng-src-present" description="Check if libpng sources has been downloaded yet.">
+        <available file="${lib.dir}/libpng-${libpng.version}.tgz" property="libpng-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if libjpeg sources has been downloaded yet   		 	          -->
+    <!-- ==================================================================== -->
+    <target name="check-libjpeg-src-present" description="Check if libjpeg sources has been downloaded yet.">
+        <available file="${lib.dir}/jpegsrc.v${libjpeg.version}.tar.gz" property="libjpeg-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Get PHP source package by given version number		  		          -->
     <!-- ==================================================================== -->
     <target name="get-php-src" depends="check-php-src-present" unless="php-src.present">
@@ -172,6 +207,41 @@
     <!-- ==================================================================== -->
     <target name="get-pthreads-src" depends="check-pthreads-src-present" unless="pthreads-src.present">
         <get src="http://pecl.php.net/get/pthreads-${appserver.pthreads.version}.tgz" dest="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get libfreetype source package by given version number		          -->
+    <!-- ==================================================================== -->
+    <target name="get-libfreetype-src" depends="check-libfreetype-src-present" unless="libfreetype-src.present" description="Get libfreetype source package by given version number.">
+        <get src="${libfreetype.download.url}" dest="${lib.dir}/freetype-${libfreetype.version}.tar.gz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get libmemcached source package by given version number		      -->
+    <!-- ==================================================================== -->
+    <target name="get-libmemcached-src" depends="check-libmemcached-src-present" unless="libmemcached-src.present" description="Get libmemcached source package by given version number.">
+        <get src="${libmemcached.download.url}" dest="${lib.dir}/libmemcached-${libmemcached.version}.tar.gz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get libmcrypt source package by given version number		          -->
+    <!-- ==================================================================== -->
+    <target name="get-libmcrypt-src" depends="check-libmcrypt-src-present" unless="libmcrypt-src.present" description="Get libmcrypt source package by given version number.">
+        <get src="${libmcrypt.download.url}" dest="${lib.dir}/libmcrypt-${libmcrypt.version}.tar.gz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get libpng source package by given version number		          -->
+    <!-- ==================================================================== -->
+    <target name="get-libpng-src" depends="check-libpng-src-present" unless="libpng-src.present" description="Get libpng source package by given version number.">
+        <get src="${libpng.download.url}" dest="${lib.dir}/libpng-${libpng.version}.tar.gz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get libjpeg source package by given version number		          -->
+    <!-- ==================================================================== -->
+    <target name="get-libjpeg-src" depends="check-libjpeg-src-present" unless="libjpeg-src.present" description="Get libjpeg source package by given version number.">
+        <get src="${libjpeg.download.url}" dest="${lib.dir}/jpegsrc.v${libjpeg.version}.tar.gz"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -200,6 +270,7 @@
     <!-- Prepares the libjpeg sources for the runtime                         -->
     <!-- ==================================================================== -->
     <target name="build-libjpeg" description="Prepares the libjpeg sources for the runtime.">
+        <antcall target="get-libjpeg-src"/>
         <untar src="${lib.dir}/jpegsrc.v${libjpeg.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <exec dir="${php-target.dir}/jpeg-${libjpeg.version}" executable="sh">
             <env key="CC" value="${libjpeg.cc}"/>
@@ -218,6 +289,7 @@
     <!-- Prepares the libpng sources for the runtime                          -->
     <!-- ==================================================================== -->
     <target name="build-libpng" description="Prepares the libpng sources for the runtime.">
+        <antcall target="get-libpng-src"/>
         <untar src="${lib.dir}/libpng-${libpng.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <exec dir="${php-target.dir}/libpng-${libpng.version}" executable="sh">
             <env key="CC" value="${libpng.cc}"/>
@@ -235,7 +307,8 @@
     <!-- ==================================================================== -->
     <!-- Prepares the libfreetype sources for the runtime                     -->
     <!-- ==================================================================== -->
-    <target name="build-freetype" description="Prepares the libfreetype sources for the runtime.">
+    <target name="build-libfreetype" description="Prepares the libfreetype sources for the runtime.">
+        <antcall target="get-libfreetype-src"/>
         <untar src="${lib.dir}/freetype-${libfreetype.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <chmod perm="755" dir="${php-target.dir}/freetype-${libfreetype.version}/builds" includes="**/*"/>
         <exec dir="${php-target.dir}/freetype-${libfreetype.version}" executable="sh">
@@ -256,6 +329,7 @@
     <!-- Prepares the libmemcached sources for the runtime                    -->
     <!-- ==================================================================== -->
     <target name="build-libmemcached" description="Prepares the libmemcached sources for the runtime.">
+        <antcall target="get-libmemcached-src"/>
         <untar src="${lib.dir}/libmemcached-${libmemcached.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <chmod perm="755" dir="${php-target.dir}/libmemcached-${libmemcached.version}/build-aux" includes="**/*"/>
         <exec dir="${php-target.dir}/libmemcached-${libmemcached.version}" executable="sh">
@@ -274,6 +348,7 @@
     <!-- Prepares the libmcrypt sources for the runtime                       -->
     <!-- ==================================================================== -->
     <target name="build-libmcrypt" description="Prepares the libmcrypt sources for the runtime.">
+        <antcall target="get-libmcrypt-src"/>
         <untar src="${lib.dir}/libmcrypt-${libmcrypt.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <exec dir="${php-target.dir}/libmcrypt-${libmcrypt.version}" executable="sh">
             <env key="CC" value="${libmcrypt.cc}"/>
@@ -306,7 +381,7 @@
         <!-- build the necessary libraries -->
         <antcall target="build-libjpeg"/>
         <antcall target="build-libpng"/>
-        <antcall target="build-freetype"/>
+        <antcall target="build-libfreetype"/>
         <antcall target="build-libmemcached"/>
         <antcall target="build-libmcrypt"/>
         <!-- compile the PHP sources and PECL extensions static -->
