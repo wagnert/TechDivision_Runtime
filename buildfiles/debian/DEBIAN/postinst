@@ -3,7 +3,7 @@
 /opt/appserver/bin/pecl install -f pthreads
 /opt/appserver/bin/pecl install memcached-2.0.1
 
-curl -sS https://getcomposer.org/installer | sudo /opt/appserver/bin/php -- --install-dir /opt/appserver/bin
+curl -sS https://getcomposer.org/installer | /opt/appserver/bin/php -- --install-dir /opt/appserver/bin
 
 chmod 755 /opt/appserver/appserver
 chmod 755 -R /opt/appserver/bin
