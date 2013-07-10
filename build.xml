@@ -1,15 +1,17 @@
 <?xml version="1.0"?>
 <project name="TechDivision_Runtime" default="deploy" basedir=".">
 
-    <property file="${user.home}/build.properties"/>
-    <property file="${basedir}/build.properties"/>
-    <property file="${basedir}/build.default.properties"/>
-    <property file="${basedir}/build.${os.family}.properties"/>
     <property environment="env" />
+
     <property name="lib.dir" value="${basedir}/lib" />
     <property name="php-src.dir" value="${basedir}/src" />
     <property name="php-test.dir" value="${basedir}/tests" />
     <property name="php-target.dir" value="${basedir}/target"/>
+
+    <property file="${user.home}/build.properties"/>
+    <property file="${basedir}/build.properties"/>
+    <property file="${basedir}/build.default.properties"/>
+    <property file="${basedir}/build.${os.family}.properties"/>
 
     <!-- ==================================================================== -->
     <!-- Cleans the directories with the generated source files				  -->
@@ -269,7 +271,7 @@
     <!-- ==================================================================== -->
     <!-- Prepares the libjpeg sources for the runtime                         -->
     <!-- ==================================================================== -->
-    <target name="build-libjpeg" description="Prepares the libjpeg sources for the runtime.">
+    <target name="build-libjpeg" if="${libjpeg.build}" description="Prepares the libjpeg sources for the runtime.">
         <antcall target="get-libjpeg-src"/>
         <untar src="${lib.dir}/jpegsrc.v${libjpeg.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <exec dir="${php-target.dir}/jpeg-${libjpeg.version}" executable="sh">
@@ -288,7 +290,7 @@
     <!-- ==================================================================== -->
     <!-- Prepares the libpng sources for the runtime                          -->
     <!-- ==================================================================== -->
-    <target name="build-libpng" description="Prepares the libpng sources for the runtime.">
+    <target name="build-libpng" if="${libpng.build}" description="Prepares the libpng sources for the runtime.">
         <antcall target="get-libpng-src"/>
         <untar src="${lib.dir}/libpng-${libpng.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <exec dir="${php-target.dir}/libpng-${libpng.version}" executable="sh">
@@ -307,7 +309,7 @@
     <!-- ==================================================================== -->
     <!-- Prepares the libfreetype sources for the runtime                     -->
     <!-- ==================================================================== -->
-    <target name="build-libfreetype" description="Prepares the libfreetype sources for the runtime.">
+    <target name="build-libfreetype" if="${libfreetype.build}" description="Prepares the libfreetype sources for the runtime.">
         <antcall target="get-libfreetype-src"/>
         <untar src="${lib.dir}/freetype-${libfreetype.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <chmod perm="755" dir="${php-target.dir}/freetype-${libfreetype.version}/builds" includes="**/*"/>
@@ -328,7 +330,7 @@
     <!-- ==================================================================== -->
     <!-- Prepares the libmemcached sources for the runtime                    -->
     <!-- ==================================================================== -->
-    <target name="build-libmemcached" description="Prepares the libmemcached sources for the runtime.">
+    <target name="build-libmemcached" if="${libmemcached.build}" description="Prepares the libmemcached sources for the runtime.">
         <antcall target="get-libmemcached-src"/>
         <untar src="${lib.dir}/libmemcached-${libmemcached.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <chmod perm="755" dir="${php-target.dir}/libmemcached-${libmemcached.version}/build-aux" includes="**/*"/>
@@ -347,7 +349,7 @@
     <!-- ==================================================================== -->
     <!-- Prepares the libmcrypt sources for the runtime                       -->
     <!-- ==================================================================== -->
-    <target name="build-libmcrypt" description="Prepares the libmcrypt sources for the runtime.">
+    <target name="build-libmcrypt" if="${libmcrypt.build}" description="Prepares the libmcrypt sources for the runtime.">
         <antcall target="get-libmcrypt-src"/>
         <untar src="${lib.dir}/libmcrypt-${libmcrypt.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <exec dir="${php-target.dir}/libmcrypt-${libmcrypt.version}" executable="sh">
@@ -417,10 +419,10 @@
             <arg value="--with-config-file-path=${appserver.compile.prefix}/etc"/>
             <arg value="--with-config-file-scan-dir=${appserver.compile.prefix}/etc/conf.d"/>
             <arg value="--with-pcre-regex"/>
-            <arg value="--with-jpeg-dir=${php-target.dir}/re${appserver.compile.prefix}"/>
-            <arg value="--with-png-dir=${php-target.dir}/re${appserver.compile.prefix}"/>
-            <arg value="--with-freetype-dir=${php-target.dir}/re${appserver.compile.prefix}"/>
-            <arg value="--with-libmemcached-dir=${php-target.dir}/re${appserver.compile.prefix}"/>
+            <arg value="--with-jpeg-dir=${libjpeg.dir}"/>
+            <arg value="--with-png-dir=${libpng.dir}"/>
+            <arg value="--with-freetype-dir=${libfreetype.dir}"/>
+            <arg value="--with-libmemcached-dir=${libmemcached.dir}"/>
             <arg value="--enable-static"/>
             <arg value="--enable-exif"/>
             <arg value="--enable-inline-optimization"/>
