@@ -342,6 +342,10 @@
             <arg value="--with-config-file-path=${appserver.compile.prefix}/etc"/>
             <arg value="--with-config-file-scan-dir=${appserver.compile.prefix}/etc/conf.d"/>
             <arg value="--with-pcre-regex"/>
+            <arg value="--with-jpeg-dir=${php-target.dir}/re${appserver.compile.prefix}"/>
+            <arg value="--with-png-dir=${php-target.dir}/re${appserver.compile.prefix}"/>
+            <arg value="--with-freetype-dir=${php-target.dir}/re${appserver.compile.prefix}"/>
+            <arg value="--with-libmemcached-dir=${php-target.dir}/re${appserver.compile.prefix}"/>
             <arg value="--enable-static"/>
             <arg value="--enable-exif"/>
             <arg value="--enable-inline-optimization"/>
@@ -370,16 +374,30 @@
         </exec>
         <!-- copy runtime files from src directory -->
         <antcall target="copy-runtime"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Install composer and ApplicationServer packages                      -->
+    <!-- ==================================================================== -->
+    <target name="install-composer" depends="build-runtime" description="Install composer and ApplicationServer packages.">
+        <!-- download the composer installer -->
+        <exec dir="${php-target.dir}" executable="curl">
+            <arg line="-sS https://getcomposer.org/installer -o installer"/>
+        </exec>
+        <!-- install composer itself -->
+        <exec dir="${php-target.dir}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/php">
+            <arg line="installer -- --install-dir ${php-target.dir}/re${appserver.compile.prefix}/bin"/>
+        </exec>
         <!-- install composer packages -->
-        <exec dir="${php-target.dir}" executable="composer">
-            <arg line="--working-dir=re${appserver.compile.prefix}/app/code update"/>
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/php">
+            <arg line="bin/composer.phar --working-dir=app/code update"/>
         </exec>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Creates a DEBIAN package with the local ApplicationServer runtime    -->
     <!-- ==================================================================== -->
-    <target name="DEBIAN-build-package" depends="build-runtime" description="Creates a DEBIAN package with the local ApplicationServer runtime.">
+    <target name="DEBIAN-build-package" depends="install-composer" description="Creates a DEBIAN package with the local ApplicationServer runtime.">
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/debian">
                 <include name="**/*"/>
@@ -397,7 +415,7 @@
     <!-- ==================================================================== -->
     <!-- Changes the dylib path for Mac OS X installation                     -->
     <!-- ==================================================================== -->
-    <target name="change-dylib-path" depends="build-runtime" description="Changes the dylib path for Mac OS X installation.">
+    <target name="change-dylib-path" depends="install-composer" description="Changes the dylib path for Mac OS X installation.">
         <!-- change dylib pathes -->
         <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
             <arg line="-change /usr/local/lib/libpng${libpng.dylib.version}.dylib ${appserver.compile.prefix}/lib/libpng${libpng.dylib.version}.dylib php"/>
