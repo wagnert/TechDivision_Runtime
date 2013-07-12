@@ -142,17 +142,45 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Check if PHP source package has been downloaded yet  		 	      -->
+    <!-- Check if the memcached server source package has been downloaded yet -->
     <!-- ==================================================================== -->
-    <target name="check-memcached-src-present" description="Check if PHP Source Package has been downloaded yet.">
+    <target name="check-memcached-server-src-present" description="Check if the memcached server source package has been downloaded yet.">
+        <available file="${lib.dir}/php-${memcached.server.version}.tar.gz" property="memcached-server-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if PECL memcached sources has been downloaded yet  		 	  -->
+    <!-- ==================================================================== -->
+    <target name="check-memcached-src-present" description="Check if PECL memcached sources has been downloaded yet.">
         <available file="${lib.dir}/memcached-${appserver.memcached.version}.tgz" property="memcached-src.present"/>
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Check if PHP source package has been downloaded yet  		 	      -->
+    <!-- Check if PECL pthreads sources has been downloaded yet  		 	  -->
     <!-- ==================================================================== -->
-    <target name="check-pthreads-src-present" description="Check if PHP Source Package has been downloaded yet.">
+    <target name="check-pthreads-src-present" description="Check if PECL pthreads sources has been downloaded yet.">
         <available file="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" property="pthreads-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if PECL operator sources has been downloaded yet  		 	  -->
+    <!-- ==================================================================== -->
+    <target name="check-operator-src-present" description="Check if PECL operator sources has been downloaded yet.">
+        <available file="${lib.dir}/operator-${appserver.operator.version}.tgz" property="operator-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if PECL pecl_http sources has been downloaded yet  		 	  -->
+    <!-- ==================================================================== -->
+    <target name="check-pecl_http-src-present" description="Check if PECL pecl_http sources has been downloaded yet.">
+        <available file="${lib.dir}/pecl_http-${appserver.pecl_http.version}.tgz" property="pecl_http-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if PECL AOP sources has been downloaded yet  		 	      -->
+    <!-- ==================================================================== -->
+    <target name="check-AOP-src-present" description="Check if PECL AOP sources has been downloaded yet.">
+        <available file="${lib.dir}/AOP-${appserver.AOP.version}.tgz" property="AOP-src.present"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -170,7 +198,7 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Check if libmcrypt sources has been downloaded yet   		 	  -->
+    <!-- Check if libmcrypt sources has been downloaded yet   		 	      -->
     <!-- ==================================================================== -->
     <target name="check-libmcrypt-src-present" description="Check if libmcrypt sources has been downloaded yet.">
         <available file="${lib.dir}/libmcrypt-${libmcrypt.version}.tgz" property="libmcrypt-src.present"/>
@@ -193,63 +221,91 @@
     <!-- ==================================================================== -->
     <!-- Get PHP source package by given version number		  		          -->
     <!-- ==================================================================== -->
-    <target name="get-php-src" depends="check-php-src-present" unless="php-src.present">
+    <target name="get-php-src" depends="check-php-src-present" unless="${php-src.present}" description="Get PHP source package by given version number">
         <get src="https://github.com/php/php-src/archive/php-${appserver.php.version}.tar.gz" dest="${lib.dir}/php-${appserver.php.version}.tar.gz"/>
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Get memcached source package by given version number		          -->
+    <!-- Get PECL memcached source package by given version number		      -->
     <!-- ==================================================================== -->
-    <target name="get-memcached-src" depends="check-memcached-src-present" unless="memcached-src.present">
+    <target name="get-memcached-src" depends="check-memcached-src-present" unless="${memcached-src.present}" description="Get PECL memcached source package by given version number">
         <get src="http://pecl.php.net/get/memcached-${appserver.memcached.version}.tgz" dest="${lib.dir}/memcached-${appserver.memcached.version}.tgz"/>
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Get memcached source package by given version number		          -->
+    <!-- Get PECL pthreads source package by given version number		      -->
     <!-- ==================================================================== -->
-    <target name="get-pthreads-src" depends="check-pthreads-src-present" unless="pthreads-src.present">
+    <target name="get-pthreads-src" depends="check-pthreads-src-present" unless="${pthreads-src.present}" description="Get PECL pthreads source package by given version number">
         <get src="http://pecl.php.net/get/pthreads-${appserver.pthreads.version}.tgz" dest="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get PECL operator source package by given version number		      -->
+    <!-- ==================================================================== -->
+    <target name="get-operator-src" depends="check-operator-src-present" unless="${operator-src.present}" description="Get PECL operator source package by given version number">
+        <get src="http://pecl.php.net/get/operator-${appserver.operator.version}.tgz" dest="${lib.dir}/operator-${appserver.operator.version}.tgz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get PECL pecl_http source package by given version number		      -->
+    <!-- ==================================================================== -->
+    <target name="get-pecl_http-src" depends="check-pecl_http-src-present" unless="${pecl_http-src.present}" description="Get PECL pecl_http source package by given version number">
+        <get src="http://pecl.php.net/get/pecl_http-${appserver.pecl_http.version}.tgz" dest="${lib.dir}/pecl_http-${appserver.pecl_http.version}.tgz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get PECL AOP source package by given version number		          -->
+    <!-- ==================================================================== -->
+    <target name="get-AOP-src" depends="check-AOP-src-present" unless="${AOP-src.present}" description="Get PECL AOP source package by given version number">
+        <get src="http://pecl.php.net/get/AOP-${appserver.AOP.version}.tgz" dest="${lib.dir}/AOP-${appserver.AOP.version}.tgz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get memcached server source package by given version number		  -->
+    <!-- ==================================================================== -->
+    <target name="get-memcached-server-src" depends="check-memcached-server-src-present" unless="${memcached-server-src.present}" description="Get memcached server source package by given version number.">
+        <get src="${memcached.server.download.url}" dest="${lib.dir}/memcached-${memcached.server.version}.tar.gz"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get libfreetype source package by given version number		          -->
     <!-- ==================================================================== -->
-    <target name="get-libfreetype-src" depends="check-libfreetype-src-present" unless="libfreetype-src.present" description="Get libfreetype source package by given version number.">
+    <target name="get-libfreetype-src" depends="check-libfreetype-src-present" unless="${libfreetype-src.present}" description="Get libfreetype source package by given version number.">
         <get src="${libfreetype.download.url}" dest="${lib.dir}/freetype-${libfreetype.version}.tar.gz"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get libmemcached source package by given version number		      -->
     <!-- ==================================================================== -->
-    <target name="get-libmemcached-src" depends="check-libmemcached-src-present" unless="libmemcached-src.present" description="Get libmemcached source package by given version number.">
+    <target name="get-libmemcached-src" depends="check-libmemcached-src-present" unless="${libmemcached-src.present}" description="Get libmemcached source package by given version number.">
         <get src="${libmemcached.download.url}" dest="${lib.dir}/libmemcached-${libmemcached.version}.tar.gz"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get libmcrypt source package by given version number		          -->
     <!-- ==================================================================== -->
-    <target name="get-libmcrypt-src" depends="check-libmcrypt-src-present" unless="libmcrypt-src.present" description="Get libmcrypt source package by given version number.">
+    <target name="get-libmcrypt-src" depends="check-libmcrypt-src-present" unless="${libmcrypt-src.present}" description="Get libmcrypt source package by given version number.">
         <get src="${libmcrypt.download.url}" dest="${lib.dir}/libmcrypt-${libmcrypt.version}.tar.gz"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get libpng source package by given version number		          -->
     <!-- ==================================================================== -->
-    <target name="get-libpng-src" depends="check-libpng-src-present" unless="libpng-src.present" description="Get libpng source package by given version number.">
+    <target name="get-libpng-src" depends="check-libpng-src-present" unless="${libpng-src.present}" description="Get libpng source package by given version number.">
         <get src="${libpng.download.url}" dest="${lib.dir}/libpng-${libpng.version}.tar.gz"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get libjpeg source package by given version number		          -->
     <!-- ==================================================================== -->
-    <target name="get-libjpeg-src" depends="check-libjpeg-src-present" unless="libjpeg-src.present" description="Get libjpeg source package by given version number.">
+    <target name="get-libjpeg-src" depends="check-libjpeg-src-present" unless="${libjpeg-src.present}" description="Get libjpeg source package by given version number.">
         <get src="${libjpeg.download.url}" dest="${lib.dir}/jpegsrc.v${libjpeg.version}.tar.gz"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Prepares the PHP sources for the runtime                             -->
     <!-- ==================================================================== -->
-    <target name="prepare-source" depends="prepare" description="Prepares the PHP sources for the runtime.">
+    <target name="prepare-source" description="Prepares the PHP sources for the runtime.">
         <!-- prepare PHP sources -->
         <antcall target="get-php-src"/>
         <untar src="${lib.dir}/php-${appserver.php.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
@@ -265,6 +321,24 @@
         <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/pthreads">
             <fileset dir="${php-target.dir}/pthreads-${appserver.pthreads.version}"/>
+        </move>
+        <!-- prepare PECL operator sources for static compilation -->
+        <antcall target="get-operator-src"/>
+        <untar src="${lib.dir}/operator-${appserver.operator.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/operator">
+            <fileset dir="${php-target.dir}/operator-${appserver.operator.version}"/>
+        </move>
+        <!-- prepare PECL pecl_http sources for static compilation -->
+        <antcall target="get-pecl_http-src"/>
+        <untar src="${lib.dir}/pecl_http-${appserver.pecl_http.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/http">
+            <fileset dir="${php-target.dir}/pecl_http-${appserver.pecl_http.version}"/>
+        </move>
+        <!-- prepare PECL AOP sources for static compilation -->
+        <antcall target="get-AOP-src"/>
+        <untar src="${lib.dir}/AOP-${appserver.AOP.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/AOP">
+            <fileset dir="${php-target.dir}/AOP-${appserver.AOP.version}"/>
         </move>
     </target>
 
@@ -443,6 +517,9 @@
             <arg value="--enable-maintainer-zts"/>
             <arg value="--enable-pthreads=static"/>
             <arg value="--enable-memcached=static"/>
+            <arg value="--enable-AOP=static"/>
+            <!-- arg value="-enable-http=static"/ -->
+            <!-- arg value="-enable-operator=static"/ -->
         </exec>
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="make"/>
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="make">
@@ -472,27 +549,28 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Creates a DEBIAN package with the local ApplicationServer runtime    -->
+    <!-- Builds the memcached server binaries                                 -->
     <!-- ==================================================================== -->
-    <target name="DEBIAN-build-package" depends="install-composer" description="Creates a DEBIAN package with the local ApplicationServer runtime.">
-        <copy todir="${php-target.dir}/re">
-            <fileset dir="${basedir}/buildfiles/debian">
-                <include name="**/*"/>
-            </fileset>
-            <filterchain>
-                <expandproperties/>
-            </filterchain>
-        </copy>
-        <chmod perm="755" file="${php-target.dir}/re/DEBIAN/postinst" />
-        <exec dir="${php-target.dir}" executable="dpkg-deb">
-            <arg line="--build ${php-target.dir}/re appserver-${appserver.version}_${appserver.architecture}.deb"/>
+    <target name="build-memcached-server" depends="install-composer" if="${memcached.server.build}" description="Builds the memcached server binaries.">
+        <antcall target="get-memcached-server-src"/>
+        <untar src="${lib.dir}/memcached-${memcached.server.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/memcached-${memcached.server.version}" executable="sh">
+            <env key="CC" value="${memcached.server.cc}"/>
+            <arg value="configure"/>
+            <arg value="--prefix=${appserver.compile.prefix}"/>
+        </exec>
+        <chmod perm="755" dir="${php-target.dir}/memcached-${memcached.server.version}" includes="install-sh"/>
+        <exec dir="${php-target.dir}/memcached-${memcached.server.version}" executable="make"/>
+        <exec dir="${php-target.dir}/memcached-${memcached.server.version}" executable="make">
+            <arg value="DESTDIR=${php-target.dir}/re"/>
+            <arg value="install"/>
         </exec>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Changes the dylib path for Mac OS X installation                     -->
     <!-- ==================================================================== -->
-    <target name="change-dylib-path" depends="install-composer" description="Changes the dylib path for Mac OS X installation.">
+    <target name="change-dylib-path" depends="build-memcached-server" description="Changes the dylib path for Mac OS X installation.">
         <!-- change dylib pathes -->
         <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
             <arg line="-change /usr/local/lib/libpng${libpng.dylib.version}.dylib ${appserver.compile.prefix}/lib/libpng${libpng.dylib.version}.dylib php"/>
@@ -508,6 +586,24 @@
         </exec>
         <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
             <arg line="-change /usr/local/lib/libmcrypt.${libmcrypt.dylib.version}.dylib ${appserver.compile.prefix}/lib/libmcrypt.${libmcrypt.dylib.version}.dylib php"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Creates a DEBIAN package with the local ApplicationServer runtime    -->
+    <!-- ==================================================================== -->
+    <target name="create-deb" depends="install-composer" description="Creates a DEBIAN package with the local ApplicationServer runtime.">
+        <copy todir="${php-target.dir}/re">
+            <fileset dir="${basedir}/buildfiles/debian">
+                <include name="**/*"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+        <chmod perm="755" file="${php-target.dir}/re/DEBIAN/postinst" />
+        <exec dir="${php-target.dir}" executable="dpkg-deb">
+            <arg line="--build ${php-target.dir}/re appserver_${appserver.version}_${appserver.architecture}.deb"/>
         </exec>
     </target>
 
