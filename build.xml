@@ -35,7 +35,16 @@
         <copy todir="${php-target.dir}" preservelastmodified="true" overwrite="true">
             <fileset dir="${php-src.dir}">
                 <include name="**/*" />
+                <exclude name="etc/**/*"/>
             </fileset>
+        </copy>
+        <copy todir="${php-target.dir}" preservelastmodified="true" overwrite="true">
+            <fileset dir="${php-src.dir}">
+                <include name="etc/**/*"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
         </copy>
     </target>
     <!-- ==================================================================== -->
