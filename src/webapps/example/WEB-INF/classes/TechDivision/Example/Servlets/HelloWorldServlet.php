@@ -13,8 +13,8 @@ namespace TechDivision\Example\Servlets;
 use TechDivision\ServletContainer\Interfaces\Servlet;
 use TechDivision\ServletContainer\Servlets\HttpServlet;
 use TechDivision\ServletContainer\Interfaces\ServletConfig;
-use TechDivision\ServletContainer\Interfaces\ServletRequest;
-use TechDivision\ServletContainer\Interfaces\ServletResponse;
+use TechDivision\ServletContainer\Interfaces\Request;
+use TechDivision\ServletContainer\Interfaces\Response;
 
 use TechDivision\Example\Entities\Sample;
 use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
@@ -22,12 +22,12 @@ use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
 class HelloWorldServlet extends HttpServlet implements Servlet {
 
     /**
-     * @param ServletRequest $req
-     * @param ServletResponse $res
+     * @param Request $req
+     * @param Response $res
      */
-    public function doGet(ServletRequest $req, ServletResponse $res) {
+    public function doGet(Request $req, Response $res) {
 
-        $parameterMap = $req->getParameterMap();
+        $parameterMap = $req->getParams();
 
         error_log(var_export($parameterMap, true));
 

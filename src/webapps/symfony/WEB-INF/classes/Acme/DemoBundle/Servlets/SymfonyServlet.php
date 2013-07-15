@@ -8,8 +8,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use TechDivision\ServletContainer\Interfaces\Servlet;
 use TechDivision\ServletContainer\Servlets\HttpServlet;
 use TechDivision\ServletContainer\Interfaces\ServletConfig;
-use TechDivision\ServletContainer\Interfaces\ServletRequest;
-use TechDivision\ServletContainer\Interfaces\ServletResponse;
 
 use TechDivision\Example\Entities\Sample;
 use TechDivision\PersistenceContainerClient\Context\Connection\Factory;
@@ -18,10 +16,13 @@ use Symfony\Component\HttpFoundation\Session\Storage\ServletSessionStorage;
 class SymfonyServlet extends HttpServlet implements Servlet {
 
     /**
-     * @param ServletRequest $req
-     * @param ServletResponse $res
+     * @param \TechDivision\ServletContainer\Interfaces\Request $req
+     * @param \TechDivision\ServletContainer\Interfaces\Response $res
      */
-    public function doGet(ServletRequest $req, ServletResponse $res) {
+    public function doGet(
+        \TechDivision\ServletContainer\Interfaces\Request $req,
+        \TechDivision\ServletContainer\Interfaces\Response $res
+    ) {
 
         // If you don't want to setup permissions the proper way, just uncomment the following PHP line
         // read http://symfony.com/doc/current/book/installation.html#configuration-and-setup for more information
@@ -58,7 +59,7 @@ class SymfonyServlet extends HttpServlet implements Servlet {
         Request::enableHttpMethodParameterOverride();
         // $request = Request::createFromGlobals();
 
-        $request = Request::create($req->getRequestUri(), $req->getMethod(), $req->getParameterMap(), array(), array(), $req->getServerVars());
+        $request = Request::create($req->getUri(), $req->getMethod(), $req->getParams(), array(), array(), $req->getServerVars());
 
         $sessionOptions = array();
         $session = new Session(new ServletSessionStorage($sessionOptions, $req->getSession()));
@@ -75,7 +76,10 @@ class SymfonyServlet extends HttpServlet implements Servlet {
         $res->setContent($response->getContent());
     }
 
-    public function doPost(ServletRequest $req, ServletResponse $res) {
+    public function doPost(
+        \TechDivision\ServletContainer\Interfaces\Request $req,
+        \TechDivision\ServletContainer\Interfaces\Response $res
+    ) {
         $this->doGet($req, $res);
     }
 }
