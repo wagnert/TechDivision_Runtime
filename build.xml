@@ -599,9 +599,40 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Install the necessary libraries to build the DEBIAN runtime          -->
+    <!-- ==================================================================== -->
+    <target name="prepare-DEBIAN-build-system" description="Install the necessary libraries to build the DEBIAN runtime.">
+        <exec dir="${php-target.dir}" executable="apt-get">
+            <arg value="install"/>
+            <arg value="ant"/>
+            <arg value="autoconf"/>
+            <arg value="curl"/>
+            <arg value="bison"/>
+            <arg value="libxml2-dev"/>
+            <arg value="libssl-dev"/>
+            <arg value="pkg-config"/>
+            <arg value="libbz2-dev"/>
+            <arg value="libjpeg8-dev"/>
+            <arg value="libpng-dev"/>
+            <arg value="libfreetype6-dev"/>
+            <arg value="libmcrypt-dev"/>
+            <arg value="libmemcached-dev"/>
+            <arg value="git-core"/>
+            <arg value="libxpm-dev"/>
+            <arg value="libc-client2007e-dev"/>
+            <arg value="libjpeg62-dev"/>
+            <arg value="libpcre3-dev"/>
+            <arg value="libpng12-dev"/>
+            <arg value="libcurl4-openssl-dev"/>
+            <arg value="libpng12-dev"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Creates a DEBIAN package with the local ApplicationServer runtime    -->
     <!-- ==================================================================== -->
     <target name="create-deb" depends="install-composer" description="Creates a DEBIAN package with the local ApplicationServer runtime.">
+
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/debian">
                 <include name="**/*"/>
