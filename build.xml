@@ -602,7 +602,7 @@
     <!-- Install the necessary libraries to build the DEBIAN runtime          -->
     <!-- ==================================================================== -->
     <target name="prepare-DEBIAN-build-system" description="Install the necessary libraries to build the DEBIAN runtime.">
-        <exec dir="${php-target.dir}" executable="apt-get">
+	<exec dir="${php-target.dir}" executable="apt-get" inputstring="Y">
             <arg value="install"/>
             <arg value="ant"/>
             <arg value="autoconf"/>
@@ -620,7 +620,6 @@
             <arg value="git-core"/>
             <arg value="libxpm-dev"/>
             <arg value="libc-client2007e-dev"/>
-            <arg value="libjpeg62-dev"/>
             <arg value="libpcre3-dev"/>
             <arg value="libpng12-dev"/>
             <arg value="libcurl4-openssl-dev"/>
