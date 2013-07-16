@@ -3,6 +3,7 @@
 /tmp
 /lib
 /instance-src
+/builds
 /.vagrant
 /.idea
 .DS_Store
