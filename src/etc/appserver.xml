@@ -37,39 +37,11 @@
             -->
 
             <!-- Thread based receiver -->
-            <receiver type="TechDivision\ApplicationServer\SocketReceiver">
-                <worker type="TechDivision\ServletContainer\RequestHandler"/>
-                <stackable type="TechDivision\ServletContainer\WorkerRequest"/>
+            <receiver type="TechDivision\ApplicationServer\SocketThreadReceiver">
+                <thread type="TechDivision\ServletContainer\ThreadRequest"/>
                 <params address="0.0.0.0" port="8586"/>
             </receiver>
 
-            <deployment type="TechDivision\ServletContainer\Deployment"/>
-            <!-- Default host configuration -->
-            <host name="localhost"
-                  appBase="/opt/appserver/webapps"
-                  serverAdmin="${appserver.admin.email}"
-                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
-                <vhosts>
-                    <vhost name="appserver.site" appBase="site">
-                        <aliases>
-                            <alias>appserver.local</alias>
-                        </aliases>
-                    </vhost>
-                </vhosts>
-            </host>
-        </container>
-        <!--
-            This is an example of a servlet container that uses a socket for
-            sending and receiving HTML requests/responses. This solution can
-            be used for running a web server.
-        -->
-        <container type="TechDivision\ServletContainer\Container">
-            <!-- Default daemon configuration -->
-            <receiver type="TechDivision\ApplicationServer\SocketReceiver">
-                <worker type="TechDivision\ServletContainer\RequestHandler"/>
-                <stackable type="TechDivision\ServletContainer\WorkerRequest"/>
-                <params workerNumber="4" address="0.0.0.0" port="8586"/>
-            </receiver>
             <deployment type="TechDivision\ServletContainer\Deployment"/>
             <!-- Default host configuration -->
             <host name="localhost"
