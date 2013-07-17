@@ -12,6 +12,12 @@
                 <params workerNumber="8" address="0.0.0.0" port="8585"/>
             </receiver>
             <deployment type="TechDivision\PersistenceContainer\Deployment"/>
+            <!-- Default host configuration -->
+            <host name="localhost"
+                  appBase="/opt/appserver/webapps"
+                  serverAdmin="${appserver.admin.email}"
+                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
+            </host>
         </container>
         <!--
             This is an example of a servlet container that uses a socket for
@@ -52,6 +58,12 @@
                 <params workerNumber="10" address="0.0.0.0" port="8587"/>
             </receiver>
             <deployment type="TechDivision\MessageQueue\Deployment"/>
+            <!-- Default host configuration -->
+            <host name="localhost"
+                  appBase="/opt/appserver/webapps"
+                  serverAdmin="${appserver.admin.email}"
+                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
+            </host>
         </container>
     </containers>
 </appserver>
