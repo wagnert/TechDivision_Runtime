@@ -39,7 +39,7 @@
             <!-- Thread based receiver -->
             <receiver type="TechDivision\ApplicationServer\SocketThreadReceiver">
                 <worker type="TechDivision\ServletContainer\ThreadRequestAcceptor"/>
-                <params address="0.0.0.0" port="8586"/>
+                <params workerNumber="64" address="0.0.0.0" port="8586"/>
             </receiver>
 
             <deployment type="TechDivision\ServletContainer\Deployment"/>
