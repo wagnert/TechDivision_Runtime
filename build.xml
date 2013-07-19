@@ -158,6 +158,20 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Check if the httpd server source package has been downloaded yet     -->
+    <!-- ==================================================================== -->
+    <target name="check-httpd-server-src-present" description="Check if the httpd server source package has been downloaded yet.">
+        <available file="${lib.dir}/httpd-${httpd.server.version}.tar.gz" property="httpd-server-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if the nginx server source package has been downloaded yet     -->
+    <!-- ==================================================================== -->
+    <target name="check-nginx-server-src-present" description="Check if the nginx server source package has been downloaded yet.">
+        <available file="${lib.dir}/nginx-${nginx.server.version}.tar.gz" property="nginx-server-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Check if PECL memcached sources has been downloaded yet  		 	  -->
     <!-- ==================================================================== -->
     <target name="check-memcached-src-present" description="Check if PECL memcached sources has been downloaded yet.">
@@ -312,9 +326,23 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Get httpd server source package by given version number		      -->
+    <!-- ==================================================================== -->
+    <target name="get-httpd-server-src" depends="check-httpd-server-src-present" unless="${httpd-server-src.present}" description="Get httpd server source package by given version number.">
+        <get src="${httpd.server.download.url}" dest="${lib.dir}/httpd-${httpd.server.version}.tar.gz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get nginx server source package by given version number		      -->
+    <!-- ==================================================================== -->
+    <target name="get-nginx-server-src" depends="check-nginx-server-src-present" unless="${nginx-server-src.present}" description="Get nginx server source package by given version number.">
+        <get src="${nginx.server.download.url}" dest="${lib.dir}/nginx-${nginx.server.version}.tar.gz"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Prepares the PHP sources for the runtime                             -->
     <!-- ==================================================================== -->
-    <target name="prepare-source" description="Prepares the PHP sources for the runtime.">
+    <target name="prepare-source" depends="prepare" description="Prepares the PHP sources for the runtime.">
         <!-- prepare PHP sources -->
         <antcall target="get-php-src"/>
         <untar src="${lib.dir}/php-${appserver.php.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
@@ -449,13 +477,89 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Builds the memcached server binaries                                 -->
+    <!-- ==================================================================== -->
+    <target name="build-memcached-server" if="${memcached.server.build}" description="Builds the memcached server binaries.">
+        <antcall target="get-memcached-server-src"/>
+        <untar src="${lib.dir}/memcached-${memcached.server.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/memcached-${memcached.server.version}" executable="sh">
+            <env key="CC" value="${memcached.server.cc}"/>
+            <arg value="configure"/>
+            <arg value="--prefix=${appserver.compile.prefix}"/>
+        </exec>
+        <chmod perm="755" dir="${php-target.dir}/memcached-${memcached.server.version}" includes="install-sh"/>
+        <exec dir="${php-target.dir}/memcached-${memcached.server.version}" executable="make"/>
+        <exec dir="${php-target.dir}/memcached-${memcached.server.version}" executable="make">
+            <arg value="DESTDIR=${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Builds the httpd server binaries                                     -->
+    <!-- ==================================================================== -->
+    <target name="build-httpd-server" if="${httpd.server.build}" description="Builds the httpd server binaries.">
+        <antcall target="get-httpd-server-src"/>
+        <untar src="${lib.dir}/httpd-${httpd.server.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+        <chmod perm="755" dir="${php-target.dir}/httpd-${httpd.server.version}/build" includes="**/*"/>
+        <exec dir="${php-target.dir}/httpd-${httpd.server.version}" executable="sh">
+            <env key="CC" value="${httpd.server.cc}"/>
+            <arg value="configure"/>
+            <arg value="--prefix=${httpd.server.compile.prefix}"/>
+            <arg value="--with-port=${httpd.server.port}"/>
+        </exec>
+        <chmod perm="755" dir="${php-target.dir}/httpd-${httpd.server.version}" includes="install-sh"/>
+        <exec dir="${php-target.dir}/httpd-${httpd.server.version}" executable="make"/>
+        <exec dir="${php-target.dir}/httpd-${httpd.server.version}" executable="make">
+            <arg value="DESTDIR=${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Builds the nginx server binaries                                     -->
+    <!-- ==================================================================== -->
+    <target name="build-nginx-server" if="${nginx.server.build}" description="Builds the nginx server binaries.">
+        <antcall target="get-nginx-server-src"/>
+        <untar src="${lib.dir}/nginx-${nginx.server.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/nginx-${nginx.server.version}" executable="sh">
+            <env key="CC" value="${nginx.server.cc}"/>
+            <arg value="configure"/>
+            <arg value="--prefix=${nginx.server.compile.prefix}"/>
+            <arg value="--sbin-path=${nginx.server.compile.prefix}/sbin/nginx"/>
+            <arg value="--conf-path=${nginx.server.compile.prefix}/etc/nginx/nginx.conf"/>
+            <arg value="--error-log-path=${nginx.server.compile.prefix}/var/log/nginx/error.log"/>
+            <arg value="--http-log-path=${nginx.server.compile.prefix}/var/log/nginx/access.log"/>
+            <arg value="--pid-path=${nginx.server.compile.prefix}/var/run/nginx.pid"/>
+            <arg value="--lock-path=${nginx.server.compile.prefix}/var/lock/nginx.lock"/>
+            <arg value="--http-client-body-temp-path=${nginx.server.compile.prefix}/var/lib/nginx/body"/>
+            <arg value="--http-proxy-temp-path=${nginx.server.compile.prefix}/var/lib/nginx/proxy"/>
+            <arg value="--http-fastcgi-temp-path=${nginx.server.compile.prefix}/var/lib/nginx/fastcgi"/>
+            <arg value="--http-uwsgi-temp-path=${nginx.server.compile.prefix}/var/lib/nginx/uwsgi"/>
+        </exec>
+        <chmod perm="755" dir="${php-target.dir}/nginx-${nginx.server.version}" includes="install-sh"/>
+        <exec dir="${php-target.dir}/nginx-${nginx.server.version}" executable="make"/>
+        <exec dir="${php-target.dir}/nginx-${nginx.server.version}" executable="make">
+            <arg value="DESTDIR=${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+        <!-- create temporary directory -->
+        <mkdir dir="${php-target.dir}/re${appserver.compile.prefix}/var/lib/nginx" />
+        <!-- delete the unnecessary default html directory -->
+        <delete dir="${php-target.dir}/re${appserver.compile.prefix}/html"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Copies the PHP Application Server runtime sources                    -->
     <!-- ==================================================================== -->
     <target name="copy-runtime" description="Copies the PHP Application Server runtime sources.">
-        <copy todir="${php-target.dir}/re${appserver.compile.prefix}">
+        <copy todir="${php-target.dir}/re${appserver.compile.prefix}" overwrite="true">
             <fileset dir="${php-src.dir}">
                 <include name="**/*"/>
             </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
         </copy>
     </target>
 
@@ -469,6 +573,9 @@
         <antcall target="build-libfreetype"/>
         <antcall target="build-libmemcached"/>
         <antcall target="build-libmcrypt"/>
+        <antcall target="build-memcached-server"/>
+        <antcall target="build-nginx-server"/>
+        <antcall target="build-httpd-server"/>
         <!-- compile the PHP sources and PECL extensions static -->
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="sh">
             <arg value="buildconf"/>
@@ -523,10 +630,11 @@
             <arg value="--enable-pdo"/>
             <arg value="--enable-roxen-zts"/>
             <arg value="--enable-pcntl"/>
+            <arg value="--enable-fpm"/>
             <arg value="--enable-maintainer-zts"/>
             <arg value="--enable-pthreads=static"/>
             <arg value="--enable-memcached=static"/>
-            <arg value="--enable-AOP=static"/>
+            <!-- arg value="-enable-AOP=static"/ -->
             <!-- arg value="-enable-http=static"/ -->
             <!-- arg value="-enable-operator=static"/ -->
         </exec>
@@ -554,47 +662,6 @@
         <!-- install composer packages -->
         <exec dir="${php-target.dir}/re${appserver.compile.prefix}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/php">
             <arg line="bin/composer.phar --working-dir=app/code update"/>
-        </exec>
-    </target>
-
-    <!-- ==================================================================== -->
-    <!-- Builds the memcached server binaries                                 -->
-    <!-- ==================================================================== -->
-    <target name="build-memcached-server" depends="install-composer" if="${memcached.server.build}" description="Builds the memcached server binaries.">
-        <antcall target="get-memcached-server-src"/>
-        <untar src="${lib.dir}/memcached-${memcached.server.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
-        <exec dir="${php-target.dir}/memcached-${memcached.server.version}" executable="sh">
-            <env key="CC" value="${memcached.server.cc}"/>
-            <arg value="configure"/>
-            <arg value="--prefix=${appserver.compile.prefix}"/>
-        </exec>
-        <chmod perm="755" dir="${php-target.dir}/memcached-${memcached.server.version}" includes="install-sh"/>
-        <exec dir="${php-target.dir}/memcached-${memcached.server.version}" executable="make"/>
-        <exec dir="${php-target.dir}/memcached-${memcached.server.version}" executable="make">
-            <arg value="DESTDIR=${php-target.dir}/re"/>
-            <arg value="install"/>
-        </exec>
-    </target>
-
-    <!-- ==================================================================== -->
-    <!-- Changes the dylib path for Mac OS X installation                     -->
-    <!-- ==================================================================== -->
-    <target name="change-dylib-path" depends="build-memcached-server" description="Changes the dylib path for Mac OS X installation.">
-        <!-- change dylib pathes -->
-        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
-            <arg line="-change /usr/local/lib/libpng${libpng.dylib.version}.dylib ${appserver.compile.prefix}/lib/libpng${libpng.dylib.version}.dylib php"/>
-        </exec>
-        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
-            <arg line="-change /usr/local/lib/libjpeg.${libjpeg.dylib.version}.dylib ${appserver.compile.prefix}/lib/libjpeg.${libjpeg.dylib.version}.dylib php"/>
-        </exec>
-        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
-            <arg line="-change /usr/local/lib/libfreetype.${libfreetype.dylib.version}.dylib ${appserver.compile.prefix}/lib/libfreetype.${libfreetype.dylib.version}.dylib php"/>
-        </exec>
-        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
-            <arg line="-change /usr/local/lib/libmemcached.${libmemcached.dylib.version}.dylib ${appserver.compile.prefix}/lib/libmemcached.${libmemcached.dylib.version}.dylib php"/>
-        </exec>
-        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
-            <arg line="-change /usr/local/lib/libmcrypt.${libmcrypt.dylib.version}.dylib ${appserver.compile.prefix}/lib/libmcrypt.${libmcrypt.dylib.version}.dylib php"/>
         </exec>
     </target>
 
@@ -631,7 +698,7 @@
     <!-- Creates a DEBIAN package with the local ApplicationServer runtime    -->
     <!-- ==================================================================== -->
     <target name="create-deb" depends="install-composer" description="Creates a DEBIAN package with the local ApplicationServer runtime.">
-
+        <antcall target="prepare-DEBIAN-build-system"/>
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/debian">
                 <include name="**/*"/>
@@ -647,9 +714,32 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Changes the dylib path for Mac OS X installation                     -->
+    <!-- ==================================================================== -->
+    <target name="change-dylib-path" description="Changes the dylib path for Mac OS X installation.">
+        <!-- change dylib pathes -->
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+            <arg line="-change /usr/local/lib/libpng${libpng.dylib.version}.dylib ${appserver.compile.prefix}/lib/libpng${libpng.dylib.version}.dylib php"/>
+        </exec>
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+            <arg line="-change /usr/local/lib/libjpeg.${libjpeg.dylib.version}.dylib ${appserver.compile.prefix}/lib/libjpeg.${libjpeg.dylib.version}.dylib php"/>
+        </exec>
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+            <arg line="-change /usr/local/lib/libfreetype.${libfreetype.dylib.version}.dylib ${appserver.compile.prefix}/lib/libfreetype.${libfreetype.dylib.version}.dylib php"/>
+        </exec>
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+            <arg line="-change /usr/local/lib/libmemcached.${libmemcached.dylib.version}.dylib ${appserver.compile.prefix}/lib/libmemcached.${libmemcached.dylib.version}.dylib php"/>
+        </exec>
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+            <arg line="-change /usr/local/lib/libmcrypt.${libmcrypt.dylib.version}.dylib ${appserver.compile.prefix}/lib/libmcrypt.${libmcrypt.dylib.version}.dylib php"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Creates a .pkg package with the local ApplicationServer runtime      -->
     <!-- ==================================================================== -->
-    <target name="create-pkg" depends="change-dylib-path" description="Creates a .pkg package with the local ApplicationServer runtime.">
+    <target name="create-pkg" depends="install-composer" description="Creates a .pkg package with the local ApplicationServer runtime.">
+        <antcall target="change-dylib-path"/>
         <exec dir="${basedir}" executable="pkgbuild">
             <arg value="--root"/>
             <arg value="${php-target.dir}/re/opt"/>
