@@ -536,6 +536,7 @@
             <arg value="--http-proxy-temp-path=${nginx.server.compile.prefix}/var/lib/nginx/proxy"/>
             <arg value="--http-fastcgi-temp-path=${nginx.server.compile.prefix}/var/lib/nginx/fastcgi"/>
             <arg value="--http-uwsgi-temp-path=${nginx.server.compile.prefix}/var/lib/nginx/uwsgi"/>
+            <arg value="--http-scgi-temp-path=${nginx.server.compile.prefix}/var/lib/nginx/scgi"/>
         </exec>
         <chmod perm="755" dir="${php-target.dir}/nginx-${nginx.server.version}" includes="install-sh"/>
         <exec dir="${php-target.dir}/nginx-${nginx.server.version}" executable="make"/>
