@@ -49,9 +49,9 @@
                   serverAdmin="${appserver.admin.email}"
                   serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
                 <vhosts>
-                    <vhost name="appserver.site" appBase="site">
+                    <vhost name="www.appserver.io" appBase="site">
                         <aliases>
-                            <alias>appserver.local</alias>
+                            <alias>appserver.io</alias>
                         </aliases>
                     </vhost>
                 </vhosts>
