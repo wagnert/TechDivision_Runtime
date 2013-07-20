@@ -15,6 +15,7 @@
         "techdivision/messagequeueclient": "dev-master",
         "doctrine/orm": "*",
         "psr/log": "*",
-        "symfony/symfony": "*"
+        "symfony/symfony": "*",
+        "react/react": "0.3.*"
     }
 }
