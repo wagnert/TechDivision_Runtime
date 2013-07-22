@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "flush_all" | nc 127.0.0.1 11211 > /dev/null
+
 APPSERVER_ROOT="/opt/appserver"
 
 export LIBRARY_PATH=$APPSERVER_ROOT/lib

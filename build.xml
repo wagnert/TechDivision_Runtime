@@ -186,6 +186,20 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Check if PECL libevent sources has been downloaded yet  		 	  -->
+    <!-- ==================================================================== -->
+    <target name="check-libevent-src-present" description="Check if PECL libevent sources has been downloaded yet.">
+        <available file="${lib.dir}/libevent-${appserver.libevent.version}.tgz" property="libevent-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if PECL libev sources has been downloaded yet  		 	      -->
+    <!-- ==================================================================== -->
+    <target name="check-libev-src-present" description="Check if PECL libev sources has been downloaded yet.">
+        <available file="${lib.dir}/libev-${appserver.libev.version}.zip" property="libev-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Check if PECL operator sources has been downloaded yet  		 	  -->
     <!-- ==================================================================== -->
     <target name="check-operator-src-present" description="Check if PECL operator sources has been downloaded yet.">
@@ -261,6 +275,21 @@
     <target name="get-pthreads-src" depends="check-pthreads-src-present" unless="${pthreads-src.present}" description="Get PECL pthreads source package by given version number">
         <get src="http://pecl.php.net/get/pthreads-${appserver.pthreads.version}.tgz" dest="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz"/>
     </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get PECL libevent source package by given version number		      -->
+    <!-- ==================================================================== -->
+    <target name="get-libevent-src" depends="check-libevent-src-present" unless="${libevent-src.present}" description="Get PECL libevent source package by given version number">
+        <get src="http://pecl.php.net/get/libevent-${appserver.libevent.version}.tgz" dest="${lib.dir}/libevent-${appserver.libevent.version}.tgz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get PECL libev source package by given version number		      -->
+    <!-- ==================================================================== -->
+    <target name="get-libev-src" depends="check-libev-src-present" unless="${libev-src.present}" description="Get PECL libev source package by given version number">
+        <get src="https://github.com/whatthejeff/php-libev/archive/${appserver.libev.version}.zip" dest="${lib.dir}/libev-${appserver.libev.version}.zip"/>
+    </target>
+
 
     <!-- ==================================================================== -->
     <!-- Get PECL operator source package by given version number		      -->
@@ -347,6 +376,12 @@
         <antcall target="get-php-src"/>
         <untar src="${lib.dir}/php-${appserver.php.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
         <chmod perm="755" dir="${php-target.dir}/php-src-php-${appserver.php.version}/build" includes="**/*"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Prepares the PECL sources for static compilation (not active!!)      -->
+    <!-- ==================================================================== -->
+    <target name="prepare-pecl-extension" description="Prepares the PECL sources for static compilation (not active!!)">
         <!-- prepare PECL memcached sources sources for static compilation -->
         <antcall target="get-memcached-src"/>
         <untar src="${lib.dir}/memcached-${appserver.memcached.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
@@ -376,6 +411,18 @@
         <untar src="${lib.dir}/AOP-${appserver.AOP.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/AOP">
             <fileset dir="${php-target.dir}/AOP-${appserver.AOP.version}"/>
+        </move>
+        <!-- prepare PECL libevent sources for static compilation -->
+        <antcall target="get-libevent-src"/>
+        <untar src="${lib.dir}/libevent-${appserver.libevent.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/libevent">
+            <fileset dir="${php-target.dir}/libevent-${appserver.libevent.version}"/>
+        </move>
+        <!-- prepare PECL libev sources for static compilation -->
+        <antcall target="get-libev-src"/>
+        <unzip src="${lib.dir}/libev-${appserver.libev.version}.zip" dest="${php-target.dir}"/>
+        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/libev">
+            <fileset dir="${php-target.dir}/php-libev-${appserver.ev.version}"/>
         </move>
     </target>
 
@@ -606,6 +653,7 @@
             <arg value="--with-mysqli"/>
             <arg value="--with-openssl"/>
             <arg value="--with-pdo-mysql"/>
+            <arg value="--with-pear=${appserver.compile.prefix}/app/code/lib"/>
             <arg value="--with-libdir=${appserver.compile.libdir}"/>
             <arg value="--with-config-file-path=${appserver.compile.prefix}/etc"/>
             <arg value="--with-config-file-scan-dir=${appserver.compile.prefix}/etc/conf.d"/>
@@ -613,7 +661,7 @@
             <arg value="--with-jpeg-dir=${libjpeg.dir}"/>
             <arg value="--with-png-dir=${libpng.dir}"/>
             <arg value="--with-freetype-dir=${libfreetype.dir}"/>
-            <arg value="--with-libmemcached-dir=${libmemcached.dir}"/>
+            <!-- arg value="-with-libmemcached-dir=${libmemcached.dir}"/ -->
             <arg value="--enable-static"/>
             <arg value="--enable-exif"/>
             <arg value="--enable-inline-optimization"/>
@@ -633,8 +681,8 @@
             <arg value="--enable-pcntl"/>
             <arg value="--enable-fpm"/>
             <arg value="--enable-maintainer-zts"/>
-            <arg value="--enable-pthreads=static"/>
-            <arg value="--enable-memcached=static"/>
+            <!-- arg value="-enable-pthreads=static"/ -->
+            <!-- arg value="-enable-memcached=static"/ -->
             <!-- arg value="-enable-AOP=static"/ -->
             <!-- arg value="-enable-http=static"/ -->
             <!-- arg value="-enable-operator=static"/ -->
@@ -644,8 +692,142 @@
             <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
+        <!-- build the PECL modules shared -->
+        <antcall target="pecl-build-pthreads"/>
+        <antcall target="pecl-build-memcached"/>
+        <antcall target="pecl-build-pecl_http"/>
+        <antcall target="pecl-build-libevent"/>
+        <antcall target="pecl-build-libev"/>
+        <antcall target="pecl-build-AOP"/>
+        <!-- antcall target="pecl-build-operator"/ -->
         <!-- copy runtime files from src directory -->
         <antcall target="copy-runtime"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Builds the PECL pthreads as shared extension                         -->
+    <!-- ==================================================================== -->
+    <target name="pecl-build-pthreads" description="Builds the PECL pthreads as shared extension.">
+        <antcall target="get-pthreads-src"/>
+        <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="sh">
+            <arg value="configure"/>
+            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+        </exec>
+        <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="make"/>
+        <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="make">
+            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Builds the PECL memcached as shared extension                        -->
+    <!-- ==================================================================== -->
+    <target name="pecl-build-memcached" description="Builds the PECL memcached as shared extension.">
+        <antcall target="get-memcached-src"/>
+        <untar src="${lib.dir}/memcached-${appserver.memcached.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="sh">
+            <arg value="configure"/>
+            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+        </exec>
+        <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="make"/>
+        <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="make">
+            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Builds the PECL operator as shared extension                         -->
+    <!-- ==================================================================== -->
+    <target name="pecl-build-operator" description="Builds the PECL operator as shared extension.">
+        <antcall target="get-operator-src"/>
+        <untar src="${lib.dir}/operator-${appserver.operator.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/operator-${appserver.operator.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/operator-${appserver.operator.version}" executable="sh">
+            <arg value="configure"/>
+            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+        </exec>
+        <exec dir="${php-target.dir}/operator-${appserver.operator.version}" executable="make"/>
+        <exec dir="${php-target.dir}/operator-${appserver.operator.version}" executable="make">
+            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Builds the PECL pecl_http as shared extension                         -->
+    <!-- ==================================================================== -->
+    <target name="pecl-build-pecl_http" description="Builds the PECL pecl_http as shared extension.">
+        <antcall target="get-pecl_http-src"/>
+        <untar src="${lib.dir}/pecl_http-${appserver.pecl_http.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/pecl_http-${appserver.pecl_http.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/pecl_http-${appserver.pecl_http.version}" executable="sh">
+            <arg value="configure"/>
+            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+        </exec>
+        <exec dir="${php-target.dir}/pecl_http-${appserver.pecl_http.version}" executable="make"/>
+        <exec dir="${php-target.dir}/pecl_http-${appserver.pecl_http.version}" executable="make">
+            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Builds the PECL libevent as shared extension                         -->
+    <!-- ==================================================================== -->
+    <target name="pecl-build-libevent" description="Builds the PECL libevent as shared extension.">
+        <antcall target="get-libevent-src"/>
+        <untar src="${lib.dir}/libevent-${appserver.libevent.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/libevent-${appserver.libevent.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/libevent-${appserver.libevent.version}" executable="sh">
+            <arg value="configure"/>
+            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+        </exec>
+        <exec dir="${php-target.dir}/libevent-${appserver.libevent.version}" executable="make"/>
+        <exec dir="${php-target.dir}/libevent-${appserver.libevent.version}" executable="make">
+            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Builds the PECL libev as shared extension                         -->
+    <!-- ==================================================================== -->
+    <target name="pecl-build-libev" description="Builds the PECL libev as shared extension.">
+        <antcall target="get-libev-src"/>
+        <unzip src="${lib.dir}/libev-${appserver.libev.version}.zip" dest="${php-target.dir}"/>
+        <exec dir="${php-target.dir}/php-libev-${appserver.libev.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/php-libev-${appserver.libev.version}" executable="sh">
+            <arg value="configure"/>
+            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+        </exec>
+        <exec dir="${php-target.dir}/php-libev-${appserver.libev.version}" executable="make"/>
+        <exec dir="${php-target.dir}/php-libev-${appserver.libev.version}" executable="make">
+            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Builds the PECL AOP as shared extension                         -->
+    <!-- ==================================================================== -->
+    <target name="pecl-build-AOP" description="Builds the PECL AOP as shared extension.">
+        <antcall target="get-AOP-src"/>
+        <untar src="${lib.dir}/AOP-${appserver.AOP.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/AOP-${appserver.AOP.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/AOP-${appserver.AOP.version}" executable="sh">
+            <arg value="configure"/>
+            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+        </exec>
+        <exec dir="${php-target.dir}/AOP-${appserver.AOP.version}" executable="make"/>
+        <exec dir="${php-target.dir}/AOP-${appserver.AOP.version}" executable="make">
+            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
     </target>
 
     <!-- ==================================================================== -->
