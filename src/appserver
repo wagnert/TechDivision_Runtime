@@ -1,6 +1,7 @@
 #!/bin/bash
 
-echo "flush_all" | nc 127.0.0.1 11211 > /dev/null
+echo "Flush Memcache: " && echo "flush_all
+quit" | nc 127.0.0.1 11211
 
 APPSERVER_ROOT="/opt/appserver"
 
