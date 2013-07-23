@@ -822,7 +822,7 @@
         <exec dir="${php-target.dir}/libevent-${appserver.libevent.version}" executable="sh">
             <arg value="configure"/>
             <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
-            <arg value="--with-libevent=${php-target.dir}/re${appserver.compile.prefix}"/>
+            <arg value="--with-libevent=${appserver.compile.libevent.libdir}"/>
         </exec>
         <exec dir="${php-target.dir}/libevent-${appserver.libevent.version}" executable="make"/>
         <exec dir="${php-target.dir}/libevent-${appserver.libevent.version}" executable="make">
