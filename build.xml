@@ -565,6 +565,7 @@
             <env key="CC" value="${memcached.server.cc}"/>
             <arg value="configure"/>
             <arg value="--prefix=${appserver.compile.prefix}"/>
+            <arg value="-with-libevent=${php-target.dir}/re${appserver.compile.prefix}"/>
         </exec>
         <chmod perm="755" dir="${php-target.dir}/memcached-${memcached.server.version}" includes="install-sh"/>
         <exec dir="${php-target.dir}/memcached-${memcached.server.version}" executable="make"/>
@@ -616,6 +617,7 @@
             <arg value="--http-fastcgi-temp-path=${nginx.server.compile.prefix}/var/lib/nginx/fastcgi"/>
             <arg value="--http-uwsgi-temp-path=${nginx.server.compile.prefix}/var/lib/nginx/uwsgi"/>
             <arg value="--http-scgi-temp-path=${nginx.server.compile.prefix}/var/lib/nginx/scgi"/>
+            <arg value="--without-http_rewrite_module"/>
         </exec>
         <chmod perm="755" dir="${php-target.dir}/nginx-${nginx.server.version}" includes="install-sh"/>
         <exec dir="${php-target.dir}/nginx-${nginx.server.version}" executable="make"/>
@@ -820,6 +822,7 @@
         <exec dir="${php-target.dir}/libevent-${appserver.libevent.version}" executable="sh">
             <arg value="configure"/>
             <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+            <arg value="--with-libevent=${php-target.dir}/re${appserver.compile.prefix}"/>
         </exec>
         <exec dir="${php-target.dir}/libevent-${appserver.libevent.version}" executable="make"/>
         <exec dir="${php-target.dir}/libevent-${appserver.libevent.version}" executable="make">
