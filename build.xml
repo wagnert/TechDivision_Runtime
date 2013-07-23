@@ -249,10 +249,17 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Check if libjpeg sources has been downloaded yet   		 	          -->
+    <!-- Check if libjpeg sources has been downloaded yet   		 	      -->
     <!-- ==================================================================== -->
     <target name="check-libjpeg-src-present" description="Check if libjpeg sources has been downloaded yet.">
         <available file="${lib.dir}/jpegsrc.v${libjpeg.version}.tar.gz" property="libjpeg-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if libevent library sources has been downloaded yet   		  -->
+    <!-- ==================================================================== -->
+    <target name="check-libevent-library-src-present" description="Check if libevent library sources has been downloaded yet.">
+        <available file="${lib.dir}/libevent-${libevent.version}.tar.gz" property="libevent-src.present"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -289,7 +296,6 @@
     <target name="get-libev-src" depends="check-libev-src-present" unless="${libev-src.present}" description="Get PECL libev source package by given version number">
         <get src="https://github.com/whatthejeff/php-libev/archive/${appserver.libev.version}.zip" dest="${lib.dir}/libev-${appserver.libev.version}.zip"/>
     </target>
-
 
     <!-- ==================================================================== -->
     <!-- Get PECL operator source package by given version number		      -->
@@ -352,6 +358,13 @@
     <!-- ==================================================================== -->
     <target name="get-libjpeg-src" depends="check-libjpeg-src-present" unless="${libjpeg-src.present}" description="Get libjpeg source package by given version number.">
         <get src="${libjpeg.download.url}" dest="${lib.dir}/jpegsrc.v${libjpeg.version}.tar.gz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get libevent source package by given version number		  -->
+    <!-- ==================================================================== -->
+    <target name="get-libevent-library-src" depends="check-libevent-library-src-present" unless="${libevent-library-src.present}" description="Get libevent source package by given version number.">
+        <get src="${libevent.download.url}" dest="${lib.dir}/libevent-${libevent.version}.tar.gz"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -524,6 +537,25 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Prepares the libevent sources for the runtime                -->
+    <!-- ==================================================================== -->
+    <target name="build-libevent" if="${libevent.build}" description="Prepares the libevent sources for the runtime.">
+        <antcall target="get-libevent-library-src"/>
+        <untar src="${lib.dir}/libevent-${libevent.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/libevent-${libevent.version}-stable" executable="sh">
+            <env key="CC" value="${libevent.cc}"/>
+            <arg value="configure"/>
+            <arg value="--prefix=${appserver.compile.prefix}"/>
+        </exec>
+        <chmod perm="755" dir="${php-target.dir}/libevent-${libevent.version}-stable" includes="install-sh"/>
+        <exec dir="${php-target.dir}/libevent-${libevent.version}-stable" executable="make"/>
+        <exec dir="${php-target.dir}/libevent-${libevent.version}-stable" executable="make">
+            <arg value="DESTDIR=${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Builds the memcached server binaries                                 -->
     <!-- ==================================================================== -->
     <target name="build-memcached-server" if="${memcached.server.build}" description="Builds the memcached server binaries.">
@@ -621,6 +653,7 @@
         <antcall target="build-libfreetype"/>
         <antcall target="build-libmemcached"/>
         <antcall target="build-libmcrypt"/>
+        <antcall target="build-libevent"/>
         <antcall target="build-memcached-server"/>
         <antcall target="build-nginx-server"/>
         <antcall target="build-httpd-server"/>
@@ -732,6 +765,7 @@
         <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="sh">
             <arg value="configure"/>
             <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+            <arg value="--with-libmemcached-dir=${libmemcached.dir}"/>
         </exec>
         <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="make"/>
         <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="make">
