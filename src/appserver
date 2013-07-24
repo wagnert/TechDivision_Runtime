@@ -1,5 +1,8 @@
 #!/bin/bash
 
+ulimit -Hn 32768
+ulimit -Sn 32768
+
 echo "Flush Memcache: " && echo "flush_all
 quit" | nc 127.0.0.1 11211
 
