@@ -36,5 +36,5 @@ Depends: libc6,
   git
 Architecture: ${appserver.architecture}
 Version: ${appserver.version}
-Homepage: https://github.com/techdivision/TechDivision_Runtime
-Description: php appserver
+Homepage: http://appserver.io
+Description: Multithreaded Application Server for PHP, written in PHP
