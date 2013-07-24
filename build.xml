@@ -186,6 +186,13 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Check if PECL xdebug sources has been downloaded yet  		 	      -->
+    <!-- ==================================================================== -->
+    <target name="check-xdebug-src-present" description="Check if PECL xdebug sources has been downloaded yet.">
+        <available file="${lib.dir}/xdebug-${appserver.xdebug.version}.tgz" property="xdebug-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Check if PECL libevent sources has been downloaded yet  		 	  -->
     <!-- ==================================================================== -->
     <target name="check-libevent-src-present" description="Check if PECL libevent sources has been downloaded yet.">
@@ -256,6 +263,13 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Check if pcre sources has been downloaded yet   		 	          -->
+    <!-- ==================================================================== -->
+    <target name="check-pcre-src-present" description="Check if pcre sources has been downloaded yet.">
+        <available file="${lib.dir}/pcre-${pcre.version}.tar.gz" property="pcre-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Check if libevent library sources has been downloaded yet   		  -->
     <!-- ==================================================================== -->
     <target name="check-libevent-library-src-present" description="Check if libevent library sources has been downloaded yet.">
@@ -316,6 +330,13 @@
     <!-- ==================================================================== -->
     <target name="get-AOP-src" depends="check-AOP-src-present" unless="${AOP-src.present}" description="Get PECL AOP source package by given version number">
         <get src="http://pecl.php.net/get/AOP-${appserver.AOP.version}.tgz" dest="${lib.dir}/AOP-${appserver.AOP.version}.tgz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get PECL xdebug source package by given version number		          -->
+    <!-- ==================================================================== -->
+    <target name="get-xdebug-src" depends="check-xdebug-src-present" unless="${xdebug-src.present}" description="Get PECL xdebug source package by given version number">
+        <get src="http://pecl.php.net/get/xdebug-${appserver.xdebug.version}.tgz" dest="${lib.dir}/xdebug-${appserver.xdebug.version}.tgz"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -382,6 +403,13 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Get pcre source package by given version number		              -->
+    <!-- ==================================================================== -->
+    <target name="get-pcre-src" depends="check-pcre-src-present" unless="${pcre-src.present}" description="Get pcre source package by given version number.">
+        <get src="${pcre.download.url}" dest="${lib.dir}/pcre-${pcre.version}.tar.gz"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Prepares the PHP sources for the runtime                             -->
     <!-- ==================================================================== -->
     <target name="prepare-source" depends="prepare" description="Prepares the PHP sources for the runtime.">
@@ -436,6 +464,12 @@
         <unzip src="${lib.dir}/libev-${appserver.libev.version}.zip" dest="${php-target.dir}"/>
         <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/libev">
             <fileset dir="${php-target.dir}/php-libev-${appserver.ev.version}"/>
+        </move>
+        <!-- prepare PECL xdebug sources for static compilation -->
+        <antcall target="get-xdebug-src"/>
+        <unzip src="${lib.dir}/xdebug-${appserver.xdebug.version}.zip" dest="${php-target.dir}"/>
+        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/xdebug">
+            <fileset dir="${php-target.dir}/xdebug-${appserver.ev.version}"/>
         </move>
     </target>
 
@@ -556,6 +590,26 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Prepares the pcre sources for the runtime                            -->
+    <!-- ==================================================================== -->
+    <target name="build-pcre" if="${pcre.build}" description="Prepares the pcre sources for the runtime.">
+        <antcall target="get-pcre-src"/>
+        <untar src="${lib.dir}/pcre-${pcre.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/pcre-${pcre.version}" executable="sh">
+            <env key="CC" value="${pcre.cc}"/>
+            <arg value="configure"/>
+            <arg value="--prefix=${appserver.compile.prefix}"/>
+        </exec>
+        <chmod perm="755" dir="${php-target.dir}/pcre-${pcre.version}" includes="install-sh"/>
+        <chmod perm="755" dir="${php-target.dir}/pcre-${pcre.version}" includes="configure"/>
+        <exec dir="${php-target.dir}/pcre-${pcre.version}" executable="make"/>
+        <exec dir="${php-target.dir}/pcre-${pcre.version}" executable="make">
+            <arg value="DESTDIR=${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Builds the memcached server binaries                                 -->
     <!-- ==================================================================== -->
     <target name="build-memcached-server" if="${memcached.server.build}" description="Builds the memcached server binaries.">
@@ -656,6 +710,7 @@
         <antcall target="build-libmemcached"/>
         <antcall target="build-libmcrypt"/>
         <antcall target="build-libevent"/>
+        <antcall target="build-pcre"/>
         <antcall target="build-memcached-server"/>
         <antcall target="build-nginx-server"/>
         <antcall target="build-httpd-server"/>
@@ -734,6 +789,7 @@
         <antcall target="pecl-build-libevent"/>
         <antcall target="pecl-build-libev"/>
         <antcall target="pecl-build-AOP"/>
+        <antcall target="pecl-build-xdebug"/>
         <!-- antcall target="pecl-build-operator"/ -->
         <!-- copy runtime files from src directory -->
         <antcall target="copy-runtime"/>
@@ -868,6 +924,24 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Builds the PECL xdebug as shared extension                           -->
+    <!-- ==================================================================== -->
+    <target name="pecl-build-xdebug" description="Builds the PECL xdebug as shared extension.">
+        <antcall target="get-xdebug-src"/>
+        <untar src="${lib.dir}/xdebug-${appserver.xdebug.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/xdebug-${appserver.xdebug.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/xdebug-${appserver.xdebug.version}" executable="sh">
+            <arg value="configure"/>
+            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+        </exec>
+        <exec dir="${php-target.dir}/xdebug-${appserver.xdebug.version}" executable="make"/>
+        <exec dir="${php-target.dir}/xdebug-${appserver.xdebug.version}" executable="make">
+            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Install composer and ApplicationServer packages                      -->
     <!-- ==================================================================== -->
     <target name="install-composer" depends="build-runtime" description="Install composer and ApplicationServer packages.">
@@ -882,6 +956,16 @@
         <!-- install composer packages -->
         <exec dir="${php-target.dir}/re${appserver.compile.prefix}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/php">
             <arg line="bin/composer.phar --working-dir=app/code update"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Install the ApplicationServer demo project                           -->
+    <!-- ==================================================================== -->
+    <target name="install-demo-project" depends="install-composer" description="Install the ApplicationServer demo project.">
+        <!-- install demo project -->
+        <exec dir="${php-target.dir}/re${appserver.compile.prefix}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/php">
+            <arg line="bin/composer.phar --working-dir=webapps create-project techdivision/techdivision_applicationserverproject demo dev-master"/>
         </exec>
     </target>
 
@@ -919,7 +1003,7 @@
     <!-- ==================================================================== -->
     <!-- Creates a DEBIAN package with the local ApplicationServer runtime    -->
     <!-- ==================================================================== -->
-    <target name="create-deb" depends="install-composer" description="Creates a DEBIAN package with the local ApplicationServer runtime.">
+    <target name="create-deb" depends="install-demo-project" description="Creates a DEBIAN package with the local ApplicationServer runtime.">
         <antcall target="prepare-DEBIAN-build-system"/>
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/debian">
@@ -960,15 +1044,23 @@
     <!-- ==================================================================== -->
     <!-- Creates a .pkg package with the local ApplicationServer runtime      -->
     <!-- ==================================================================== -->
-    <target name="create-pkg" depends="install-composer" description="Creates a .pkg package with the local ApplicationServer runtime.">
+    <target name="create-pkg" depends="install-demo-project" description="Creates a .pkg package with the local ApplicationServer runtime.">
+        <!-- change dylib path in binaries -->
         <antcall target="change-dylib-path"/>
+        <!-- copy plist files to required directory -->
+        <copy todir="${php-target.dir}/re">
+            <fileset dir="${basedir}/buildfiles/macosx/plist">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+        <!-- create the .pkg file -->
         <exec dir="${basedir}" executable="pkgbuild">
             <arg value="--root"/>
-            <arg value="${php-target.dir}/re/opt"/>
+            <arg value="${php-target.dir}/re"/>
             <arg value="--scripts"/>
             <arg value="${basedir}/buildfiles/macosx/scripts"/>
             <arg value="--install-location"/>
-            <arg value="/opt"/>
+            <arg value="/"/>
             <arg value="--version"/>
             <arg value="${appserver.version}"/>
             <arg value="--identifier"/>

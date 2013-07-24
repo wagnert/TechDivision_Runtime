@@ -1,0 +1,9 @@
+#!/bin/bash
+
+ulimit -Hn 32768
+ulimit -Sn 32768
+
+APPSERVER_ROOT="/opt/appserver"
+
+cd $APPSERVER_ROOT
+$APPSERVER_ROOT/bin/php server.php
