@@ -11,13 +11,14 @@
 ### END INIT INFO
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=/opt/appserver/bin/php
-DAEMON_OPTS='/opt/appserver/server.php'
+BASE_PATH='/opt/appserver'
+DAEMON="${BASE_PATH}/bin/php"
+DAEMON_OPTS="${BASE_PATH}/server.php"
 NAME="appserver"
 DESC="appserver"
 PIDFILE="/var/run/${NAME}.pid"
 QUIET="--quiet"
-START_OPTS="--start ${QUIET} --background --make-pidfile --pidfile ${PIDFILE} --exec ${DAEMON} ${DAEMON_OPTS}"
+START_OPTS="--start ${QUIET} --background --chdir ${BASE_PATH} --make-pidfile --pidfile ${PIDFILE} --exec ${DAEMON} ${DAEMON_OPTS}"
 STOP_OPTS="--stop --pidfile ${PIDFILE}"
 
 test -x $DAEMON || exit 0
