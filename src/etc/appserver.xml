@@ -14,7 +14,7 @@
             <deployment type="TechDivision\PersistenceContainer\Deployment"/>
             <!-- Default host configuration -->
             <host name="localhost"
-                  appBase="/opt/appserver/webapps"
+                  appBase="/webapps"
                   serverAdmin="${appserver.admin.email}"
                   serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
             </host>
@@ -45,13 +45,14 @@
             <deployment type="TechDivision\ServletContainer\Deployment"/>
             <!-- Default host configuration -->
             <host name="localhost"
-                  appBase="/opt/appserver/webapps"
+                  appBase="/webapps"
                   serverAdmin="${appserver.admin.email}"
                   serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
                 <vhosts>
-                    <vhost name="www.appserver.io" appBase="site">
+                    <vhost name="www.appserver.io" appBase="/site">
                         <aliases>
                             <alias>appserver.io</alias>
+                            <alias>appserver.local</alias>
                         </aliases>
                     </vhost>
                 </vhosts>
@@ -71,7 +72,7 @@
             <deployment type="TechDivision\MessageQueue\Deployment"/>
             <!-- Default host configuration -->
             <host name="localhost"
-                  appBase="/opt/appserver/webapps"
+                  appBase="/webapps"
                   serverAdmin="${appserver.admin.email}"
                   serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
             </host>
@@ -93,7 +94,7 @@
 
             <!-- Default host configuration -->
             <host name="localhost"
-                  appBase="/opt/appserver/webapps"
+                  appBase="/webapps"
                   serverAdmin="${appserver.admin.email}"
                   serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}"/>
         </container>
