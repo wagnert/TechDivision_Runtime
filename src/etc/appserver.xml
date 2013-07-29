@@ -12,7 +12,6 @@
                 <params workerNumber="8" address="0.0.0.0" port="8585"/>
             </receiver>
             <deployment type="TechDivision\PersistenceContainer\Deployment"/>
-            <!-- Default host configuration -->
             <host name="localhost"
                   appBase="/webapps"
                   serverAdmin="${appserver.admin.email}"
@@ -25,9 +24,6 @@
             be used for running a web server.
         -->
         <container type="TechDivision\ServletContainer\Container">
-            <!-- Default daemon configuration -->
-
-            <!-- Worker & Stackable based receiver -->
             <!--
             <receiver type="TechDivision\ApplicationServer\SocketReceiver">
 	           	<worker type="TechDivision\ServletContainer\RequestHandler"/>
@@ -35,15 +31,11 @@
                 <params workerNumber="4" address="0.0.0.0" port="8586"/>
             </receiver>
             -->
-
-            <!-- Thread based receiver -->
             <receiver type="TechDivision\ApplicationServer\SocketThreadReceiver">
                 <worker type="TechDivision\ServletContainer\ThreadRequestAcceptor"/>
                 <params workerNumber="8" address="0.0.0.0" port="8586"/>
             </receiver>
-
             <deployment type="TechDivision\ServletContainer\Deployment"/>
-            <!-- Default host configuration -->
             <host name="localhost"
                   appBase="/webapps"
                   serverAdmin="${appserver.admin.email}"
@@ -70,7 +62,6 @@
                 <params workerNumber="10" address="0.0.0.0" port="8587"/>
             </receiver>
             <deployment type="TechDivision\MessageQueue\Deployment"/>
-            <!-- Default host configuration -->
             <host name="localhost"
                   appBase="/webapps"
                   serverAdmin="${appserver.admin.email}"
@@ -83,21 +74,18 @@
             sending and receiving HTML requests/responses. This solution can
             be used for running a web server.
         -->
+        <!--
         <container type="TechDivision\ServletContainer\Container">
-
-            <!-- React based receiver -->
             <receiver type="TechDivision\ServletContainer\ReactReceiver">
                 <params address="0.0.0.0" port="8588"/>
             </receiver>
-
             <deployment type="TechDivision\ServletContainer\Deployment"/>
-
-            <!-- Default host configuration -->
             <host name="localhost"
                   appBase="/webapps"
                   serverAdmin="${appserver.admin.email}"
                   serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}"/>
         </container>
+        -->
     </containers>
 
 </appserver>
