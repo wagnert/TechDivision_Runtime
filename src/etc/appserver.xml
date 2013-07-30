@@ -6,9 +6,16 @@
             for clients connecting over a network.
         -->
         <container type="TechDivision\PersistenceContainer\Container">
+            <!--
             <receiver type="TechDivision\ApplicationServer\SocketReceiver">
 	           	<worker type="TechDivision\PersistenceContainer\RequestHandler"/>
 	           	<stackable type="TechDivision\PersistenceContainer\WorkerRequest"/>
+	           	<params workerNumber="8" address="0.0.0.0" port="8585"/>
+	        </receiver>
+	        -->
+            <receiver type="TechDivision\ApplicationServer\SocketThreadReceiver">
+                <worker type="TechDivision\ApplicationServer\SocketRequestAcceptor"/>
+                <thread type="TechDivision\PersistenceContainer\ThreadRequest"/>
                 <params workerNumber="8" address="0.0.0.0" port="8585"/>
             </receiver>
             <deployment type="TechDivision\PersistenceContainer\Deployment"/>
@@ -32,7 +39,8 @@
             </receiver>
             -->
             <receiver type="TechDivision\ApplicationServer\SocketThreadReceiver">
-                <worker type="TechDivision\ServletContainer\ThreadRequestAcceptor"/>
+                <worker type="TechDivision\ApplicationServer\SocketRequestAcceptor"/>
+                <thread type="TechDivision\ServletContainer\ThreadRequest"/>
                 <params workerNumber="8" address="0.0.0.0" port="8586"/>
             </receiver>
             <deployment type="TechDivision\ServletContainer\Deployment"/>
@@ -56,10 +64,17 @@
             over a network.
         -->
         <container type="TechDivision\MessageQueue\Container">
+            <!--
             <receiver type="TechDivision\MessageQueue\SocketReceiver">
 	           	<worker type="TechDivision\MessageQueue\RequestHandler"/>
 	           	<stackable type="TechDivision\MessageQueue\WorkerRequest"/>
                 <params workerNumber="10" address="0.0.0.0" port="8587"/>
+            </receiver>
+            -->
+            <receiver type="TechDivision\ApplicationServer\SocketThreadReceiver">
+                <worker type="TechDivision\ApplicationServer\SocketRequestAcceptor"/>
+                <thread type="TechDivision\MessageQueue\ThreadRequest"/>
+                <params workerNumber="8" address="0.0.0.0" port="8587"/>
             </receiver>
             <deployment type="TechDivision\MessageQueue\Deployment"/>
             <host name="localhost"
