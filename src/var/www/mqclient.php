@@ -2,6 +2,7 @@
 
 namespace TechDivision\Example;
 
+use TechDivision\MessageQueueClient\Messages\StringMessage;
 use TechDivision\SplClassLoader;
 use TechDivision\MessageQueueClient\Queue;
 use TechDivision\MessageQueueClient\QueueConnectionFactory;
@@ -14,9 +15,10 @@ ini_set('max_execution_time', 0);
 
 define('DS', DIRECTORY_SEPARATOR);
 define('PS', PATH_SEPARATOR);
-define('BP', dirname(dirname(__FILE__)));
+define('BP', dirname(dirname(dirname(__FILE__))));
 
 $paths[] = BP . DS . 'webapps' . DS .'example' . DS . 'META-INF' . DS . 'classes';
+$paths[] = BP . DS . 'webapps' . DS .'example';
 $paths[] = BP . DS . 'app' . DS . 'code' . DS . 'local';
 $paths[] = BP . DS . 'app' . DS . 'code' . DS . 'community';
 $paths[] = BP . DS . 'app' . DS . 'code' . DS . 'core';
@@ -25,7 +27,8 @@ $paths[] = BP . DS . 'app' . DS . 'code' . DS . 'lib';
 // set the new include path
 set_include_path(implode(PS, $paths) . PS . get_include_path());
 
-require_once 'TechDivision/SplClassLoader.php';
+//require_once 'TechDivision/SplClassLoader.php';
+require_once BP . DS . 'app' . DS . 'code' . DS . 'vendor' . DS . 'autoload.php';
 
 $classLoader = new SplClassLoader();
 $classLoader->register();
@@ -39,4 +42,4 @@ $session = $connection->createQueueSession();
 $sender = $session->createSender($queue);
 
 // create a new message and send it
-$send = $sender->send(new IntegerMessage(10), false);
+$send = $sender->send(new StringMessage('/opt/appserver/webapps/example/META-INF/data/example-persons3000.csv'), false);

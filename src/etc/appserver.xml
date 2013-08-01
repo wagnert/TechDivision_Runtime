@@ -16,7 +16,7 @@
             <receiver type="TechDivision\ApplicationServer\SocketThreadReceiver">
                 <worker type="TechDivision\ApplicationServer\SocketRequestAcceptor"/>
                 <thread type="TechDivision\PersistenceContainer\ThreadRequest"/>
-                <params workerNumber="8" address="0.0.0.0" port="8585"/>
+                <params workerNumber="256" address="0.0.0.0" port="8585"/>
             </receiver>
             <deployment type="TechDivision\PersistenceContainer\Deployment"/>
             <host name="localhost"
@@ -41,7 +41,7 @@
             <receiver type="TechDivision\ApplicationServer\SocketThreadReceiver">
                 <worker type="TechDivision\ApplicationServer\SocketRequestAcceptor"/>
                 <thread type="TechDivision\ServletContainer\ThreadRequest"/>
-                <params workerNumber="8" address="0.0.0.0" port="8586"/>
+                <params workerNumber="256" address="0.0.0.0" port="8586"/>
             </receiver>
             <deployment type="TechDivision\ServletContainer\Deployment"/>
             <host name="localhost"
@@ -74,7 +74,7 @@
             <receiver type="TechDivision\ApplicationServer\SocketThreadReceiver">
                 <worker type="TechDivision\ApplicationServer\SocketRequestAcceptor"/>
                 <thread type="TechDivision\MessageQueue\ThreadRequest"/>
-                <params workerNumber="8" address="0.0.0.0" port="8587"/>
+                <params workerNumber="256" address="0.0.0.0" port="8587"/>
             </receiver>
             <deployment type="TechDivision\MessageQueue\Deployment"/>
             <host name="localhost"
