@@ -186,6 +186,13 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Check if PECL redis sources has been downloaded yet  		 	      -->
+    <!-- ==================================================================== -->
+    <target name="check-redis-src-present" description="Check if PECL redis sources has been downloaded yet.">
+        <available file="${lib.dir}/redis-${appserver.redis.version}.tgz" property="redis-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Check if PECL xdebug sources has been downloaded yet  		 	      -->
     <!-- ==================================================================== -->
     <target name="check-xdebug-src-present" description="Check if PECL xdebug sources has been downloaded yet.">
@@ -204,6 +211,13 @@
     <!-- ==================================================================== -->
     <target name="check-libev-src-present" description="Check if PECL libev sources has been downloaded yet.">
         <available file="${lib.dir}/libev-${appserver.libev.version}.zip" property="libev-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if PECL ev sources has been downloaded yet  		 	      -->
+    <!-- ==================================================================== -->
+    <target name="check-ev-src-present" description="Check if PECL ev sources has been downloaded yet.">
+        <available file="${lib.dir}/ev-${appserver.ev.version}.zip" property="ev-src.present"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -277,6 +291,13 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Check if the redis server source package has been downloaded yet     -->
+    <!-- ==================================================================== -->
+    <target name="check-redis-server-src-present" description="Check if the redis server source package has been downloaded yet.">
+        <available file="${lib.dir}/redis-${redis.server.version}.zip" property="redis-server-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Get PHP source package by given version number		  		          -->
     <!-- ==================================================================== -->
     <target name="get-php-src" depends="check-php-src-present" unless="${php-src.present}" description="Get PHP source package by given version number">
@@ -298,10 +319,24 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Get PECL redis source package by given version number		          -->
+    <!-- ==================================================================== -->
+    <target name="get-redis-src" depends="check-redis-src-present" unless="${redis-src.present}" description="Get PECL redis source package by given version number">
+        <get src="http://pecl.php.net/get/redis-${appserver.redis.version}.tgz" dest="${lib.dir}/redis-${appserver.redis.version}.tgz"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Get PECL libevent source package by given version number		      -->
     <!-- ==================================================================== -->
     <target name="get-libevent-src" depends="check-libevent-src-present" unless="${libevent-src.present}" description="Get PECL libevent source package by given version number">
         <get src="http://pecl.php.net/get/libevent-${appserver.libevent.version}.tgz" dest="${lib.dir}/libevent-${appserver.libevent.version}.tgz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get PECL ev source package by given version number		              -->
+    <!-- ==================================================================== -->
+    <target name="get-ev-src" depends="check-ev-src-present" unless="$ev-src.present}" description="Get PECL ev source package by given version number">
+        <get src="http://pecl.php.net/get/ev-${appserver.ev.version}.tgz" dest="${lib.dir}/libevent-${appserver.ev.version}.tgz"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -403,6 +438,13 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Get redis server source package by given version number		      -->
+    <!-- ==================================================================== -->
+    <target name="get-redis-server-src" depends="check-redis-server-src-present" unless="${redis-server-src.present}" description="Get redis server source package by given version number.">
+        <get src="${redis.server.download.url}" dest="${lib.dir}/redis-${redis.server.version}.zip"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Get pcre source package by given version number		              -->
     <!-- ==================================================================== -->
     <target name="get-pcre-src" depends="check-pcre-src-present" unless="${pcre-src.present}" description="Get pcre source package by given version number.">
@@ -463,13 +505,25 @@
         <antcall target="get-libev-src"/>
         <unzip src="${lib.dir}/libev-${appserver.libev.version}.zip" dest="${php-target.dir}"/>
         <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/libev">
-            <fileset dir="${php-target.dir}/php-libev-${appserver.ev.version}"/>
+            <fileset dir="${php-target.dir}/php-libev-${appserver.libev.version}"/>
+        </move>
+        <!-- prepare PECL ev sources for static compilation -->
+        <antcall target="get-ev-src"/>
+        <unzip src="${lib.dir}/ev-${appserver.ev.version}.zip" dest="${php-target.dir}"/>
+        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/ev">
+            <fileset dir="${php-target.dir}/php-ev-${appserver.ev.version}"/>
         </move>
         <!-- prepare PECL xdebug sources for static compilation -->
         <antcall target="get-xdebug-src"/>
         <unzip src="${lib.dir}/xdebug-${appserver.xdebug.version}.zip" dest="${php-target.dir}"/>
         <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/xdebug">
             <fileset dir="${php-target.dir}/xdebug-${appserver.ev.version}"/>
+        </move>
+        <!-- prepare PECL redis sources for static compilation -->
+        <antcall target="get-redis-src"/>
+        <untar src="${lib.dir}/redis-${appserver.redis.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/redis">
+            <fileset dir="${php-target.dir}/redis-${appserver.redis.version}"/>
         </move>
     </target>
 
@@ -686,6 +740,20 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Builds the redis server binaries                                     -->
+    <!-- ==================================================================== -->
+    <target name="build-redis-server" if="${redis.server.build}" description="Builds the redis server binaries.">
+        <antcall target="get-redis-server-src"/>
+        <unzip src="${lib.dir}/redis-${redis.server.version}.zip" dest="${php-target.dir}"/>
+        <chmod perm="755" dir="${php-target.dir}/redis-${redis.server.version}" includes="**/*"/>
+        <exec dir="${php-target.dir}/redis-${redis.server.version}" executable="make"/>
+        <exec dir="${php-target.dir}/redis-${redis.server.version}" executable="make">
+            <env key="PREFIX" value="${php-target.dir}/re${appserver.compile.prefix}"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Copies the PHP Application Server runtime sources                    -->
     <!-- ==================================================================== -->
     <target name="copy-runtime" description="Copies the PHP Application Server runtime sources.">
@@ -714,6 +782,7 @@
         <antcall target="build-memcached-server"/>
         <antcall target="build-nginx-server"/>
         <antcall target="build-httpd-server"/>
+        <antcall target="build-redis-server"/>
         <!-- compile the PHP sources and PECL extensions static -->
         <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="sh">
             <arg value="buildconf"/>
@@ -788,8 +857,10 @@
         <antcall target="pecl-build-pecl_http"/>
         <antcall target="pecl-build-libevent"/>
         <antcall target="pecl-build-libev"/>
+        <antcall target="pecl-build-ev"/>
         <antcall target="pecl-build-AOP"/>
         <antcall target="pecl-build-xdebug"/>
+        <antcall target="pecl-build-redis"/>
         <!-- antcall target="pecl-build-operator"/ -->
         <!-- copy runtime files from src directory -->
         <antcall target="copy-runtime"/>
@@ -906,6 +977,24 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Builds the PECL ev as shared extension                               -->
+    <!-- ==================================================================== -->
+    <target name="pecl-build-ev" description="Builds the PECL ev as shared extension.">
+        <antcall target="get-ev-src"/>
+        <untar src="${lib.dir}/ev-${appserver.ev.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/ev-${appserver.ev.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/ev-${appserver.ev.version}" executable="sh">
+            <arg value="configure"/>
+            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+        </exec>
+        <exec dir="${php-target.dir}/ev-${appserver.ev.version}" executable="make"/>
+        <exec dir="${php-target.dir}/ev-${appserver.ev.version}" executable="make">
+            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Builds the PECL AOP as shared extension                         -->
     <!-- ==================================================================== -->
     <target name="pecl-build-AOP" description="Builds the PECL AOP as shared extension.">
@@ -936,6 +1025,24 @@
         </exec>
         <exec dir="${php-target.dir}/xdebug-${appserver.xdebug.version}" executable="make"/>
         <exec dir="${php-target.dir}/xdebug-${appserver.xdebug.version}" executable="make">
+            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Builds the PECL redis as shared extension                            -->
+    <!-- ==================================================================== -->
+    <target name="pecl-build-redis" description="Builds the PECL redis as shared extension.">
+        <antcall target="get-redis-src"/>
+        <untar src="${lib.dir}/redis-${appserver.redis.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/redis-${appserver.redis.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/redis-${appserver.redis.version}" executable="sh">
+            <arg value="configure"/>
+            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+        </exec>
+        <exec dir="${php-target.dir}/redis-${appserver.redis.version}" executable="make"/>
+        <exec dir="${php-target.dir}/redis-${appserver.redis.version}" executable="make">
             <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
