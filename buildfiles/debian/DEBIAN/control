@@ -33,7 +33,8 @@ Depends: libc6,
   curl,
   make,
   autoconf,
-  git
+  git,
+  redis-server
 Architecture: ${appserver.architecture}
 Version: ${appserver.version}
 Homepage: http://appserver.io

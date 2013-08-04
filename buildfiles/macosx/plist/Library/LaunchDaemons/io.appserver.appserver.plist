@@ -5,7 +5,7 @@
 	<key>Disabled</key>
 	<true/>
 	<key>Label</key>
-	<string>com.techdivision.appserver</string>
+	<string>io.appserver.appserver</string>
 	<key>EnvironmentVariables</key>
 	<dict>
 		<key>XPC_SERVICES_UNAVAILABLE</key>
