@@ -55,6 +55,7 @@
                             <alias>appserver.local</alias>
                         </aliases>
                     </vhost>
+                    <vhost name="magento.local" appBase="/magento" />
                 </vhosts>
             </host>
         </container>
