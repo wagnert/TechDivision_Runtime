@@ -854,11 +854,11 @@
         <!-- build the PECL modules shared -->
         <antcall target="pecl-build-pthreads"/>
         <antcall target="pecl-build-memcached"/>
-        <antcall target="pecl-build-pecl_http"/>
+        <!-- antcall target="pecl-build-pecl_http"/ -->
         <antcall target="pecl-build-libevent"/>
         <antcall target="pecl-build-libev"/>
         <antcall target="pecl-build-ev"/>
-        <antcall target="pecl-build-AOP"/>
+        <!-- antcall target="pecl-build-AOP"/ -->
         <antcall target="pecl-build-xdebug"/>
         <antcall target="pecl-build-redis"/>
         <!-- antcall target="pecl-build-operator"/ -->
