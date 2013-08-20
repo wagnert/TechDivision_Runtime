@@ -301,7 +301,7 @@
     <!-- Get PHP source package by given version number		  		          -->
     <!-- ==================================================================== -->
     <target name="get-php-src" depends="check-php-src-present" unless="${php-src.present}" description="Get PHP source package by given version number">
-        <get src="https://github.com/php/php-src/archive/php-${appserver.php.version}.tar.gz" dest="${lib.dir}/php-${appserver.php.version}.tar.gz"/>
+        <get src="http://de1.php.net/get/php-${appserver.php.version}.tar.gz/from/this/mirror" dest="${lib.dir}/php-${appserver.php.version}.tar.gz"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -458,7 +458,7 @@
         <!-- prepare PHP sources -->
         <antcall target="get-php-src"/>
         <untar src="${lib.dir}/php-${appserver.php.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
-        <chmod perm="755" dir="${php-target.dir}/php-src-php-${appserver.php.version}/build" includes="**/*"/>
+        <chmod perm="755" dir="${php-target.dir}/php-${appserver.php.version}/build" includes="**/*"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -468,61 +468,61 @@
         <!-- prepare PECL memcached sources sources for static compilation -->
         <antcall target="get-memcached-src"/>
         <untar src="${lib.dir}/memcached-${appserver.memcached.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/memcached">
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/memcached">
             <fileset dir="${php-target.dir}/memcached-${appserver.memcached.version}"/>
         </move>
         <!-- prepare PECL pthread sources for static compilation -->
         <antcall target="get-pthreads-src"/>
         <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/pthreads">
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/pthreads">
             <fileset dir="${php-target.dir}/pthreads-${appserver.pthreads.version}"/>
         </move>
         <!-- prepare PECL operator sources for static compilation -->
         <antcall target="get-operator-src"/>
         <untar src="${lib.dir}/operator-${appserver.operator.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/operator">
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/operator">
             <fileset dir="${php-target.dir}/operator-${appserver.operator.version}"/>
         </move>
         <!-- prepare PECL pecl_http sources for static compilation -->
         <antcall target="get-pecl_http-src"/>
         <untar src="${lib.dir}/pecl_http-${appserver.pecl_http.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/http">
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/http">
             <fileset dir="${php-target.dir}/pecl_http-${appserver.pecl_http.version}"/>
         </move>
         <!-- prepare PECL AOP sources for static compilation -->
         <antcall target="get-AOP-src"/>
         <untar src="${lib.dir}/AOP-${appserver.AOP.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/AOP">
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/AOP">
             <fileset dir="${php-target.dir}/AOP-${appserver.AOP.version}"/>
         </move>
         <!-- prepare PECL libevent sources for static compilation -->
         <antcall target="get-libevent-src"/>
         <untar src="${lib.dir}/libevent-${appserver.libevent.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/libevent">
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/libevent">
             <fileset dir="${php-target.dir}/libevent-${appserver.libevent.version}"/>
         </move>
         <!-- prepare PECL libev sources for static compilation -->
         <antcall target="get-libev-src"/>
         <unzip src="${lib.dir}/libev-${appserver.libev.version}.zip" dest="${php-target.dir}"/>
-        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/libev">
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/libev">
             <fileset dir="${php-target.dir}/php-libev-${appserver.libev.version}"/>
         </move>
         <!-- prepare PECL ev sources for static compilation -->
         <antcall target="get-ev-src"/>
         <unzip src="${lib.dir}/ev-${appserver.ev.version}.zip" dest="${php-target.dir}"/>
-        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/ev">
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/ev">
             <fileset dir="${php-target.dir}/php-ev-${appserver.ev.version}"/>
         </move>
         <!-- prepare PECL xdebug sources for static compilation -->
         <antcall target="get-xdebug-src"/>
         <unzip src="${lib.dir}/xdebug-${appserver.xdebug.version}.zip" dest="${php-target.dir}"/>
-        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/xdebug">
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/xdebug">
             <fileset dir="${php-target.dir}/xdebug-${appserver.ev.version}"/>
         </move>
         <!-- prepare PECL redis sources for static compilation -->
         <antcall target="get-redis-src"/>
         <untar src="${lib.dir}/redis-${appserver.redis.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <move todir="${php-target.dir}/php-src-php-${appserver.php.version}/ext/redis">
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/redis">
             <fileset dir="${php-target.dir}/redis-${appserver.redis.version}"/>
         </move>
     </target>
@@ -784,11 +784,11 @@
         <antcall target="build-httpd-server"/>
         <antcall target="build-redis-server"/>
         <!-- compile the PHP sources and PECL extensions static -->
-        <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="sh">
+        <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="sh">
             <arg value="buildconf"/>
             <arg line="--force"/>
         </exec>
-        <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="sh">
+        <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="sh">
             <env key="CC" value="${appserver.cc}"/>
             <arg value="configure"/>
             <arg value="--prefix=${appserver.compile.prefix}"/>
@@ -846,8 +846,8 @@
             <!-- arg value="-enable-http=static"/ -->
             <!-- arg value="-enable-operator=static"/ -->
         </exec>
-        <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="make"/>
-        <exec dir="${php-target.dir}/php-src-php-${appserver.php.version}" executable="make">
+        <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make"/>
+        <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make">
             <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
