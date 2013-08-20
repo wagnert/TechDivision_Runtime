@@ -12,7 +12,9 @@ ini_set('session.gc_maxlifetime', 0);
 ini_set('zend.enable_gc', 0);
 ini_set('max_execution_time', 0);
 
+// bootstrap the application
 require __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
+// start the server finally
 $server = new Server();
 $server->start();

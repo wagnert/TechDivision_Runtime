@@ -1,7 +1,5 @@
 <?php
 
-namespace TechDivision;
-
 define('DS', DIRECTORY_SEPARATOR);
 define('PS', PATH_SEPARATOR);
 define('BP', __DIR__);
@@ -20,9 +18,6 @@ $paths[] = __DIR__ . DS . 'app' . DS . 'code' . DS . 'core';
 $paths[] = __DIR__ . DS . 'app' . DS . 'code' . DS . 'lib'; // directory for PEAR libraries
 
 // set the new include path
-set_include_path(implode(PS, $paths) . PS . get_include_path());
+set_include_path(get_include_path() . PS . implode(PS, $paths));
 
-// register class loader again, because we are in a thread
-require 'TechDivision/SplClassLoader.php';
-$classLoader = new SplClassLoader();
-$classLoader->register(true);
+require __DIR__ . '/app/code/vendor/autoload.php';
