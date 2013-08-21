@@ -1,0 +1,56 @@
+# Default PHP compile settings
+	
+```
+appserver.compile.configuration = --prefix=${appserver.compile.prefix} \
+								  --libdir=${appserver.compile.prefix}/lib \
+								  --disable-debug \
+								  --disable-rpath \
+								  --with-pic \
+								  --with-gnu-ld \
+								  --with-mysql \
+								  --with-gd \
+								  --with-jpeg-dir \
+								  --with-png-dir \
+								  --with-freetype-dir \
+								  --with-zlib \
+								  --with-bz2 \
+								  --with-curl \
+			 					  --with-mysqli \
+								  --with-tsrm-pthreads \
+								  --with-mcrypt \
+								  --with-mysqli \
+								  --with-openssl \
+								  --with-pdo-mysql \
+								  --with-pear=${appserver.compile.prefix}/app/code/lib \
+								  --with-libdir=${appserver.compile.libdir} \
+								  --with-config-file-path=${appserver.compile.prefix}/etc \
+								  --with-config-file-scan-dir=${appserver.compile.prefix}/etc/conf.d \
+								  --with-pcre-regex \
+								  --with-jpeg-dir=${libjpeg.dir} \
+								  --with-png-dir=${libpng.dir} \
+								  --with-freetype-dir=${libfreetype.dir} \
+								  --with-libmemcached-dir=${libmemcached.dir} \
+								  --enable-static \
+								  --enable-shared \
+								  --enable-exif \
+								  --enable-inline-optimization \
+								  --enable-xml \
+								  --enable-simplexml \
+								  --enable-filter \
+								  --enable-libxml \
+								  --enable-session \
+								  --enable-sockets \
+								  --enable-mbstring \
+								  --enable-gd-native-ttf \
+								  --enable-bcmath \
+								  --enable-zip \
+								  --enable-phar \
+								  --enable-pdo \
+								  --enable-roxen-zts \
+								  --enable-pcntl \
+								  --enable-fpm \
+								  --enable-maintainer-zts \
+								  --enable-pthreads=static \
+								  --enable-memcached=static \
+								  --enable-redis=static \
+```
