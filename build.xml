@@ -808,7 +808,7 @@
     	<!-- configure, compile and install PHP binary -->
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="sh">
             <env key="CC" value="${appserver.cc}"/>
-            <arg line="configure ${php.configure.line}"/>
+            <arg line="configure ${appserver.compile.configuration}"/>
         </exec>
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make"/>
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make">
