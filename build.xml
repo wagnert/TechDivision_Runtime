@@ -803,7 +803,7 @@
         </exec>
     	
     	<!-- log PHP compile configuration -->
-    	<echo message="Now compiling PHP using configure params: ${php.configure.line}"/>
+    	<echo message="Now compiling PHP using configure params: ${appserver.compile.configuration}"/>
     	
     	<!-- configure, compile and install PHP binary -->
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="sh">
