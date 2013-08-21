@@ -336,7 +336,7 @@
     <!-- Get PECL ev source package by given version number		              -->
     <!-- ==================================================================== -->
     <target name="get-ev-src" depends="check-ev-src-present" unless="$ev-src.present}" description="Get PECL ev source package by given version number">
-        <get src="http://pecl.php.net/get/ev-${appserver.ev.version}.tgz" dest="${lib.dir}/libevent-${appserver.ev.version}.tgz"/>
+        <get src="http://pecl.php.net/get/ev-${appserver.ev.version}.tgz" dest="${lib.dir}/ev-${appserver.ev.version}.tgz"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -502,22 +502,26 @@
             <fileset dir="${php-target.dir}/libevent-${appserver.libevent.version}"/>
         </move>
         <!-- prepare PECL libev sources for static compilation -->
-        <antcall target="get-libev-src"/>
+        <!--
+    	<antcall target="get-libev-src"/>
         <unzip src="${lib.dir}/libev-${appserver.libev.version}.zip" dest="${php-target.dir}"/>
         <move todir="${php-target.dir}/php-${appserver.php.version}/ext/libev">
             <fileset dir="${php-target.dir}/php-libev-${appserver.libev.version}"/>
         </move>
+        -->
         <!-- prepare PECL ev sources for static compilation -->
-        <antcall target="get-ev-src"/>
-        <unzip src="${lib.dir}/ev-${appserver.ev.version}.zip" dest="${php-target.dir}"/>
+        <!--
+    	<antcall target="get-ev-src"/>
+        <untar src="${lib.dir}/ev-${appserver.ev.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <move todir="${php-target.dir}/php-${appserver.php.version}/ext/ev">
-            <fileset dir="${php-target.dir}/php-ev-${appserver.ev.version}"/>
+            <fileset dir="${php-target.dir}/ev-${appserver.ev.version}"/>
         </move>
+        -->
         <!-- prepare PECL xdebug sources for static compilation -->
         <antcall target="get-xdebug-src"/>
-        <unzip src="${lib.dir}/xdebug-${appserver.xdebug.version}.zip" dest="${php-target.dir}"/>
-        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/xdebug">
-            <fileset dir="${php-target.dir}/xdebug-${appserver.ev.version}"/>
+        <untar src="${lib.dir}/xdebug-${appserver.xdebug.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <move todir="${php-target.dir}/xdebug-${appserver.php.version}/ext/xdebug">
+            <fileset dir="${php-target.dir}/xdebug-${appserver.xdebug.version}"/>
         </move>
         <!-- prepare PECL redis sources for static compilation -->
         <antcall target="get-redis-src"/>
@@ -771,8 +775,9 @@
     <!-- Builds the PHP source for the PHP Application Server runtime         -->
     <!-- ==================================================================== -->
     <target name="build-runtime" depends="prepare-source" description="Compiles the ApplicationServer runtime environment.">
+    	
         <!-- build the necessary libraries -->
-        <antcall target="build-libjpeg"/>
+    	<antcall target="build-libjpeg"/>
         <antcall target="build-libpng"/>
         <antcall target="build-libfreetype"/>
         <antcall target="build-libmemcached"/>
@@ -783,86 +788,35 @@
         <antcall target="build-nginx-server"/>
         <antcall target="build-httpd-server"/>
         <antcall target="build-redis-server"/>
+    	
+    	<!-- prepare the PECL extensions -->
+        <antcall target="prepare-pecl-extension"/>
+    	
         <!-- compile the PHP sources and PECL extensions static -->
+        <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make">
+            <arg value="clean"/>
+        </exec>
+        <delete file="${php-target.dir}/php-${appserver.php.version}/aclocal.m4"/>
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="sh">
             <arg value="buildconf"/>
             <arg line="--force"/>
         </exec>
+    	
+    	<!-- log PHP compile configuration -->
+    	<echo message="Now compiling PHP using configure params: ${php.configure.line}"/>
+    	
+    	<!-- configure, compile and install PHP binary -->
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="sh">
             <env key="CC" value="${appserver.cc}"/>
-            <arg value="configure"/>
-            <arg value="--prefix=${appserver.compile.prefix}"/>
-            <arg value="--libdir=${appserver.compile.prefix}/lib"/>
-            <arg value="--disable-debug"/>
-            <arg value="--disable-rpath"/>
-            <arg value="--without-pear"/>
-            <arg value="--with-pic"/>
-            <arg value="--with-gnu-ld"/>
-            <arg value="--with-mysql"/>
-            <arg value="--with-gd"/>
-            <arg value="--with-jpeg-dir"/>
-            <arg value="--with-png-dir"/>
-            <arg value="--with-freetype-dir"/>
-            <arg value="--with-zlib"/>
-            <arg value="--with-bz2"/>
-            <arg value="--with-curl"/>
-            <arg value="--with-mysqli"/>
-            <arg value="--with-tsrm-pthreads"/>
-            <arg value="--with-mcrypt"/>
-            <arg value="--with-mysqli"/>
-            <arg value="--with-openssl"/>
-            <arg value="--with-pdo-mysql"/>
-            <arg value="--with-pear=${appserver.compile.prefix}/app/code/lib"/>
-            <arg value="--with-libdir=${appserver.compile.libdir}"/>
-            <arg value="--with-config-file-path=${appserver.compile.prefix}/etc"/>
-            <arg value="--with-config-file-scan-dir=${appserver.compile.prefix}/etc/conf.d"/>
-            <arg value="--with-pcre-regex"/>
-            <arg value="--with-jpeg-dir=${libjpeg.dir}"/>
-            <arg value="--with-png-dir=${libpng.dir}"/>
-            <arg value="--with-freetype-dir=${libfreetype.dir}"/>
-            <!-- arg value="-with-libmemcached-dir=${libmemcached.dir}"/ -->
-            <arg value="--enable-static"/>
-            <arg value="--enable-exif"/>
-            <arg value="--enable-inline-optimization"/>
-            <arg value="--enable-xml"/>
-            <arg value="--enable-simplexml"/>
-            <arg value="--enable-filter"/>
-            <arg value="--enable-libxml"/>
-            <arg value="--enable-session"/>
-            <arg value="--enable-sockets"/>
-            <arg value="--enable-mbstring"/>
-            <arg value="--enable-gd-native-ttf"/>
-            <arg value="--enable-bcmath"/>
-            <arg value="--enable-zip"/>
-            <arg value="--enable-phar"/>
-            <arg value="--enable-pdo"/>
-            <arg value="--enable-roxen-zts"/>
-            <arg value="--enable-pcntl"/>
-            <arg value="--enable-fpm"/>
-            <arg value="--enable-maintainer-zts"/>
-            <!-- arg value="-enable-pthreads=static"/ -->
-            <!-- arg value="-enable-memcached=static"/ -->
-            <!-- arg value="-enable-AOP=static"/ -->
-            <!-- arg value="-enable-http=static"/ -->
-            <!-- arg value="-enable-operator=static"/ -->
+            <arg line="configure ${php.configure.line}"/>
         </exec>
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make"/>
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make">
             <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
-        <!-- build the PECL modules shared -->
-        <antcall target="pecl-build-pthreads"/>
-        <antcall target="pecl-build-memcached"/>
-        <!-- antcall target="pecl-build-pecl_http"/ -->
-        <antcall target="pecl-build-libevent"/>
-        <antcall target="pecl-build-libev"/>
-        <antcall target="pecl-build-ev"/>
-        <!-- antcall target="pecl-build-AOP"/ -->
-        <antcall target="pecl-build-xdebug"/>
-        <antcall target="pecl-build-redis"/>
-        <!-- antcall target="pecl-build-operator"/ -->
-        <!-- copy runtime files from src directory -->
+        
+    	<!-- copy runtime files from src directory -->
         <antcall target="copy-runtime"/>
     </target>
 
