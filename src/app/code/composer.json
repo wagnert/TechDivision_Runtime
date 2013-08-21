@@ -16,6 +16,7 @@
         "doctrine/orm": "*",
         "psr/log": "*",
         "symfony/symfony": "*",
-        "react/react": "0.3.*"
+        "react/react": "0.3.*",
+        "herrera-io/annotations": "1.0.*"
     }
 }
