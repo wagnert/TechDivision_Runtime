@@ -1,7 +1,5 @@
 <?php
 
-define('APPSERVER_DS', DIRECTORY_SEPARATOR);
-define('APPSERVER_PS', PATH_SEPARATOR);
 define('APPSERVER_BP', __DIR__);
 
 // load composer namespaces and add them to the include path
@@ -12,12 +10,12 @@ foreach ($namespaces as $namespace) {
 }
 
 // add the default include paths
-$paths[] = APPSERVER_BP . APPSERVER_DS . 'app' . APPSERVER_DS . 'code' . APPSERVER_DS . 'local';
-$paths[] = APPSERVER_BP . APPSERVER_DS . 'app' . APPSERVER_DS . 'code' . APPSERVER_DS . 'community';
-$paths[] = APPSERVER_BP . APPSERVER_DS . 'app' . APPSERVER_DS . 'code' . APPSERVER_DS . 'core';
-$paths[] = APPSERVER_BP . APPSERVER_DS . 'app' . APPSERVER_DS . 'code' . APPSERVER_DS . 'lib'; // directory for PEAR libraries
+$paths[] = APPSERVER_BP . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'code' . DIRECTORY_SEPARATOR . 'local';
+$paths[] = APPSERVER_BP . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'code' . DIRECTORY_SEPARATOR . 'community';
+$paths[] = APPSERVER_BP . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'code' . DIRECTORY_SEPARATOR . 'core';
+$paths[] = APPSERVER_BP . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'code' . DIRECTORY_SEPARATOR . 'lib'; // directory for PEAR libraries
 
 // set the new include path
-set_include_path(get_include_path() . APPSERVER_PS . implode(APPSERVER_PS, $paths));
+set_include_path(get_include_path() . PATH_SEPARATOR . implode(PATH_SEPARATOR, $paths));
 
 require APPSERVER_BP . '/app/code/vendor/autoload.php';
