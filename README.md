@@ -1,3 +1,38 @@
+# Roadmap
+
+Version 0.6
+
+* Integrate Monolog Logger
+* Integration Annotations for session beans
+* PHPUnit test suite for TechDivision_ApplicationServer project
+
+* Running Magento CE 1.7.x demo application
+* Running TYPO3 demo application
+* Running TYPO3 Flow 2.0.x demo application
+* Running TYPO3 Neos 1.x demo application
+
+Version 0.7
+
+* Automated Build- and Deployment using Travis-CI
+* Timer Service
+* Container based caching for Doctrine entity beans
+* PHPUnit test suite for TechDivision_ServletContainer project
+
+Version 0.8
+
+* Distributed and redundant cluster caching system with automated failover
+* PHPUnit test suite for TechDivision_PersistenceContainer project
+
+Version 0.9
+
+* PHAR based deployment
+* PHPUnit test suite for TechDivision_MessageQueue project
+
+Version 1.0
+
+* Cluster functionality
+* Farming deployment
+
 # Default PHP compile settings
 	
 ```
