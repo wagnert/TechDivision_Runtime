@@ -520,7 +520,7 @@
         <!-- prepare PECL xdebug sources for static compilation -->
         <antcall target="get-xdebug-src"/>
         <untar src="${lib.dir}/xdebug-${appserver.xdebug.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <move todir="${php-target.dir}/xdebug-${appserver.php.version}/ext/xdebug">
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/xdebug">
             <fileset dir="${php-target.dir}/xdebug-${appserver.xdebug.version}"/>
         </move>
         <!-- prepare PECL redis sources for static compilation -->
@@ -545,7 +545,6 @@
         <chmod perm="755" dir="${php-target.dir}/jpeg-${libjpeg.version}" includes="install-sh"/>
         <exec dir="${php-target.dir}/jpeg-${libjpeg.version}" executable="make"/>
         <exec dir="${php-target.dir}/jpeg-${libjpeg.version}" executable="make">
-            <arg value="DESTDIR=${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -564,7 +563,6 @@
         <chmod perm="755" dir="${php-target.dir}/libpng-${libpng.version}" includes="install-sh"/>
         <exec dir="${php-target.dir}/libpng-${libpng.version}" executable="make"/>
         <exec dir="${php-target.dir}/libpng-${libpng.version}" executable="make">
-            <arg value="DESTDIR=${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -578,14 +576,11 @@
         <chmod perm="755" dir="${php-target.dir}/freetype-${libfreetype.version}/builds" includes="**/*"/>
         <exec dir="${php-target.dir}/freetype-${libfreetype.version}" executable="sh">
             <env key="CC" value="${libfreetype.cc}"/>
-            <env key="LIBS" value="${libfreetype.libs}"/>
-            <env key="CFLAGS" value="${libfreetype.cflags}"/>
             <arg value="configure"/>
             <arg value="--prefix=${appserver.compile.prefix}"/>
         </exec>
         <exec dir="${php-target.dir}/freetype-${libfreetype.version}" executable="make"/>
         <exec dir="${php-target.dir}/freetype-${libfreetype.version}" executable="make">
-            <arg value="DESTDIR=${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -604,7 +599,6 @@
         </exec>
         <exec dir="${php-target.dir}/libmemcached-${libmemcached.version}" executable="make"/>
         <exec dir="${php-target.dir}/libmemcached-${libmemcached.version}" executable="make">
-            <arg value="DESTDIR=${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -623,7 +617,6 @@
         <chmod perm="755" dir="${php-target.dir}/libmcrypt-${libmcrypt.version}" includes="install-sh"/>
         <exec dir="${php-target.dir}/libmcrypt-${libmcrypt.version}" executable="make"/>
         <exec dir="${php-target.dir}/libmcrypt-${libmcrypt.version}" executable="make">
-            <arg value="DESTDIR=${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -642,7 +635,6 @@
         <chmod perm="755" dir="${php-target.dir}/libevent-${libevent.version}-stable" includes="install-sh"/>
         <exec dir="${php-target.dir}/libevent-${libevent.version}-stable" executable="make"/>
         <exec dir="${php-target.dir}/libevent-${libevent.version}-stable" executable="make">
-            <arg value="DESTDIR=${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -662,7 +654,6 @@
         <chmod perm="755" dir="${php-target.dir}/pcre-${pcre.version}" includes="configure"/>
         <exec dir="${php-target.dir}/pcre-${pcre.version}" executable="make"/>
         <exec dir="${php-target.dir}/pcre-${pcre.version}" executable="make">
-            <arg value="DESTDIR=${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -677,12 +668,11 @@
             <env key="CC" value="${memcached.server.cc}"/>
             <arg value="configure"/>
             <arg value="--prefix=${appserver.compile.prefix}"/>
-            <arg value="-with-libevent=${php-target.dir}/re${appserver.compile.prefix}"/>
+            <arg value="-with-libevent=${appserver.compile.prefix}"/>
         </exec>
         <chmod perm="755" dir="${php-target.dir}/memcached-${memcached.server.version}" includes="install-sh"/>
         <exec dir="${php-target.dir}/memcached-${memcached.server.version}" executable="make"/>
         <exec dir="${php-target.dir}/memcached-${memcached.server.version}" executable="make">
-            <arg value="DESTDIR=${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -703,7 +693,6 @@
         <chmod perm="755" dir="${php-target.dir}/httpd-${httpd.server.version}" includes="install-sh"/>
         <exec dir="${php-target.dir}/httpd-${httpd.server.version}" executable="make"/>
         <exec dir="${php-target.dir}/httpd-${httpd.server.version}" executable="make">
-            <arg value="DESTDIR=${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -734,13 +723,12 @@
         <chmod perm="755" dir="${php-target.dir}/nginx-${nginx.server.version}" includes="install-sh"/>
         <exec dir="${php-target.dir}/nginx-${nginx.server.version}" executable="make"/>
         <exec dir="${php-target.dir}/nginx-${nginx.server.version}" executable="make">
-            <arg value="DESTDIR=${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
         <!-- create temporary directory -->
-        <mkdir dir="${php-target.dir}/re${appserver.compile.prefix}/var/lib/nginx" />
+        <mkdir dir="${appserver.compile.prefix}/var/lib/nginx" />
         <!-- delete the unnecessary default html directory -->
-        <delete dir="${php-target.dir}/re${appserver.compile.prefix}/html"/>
+        <delete dir="${appserver.compile.prefix}/html"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -752,7 +740,6 @@
         <chmod perm="755" dir="${php-target.dir}/redis-${redis.server.version}" includes="**/*"/>
         <exec dir="${php-target.dir}/redis-${redis.server.version}" executable="make"/>
         <exec dir="${php-target.dir}/redis-${redis.server.version}" executable="make">
-            <env key="PREFIX" value="${php-target.dir}/re${appserver.compile.prefix}"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -761,7 +748,7 @@
     <!-- Copies the PHP Application Server runtime sources                    -->
     <!-- ==================================================================== -->
     <target name="copy-runtime" description="Copies the PHP Application Server runtime sources.">
-        <copy todir="${php-target.dir}/re${appserver.compile.prefix}" overwrite="true">
+        <copy todir="${appserver.compile.prefix}" overwrite="true">
             <fileset dir="${php-src.dir}">
                 <include name="**/*"/>
             </fileset>
@@ -775,7 +762,10 @@
     <!-- Builds the PHP source for the PHP Application Server runtime         -->
     <!-- ==================================================================== -->
     <target name="build-runtime" depends="prepare-source" description="Compiles the ApplicationServer runtime environment.">
-    	
+
+        <!-- delete the application server directory -->
+        <delete dir="${appserver.compile.prefix}" includeemptydirs="true" quiet="false" verbose="true" failonerror="true"/>
+
         <!-- build the necessary libraries -->
     	<antcall target="build-libjpeg"/>
         <antcall target="build-libpng"/>
@@ -812,10 +802,12 @@
         </exec>
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make"/>
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make">
-            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
-        
+
+        <!-- build the PECL ev package as shared library -->
+        <antcall target="pecl-build-ev"/>
+
     	<!-- copy runtime files from src directory -->
         <antcall target="copy-runtime"/>
     </target>
@@ -826,14 +818,13 @@
     <target name="pecl-build-pthreads" description="Builds the PECL pthreads as shared extension.">
         <antcall target="get-pthreads-src"/>
         <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
         <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="sh">
             <arg value="configure"/>
-            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+            <arg value="--with-php-config=${appserver.compile.prefix}/bin/php-config"/>
         </exec>
         <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="make"/>
         <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="make">
-            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -844,15 +835,14 @@
     <target name="pecl-build-memcached" description="Builds the PECL memcached as shared extension.">
         <antcall target="get-memcached-src"/>
         <untar src="${lib.dir}/memcached-${appserver.memcached.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
         <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="sh">
             <arg value="configure"/>
-            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+            <arg value="--with-php-config=${appserver.compile.prefix}/bin/php-config"/>
             <arg value="--with-libmemcached-dir=${libmemcached.dir}"/>
         </exec>
         <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="make"/>
         <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="make">
-            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -863,14 +853,13 @@
     <target name="pecl-build-operator" description="Builds the PECL operator as shared extension.">
         <antcall target="get-operator-src"/>
         <untar src="${lib.dir}/operator-${appserver.operator.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <exec dir="${php-target.dir}/operator-${appserver.operator.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/operator-${appserver.operator.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
         <exec dir="${php-target.dir}/operator-${appserver.operator.version}" executable="sh">
             <arg value="configure"/>
-            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+            <arg value="--with-php-config=${appserver.compile.prefix}/bin/php-config"/>
         </exec>
         <exec dir="${php-target.dir}/operator-${appserver.operator.version}" executable="make"/>
         <exec dir="${php-target.dir}/operator-${appserver.operator.version}" executable="make">
-            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -881,14 +870,13 @@
     <target name="pecl-build-pecl_http" description="Builds the PECL pecl_http as shared extension.">
         <antcall target="get-pecl_http-src"/>
         <untar src="${lib.dir}/pecl_http-${appserver.pecl_http.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <exec dir="${php-target.dir}/pecl_http-${appserver.pecl_http.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/pecl_http-${appserver.pecl_http.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
         <exec dir="${php-target.dir}/pecl_http-${appserver.pecl_http.version}" executable="sh">
             <arg value="configure"/>
-            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+            <arg value="--with-php-config=${appserver.compile.prefix}/bin/php-config"/>
         </exec>
         <exec dir="${php-target.dir}/pecl_http-${appserver.pecl_http.version}" executable="make"/>
         <exec dir="${php-target.dir}/pecl_http-${appserver.pecl_http.version}" executable="make">
-            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -899,15 +887,14 @@
     <target name="pecl-build-libevent" description="Builds the PECL libevent as shared extension.">
         <antcall target="get-libevent-src"/>
         <untar src="${lib.dir}/libevent-${appserver.libevent.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <exec dir="${php-target.dir}/libevent-${appserver.libevent.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/libevent-${appserver.libevent.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
         <exec dir="${php-target.dir}/libevent-${appserver.libevent.version}" executable="sh">
             <arg value="configure"/>
-            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+            <arg value="--with-php-config=${appserver.compile.prefix}/bin/php-config"/>
             <arg value="--with-libevent=${appserver.compile.libevent.libdir}"/>
         </exec>
         <exec dir="${php-target.dir}/libevent-${appserver.libevent.version}" executable="make"/>
         <exec dir="${php-target.dir}/libevent-${appserver.libevent.version}" executable="make">
-            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -918,14 +905,13 @@
     <target name="pecl-build-libev" description="Builds the PECL libev as shared extension.">
         <antcall target="get-libev-src"/>
         <unzip src="${lib.dir}/libev-${appserver.libev.version}.zip" dest="${php-target.dir}"/>
-        <exec dir="${php-target.dir}/php-libev-${appserver.libev.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/php-libev-${appserver.libev.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
         <exec dir="${php-target.dir}/php-libev-${appserver.libev.version}" executable="sh">
             <arg value="configure"/>
-            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+            <arg value="--with-php-config=${appserver.compile.prefix}/bin/php-config"/>
         </exec>
         <exec dir="${php-target.dir}/php-libev-${appserver.libev.version}" executable="make"/>
         <exec dir="${php-target.dir}/php-libev-${appserver.libev.version}" executable="make">
-            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -936,14 +922,13 @@
     <target name="pecl-build-ev" description="Builds the PECL ev as shared extension.">
         <antcall target="get-ev-src"/>
         <untar src="${lib.dir}/ev-${appserver.ev.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <exec dir="${php-target.dir}/ev-${appserver.ev.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/ev-${appserver.ev.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
         <exec dir="${php-target.dir}/ev-${appserver.ev.version}" executable="sh">
             <arg value="configure"/>
-            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+            <arg value="--with-php-config=${appserver.compile.prefix}/bin/php-config"/>
         </exec>
         <exec dir="${php-target.dir}/ev-${appserver.ev.version}" executable="make"/>
         <exec dir="${php-target.dir}/ev-${appserver.ev.version}" executable="make">
-            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -954,14 +939,13 @@
     <target name="pecl-build-AOP" description="Builds the PECL AOP as shared extension.">
         <antcall target="get-AOP-src"/>
         <untar src="${lib.dir}/AOP-${appserver.AOP.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <exec dir="${php-target.dir}/AOP-${appserver.AOP.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/AOP-${appserver.AOP.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
         <exec dir="${php-target.dir}/AOP-${appserver.AOP.version}" executable="sh">
             <arg value="configure"/>
-            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+            <arg value="--with-php-config=${appserver.compile.prefix}/bin/php-config"/>
         </exec>
         <exec dir="${php-target.dir}/AOP-${appserver.AOP.version}" executable="make"/>
         <exec dir="${php-target.dir}/AOP-${appserver.AOP.version}" executable="make">
-            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -972,14 +956,13 @@
     <target name="pecl-build-xdebug" description="Builds the PECL xdebug as shared extension.">
         <antcall target="get-xdebug-src"/>
         <untar src="${lib.dir}/xdebug-${appserver.xdebug.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <exec dir="${php-target.dir}/xdebug-${appserver.xdebug.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/xdebug-${appserver.xdebug.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
         <exec dir="${php-target.dir}/xdebug-${appserver.xdebug.version}" executable="sh">
             <arg value="configure"/>
-            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+            <arg value="--with-php-config=${appserver.compile.prefix}/bin/php-config"/>
         </exec>
         <exec dir="${php-target.dir}/xdebug-${appserver.xdebug.version}" executable="make"/>
         <exec dir="${php-target.dir}/xdebug-${appserver.xdebug.version}" executable="make">
-            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -990,14 +973,13 @@
     <target name="pecl-build-redis" description="Builds the PECL redis as shared extension.">
         <antcall target="get-redis-src"/>
         <untar src="${lib.dir}/redis-${appserver.redis.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <exec dir="${php-target.dir}/redis-${appserver.redis.version}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/redis-${appserver.redis.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
         <exec dir="${php-target.dir}/redis-${appserver.redis.version}" executable="sh">
             <arg value="configure"/>
-            <arg value="--with-php-config=${php-target.dir}/re${appserver.compile.prefix}/bin/php-config"/>
+            <arg value="--with-php-config=${appserver.compile.prefix}/bin/php-config"/>
         </exec>
         <exec dir="${php-target.dir}/redis-${appserver.redis.version}" executable="make"/>
         <exec dir="${php-target.dir}/redis-${appserver.redis.version}" executable="make">
-            <env key="INSTALL_ROOT" value="${php-target.dir}/re"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -1011,11 +993,11 @@
             <arg line="-sS https://getcomposer.org/installer -o installer"/>
         </exec>
         <!-- install composer itself -->
-        <exec dir="${php-target.dir}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/php">
-            <arg line="installer -- --install-dir ${php-target.dir}/re${appserver.compile.prefix}/bin"/>
+        <exec dir="${php-target.dir}" executable="${appserver.compile.prefix}/bin/php">
+            <arg line="installer -- --install-dir ${appserver.compile.prefix}/bin"/>
         </exec>
         <!-- install composer packages -->
-        <exec dir="${php-target.dir}/re${appserver.compile.prefix}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/php">
+        <exec dir="${appserver.compile.prefix}" executable="${appserver.compile.prefix}/bin/php">
             <arg line="bin/composer.phar --working-dir=app/code update"/>
         </exec>
     </target>
@@ -1024,9 +1006,8 @@
     <!-- Install the ApplicationServer demo project                           -->
     <!-- ==================================================================== -->
     <target name="install-demo-project" depends="install-composer" description="Install the ApplicationServer demo project.">
-        <!-- install demo project -->
-        <exec dir="${php-target.dir}/re${appserver.compile.prefix}" executable="${php-target.dir}/re${appserver.compile.prefix}/bin/php">
-            <arg line="bin/composer.phar --working-dir=webapps create-project techdivision/techdivision_applicationserverproject demo dev-master"/>
+        <exec dir="${appserver.compile.prefix}" executable="${appserver.compile.prefix}/bin/php">
+            <arg line="${appserver.compile.prefix}/bin/composer.phar create-project techdivision/techdivision_applicationserverproject ${appserver.compile.prefix}/webapps/demo dev-master"/>
         </exec>
     </target>
 
@@ -1062,10 +1043,23 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Copy build files to target directory                                 -->
+    <!-- ==================================================================== -->
+    <target name="copy-build-to-target" description="Copies build files to target directory.">
+        <move todir="${php-target.dir}/re${appserver.compile.prefix}">
+            <fileset dir="${appserver.compile.prefix}"/>
+        </move>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Creates a DEBIAN package with the local ApplicationServer runtime    -->
     <!-- ==================================================================== -->
     <target name="create-deb" depends="install-demo-project" description="Creates a DEBIAN package with the local ApplicationServer runtime.">
+        <!-- copy build files to target directory -->
+        <antcall target="copy-build-to-target"/>
+        <!-- prepare the DEBIAN build system -->
         <antcall target="prepare-DEBIAN-build-system"/>
+        <!-- copy init scripts to required directory -->
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/debian">
                 <include name="**/*"/>
@@ -1085,19 +1079,19 @@
     <!-- ==================================================================== -->
     <target name="change-dylib-path" description="Changes the dylib path for Mac OS X installation.">
         <!-- change dylib pathes -->
-        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+        <exec dir="${appserver.compile.prefix}/bin" executable="install_name_tool">
             <arg line="-change /usr/local/lib/libpng${libpng.dylib.version}.dylib ${appserver.compile.prefix}/lib/libpng${libpng.dylib.version}.dylib php"/>
         </exec>
-        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+        <exec dir="${appserver.compile.prefix}/bin" executable="install_name_tool">
             <arg line="-change /usr/local/lib/libjpeg.${libjpeg.dylib.version}.dylib ${appserver.compile.prefix}/lib/libjpeg.${libjpeg.dylib.version}.dylib php"/>
         </exec>
-        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+        <exec dir="${appserver.compile.prefix}/bin" executable="install_name_tool">
             <arg line="-change /usr/local/lib/libfreetype.${libfreetype.dylib.version}.dylib ${appserver.compile.prefix}/lib/libfreetype.${libfreetype.dylib.version}.dylib php"/>
         </exec>
-        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+        <exec dir="${appserver.compile.prefix}/bin" executable="install_name_tool">
             <arg line="-change /usr/local/lib/libmemcached.${libmemcached.dylib.version}.dylib ${appserver.compile.prefix}/lib/libmemcached.${libmemcached.dylib.version}.dylib php"/>
         </exec>
-        <exec dir="${php-target.dir}/re${appserver.compile.prefix}/bin" executable="install_name_tool">
+        <exec dir="${appserver.compile.prefix}/bin" executable="install_name_tool">
             <arg line="-change /usr/local/lib/libmcrypt.${libmcrypt.dylib.version}.dylib ${appserver.compile.prefix}/lib/libmcrypt.${libmcrypt.dylib.version}.dylib php"/>
         </exec>
     </target>
@@ -1108,6 +1102,8 @@
     <target name="create-pkg" depends="install-demo-project" description="Creates a .pkg package with the local ApplicationServer runtime.">
         <!-- change dylib path in binaries -->
         <antcall target="change-dylib-path"/>
+        <!-- copy build files to target directory -->
+        <antcall target="copy-build-to-target"/>
         <!-- copy plist files to required directory -->
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/macosx/plist">
