@@ -5,6 +5,8 @@ Version 0.6
 * Integrate Monolog Logger
 * Integration Annotations for session beans
 * PHPUnit test suite for TechDivision_ApplicationServer project
+* AOP
+* DI
 
 * Running Magento CE 1.7.x demo application
 * Running TYPO3 demo application
@@ -22,6 +24,7 @@ Version 0.8
 
 * Distributed and redundant cluster caching system with automated failover
 * PHPUnit test suite for TechDivision_PersistenceContainer project
+* Webservice for session beans
 
 Version 0.9
 
