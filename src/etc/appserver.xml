@@ -1,4 +1,15 @@
 <appserver>
+
+	<!-- 
+		The initial context configuration.
+	-->
+	<initialContext type="TechDivision\ApplicationServer\InitialContext">
+		<classLoader type="TechDivision\ApplicationServer\SplClassLoader"/>
+		<servers>
+			<server address="127.0.0.1" port="11211" weight="0"/>
+		</servers>
+	</initialContext>
+	
     <containers>
         <!--
             This is an example of a container that uses a socket for
