@@ -28,6 +28,8 @@ Version 0.8
 
 Version 0.9
 
+* Fast-CGI container
+* WebSocket integration
 * PHAR based deployment
 * PHPUnit test suite for TechDivision_MessageQueue project
 
