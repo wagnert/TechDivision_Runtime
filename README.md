@@ -18,6 +18,8 @@ Version 0.7
 * Automated Build- and Deployment using Travis-CI
 * Timer Service
 * Container based caching for Doctrine entity beans
+* SSL Encryption for TechDivision_ServletContainer project
+* HTTP basic authentication for TechDivision_ServletContainer project
 * PHPUnit test suite for TechDivision_ServletContainer project
 
 Version 0.8
