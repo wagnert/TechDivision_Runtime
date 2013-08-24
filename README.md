@@ -15,6 +15,7 @@ Version 0.6
 
 Version 0.7
 
+* Merging XML configuration files
 * Automated Build- and Deployment using Travis-CI
 * Timer Service
 * Container based caching for Doctrine entity beans

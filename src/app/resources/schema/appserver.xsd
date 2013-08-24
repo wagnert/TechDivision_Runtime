@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="appserver">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="initialContext" />
+				<xs:element ref="containers" />
+			</xs:choice>
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="initialContext">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="description" />
+				<xs:element ref="classLoader" />
+				<xs:element ref="servers" />
+			</xs:choice>
+			<xs:attribute name="type" type="xs:string" />
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="description">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:anyAttribute />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="classLoader">
+		<xs:complexType>
+			<xs:attribute name="type" type="xs:string" />
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="servers">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="server" />
+			</xs:choice>
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="server">
+		<xs:complexType>
+			<xs:attribute name="address" type="xs:string" />
+			<xs:attribute name="port" type="xs:string" />
+			<xs:attribute name="weight" type="xs:string" />
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="containers">
+		<xs:complexType>
+			<xs:choice minOccurs="1" maxOccurs="unbounded">
+				<xs:element ref="container" />
+			</xs:choice>
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="container">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="description" />
+				<xs:element ref="receiver" />
+				<xs:element ref="deployment" />
+				<xs:element ref="host" />
+			</xs:choice>
+			<xs:attribute name="threadType" type="xs:string" />
+			<xs:attribute name="type" type="xs:string" />
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="receiver">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="worker" />
+				<xs:element ref="thread" />
+				<xs:element ref="params" />
+			</xs:choice>
+			<xs:attribute name="type" type="xs:string" />
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="worker">
+		<xs:complexType>
+			<xs:attribute name="type" type="xs:string" />
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="thread">
+		<xs:complexType>
+			<xs:attribute name="type" type="xs:string" />
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="params">
+		<xs:complexType>
+			<xs:attribute name="address" type="xs:string" />
+			<xs:attribute name="port" type="xs:string" />
+			<xs:attribute name="workerNumber" type="xs:string" />
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="deployment">
+		<xs:complexType>
+			<xs:attribute name="type" type="xs:string" />
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="host">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="vhosts" />
+			</xs:choice>
+			<xs:attribute name="appBase" type="xs:string" />
+			<xs:attribute name="name" type="xs:string" />
+			<xs:attribute name="serverAdmin" type="xs:string" />
+			<xs:attribute name="serverSoftware" type="xs:string" />
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="vhosts">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="vhost" />
+			</xs:choice>
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="vhost">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="aliases" />
+			</xs:choice>
+			<xs:attribute name="appBase" type="xs:string" />
+			<xs:attribute name="name" type="xs:string" />
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="aliases">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="alias" />
+			</xs:choice>
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="alias">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:anyAttribute />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
