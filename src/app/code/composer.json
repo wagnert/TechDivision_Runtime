@@ -6,6 +6,7 @@
     "license": ["OSL-3.0"],
     "require": {
         "php" : ">=5.4.0",
+        "monolog/monolog": "*",
         "techdivision/socket": "dev-master",
         "techdivision/appserver": "dev-master",
         "techdivision/servletcontainer": "dev-master",
