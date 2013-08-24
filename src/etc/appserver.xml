@@ -50,7 +50,7 @@
         </container>
 
         <container threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\MessageQueue\Container">
-		<description><![CDATA[This is an example of a message queue that uses a socket to receive messages. This solution can be used for clients connecting over a network.]]></description>
+			<description><![CDATA[This is an example of a message queue that uses a socket to receive messages. This solution can be used for clients connecting over a network.]]></description>
             <receiver type="TechDivision\ApplicationServer\SocketThreadReceiver">
                 <worker type="TechDivision\ApplicationServer\SocketRequestAcceptor"/>
                 <thread type="TechDivision\MessageQueue\ThreadRequest"/>
