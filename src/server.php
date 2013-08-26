@@ -23,10 +23,14 @@ $schemaFileName = APPSERVER_BP . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARAT
 $configurationFile = new \DOMDocument();
 $configurationFile->load($configurationFileName);
 
+// activate internal error handling, necessary to catch errors with libxml_get_errors()
+libxml_use_internal_errors(true);
+
 // validate the configuration file with the schema
 if ($configurationFile->schemaValidate($schemaFileName) === false) {
     foreach (libxml_get_errors() as $error) {
         $message = "Found a schema validation error on line %s with code %s and message %s when validating configuration file %s";
+        error_log(var_export($error, true));
         throw new \Exception(sprintf($message, $error->line, $error->code, $error->message, $error->file));
     }
 }

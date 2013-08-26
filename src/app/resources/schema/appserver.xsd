@@ -4,6 +4,7 @@
 		<xs:complexType>
 			<xs:choice maxOccurs="unbounded">
 				<xs:element ref="initialContext" />
+				<xs:element ref="systemLogger" />
 				<xs:element ref="containers" />
 			</xs:choice>
 			<xs:anyAttribute />
@@ -51,6 +52,17 @@
 			<xs:anyAttribute />
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="systemLogger">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="processors" />
+				<xs:element ref="handlers" />
+			</xs:choice>
+			<xs:attribute name="type" type="xs:string" />
+			<xs:attribute name="channelName" type="xs:string" />
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
 	<xs:element name="containers">
 		<xs:complexType>
 			<xs:choice minOccurs="1" maxOccurs="unbounded">
@@ -95,14 +107,6 @@
 			<xs:anyAttribute />
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="params">
-		<xs:complexType>
-			<xs:attribute name="address" type="xs:string" />
-			<xs:attribute name="port" type="xs:string" />
-			<xs:attribute name="workerNumber" type="xs:string" />
-			<xs:anyAttribute />
-		</xs:complexType>
-	</xs:element>
 	<xs:element name="deployment">
 		<xs:complexType>
 			<xs:attribute name="type" type="xs:string" />
@@ -144,14 +148,69 @@
 			<xs:choice maxOccurs="unbounded">
 				<xs:element ref="alias" />
 			</xs:choice>
-			<xs:anyAttribute />
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="alias">
 		<xs:complexType>
 			<xs:simpleContent>
+				<xs:extension base="xs:string"/>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="formatter">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="params" />
+			</xs:choice>
+			<xs:attribute name="type" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="processors">
+		<xs:complexType>
+			<xs:choice minOccurs="1" maxOccurs="unbounded">
+				<xs:element ref="processor" />
+			</xs:choice>
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="processor">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="params" />
+			</xs:choice>
+			<xs:attribute name="type" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="handlers">
+		<xs:complexType>
+			<xs:choice minOccurs="1" maxOccurs="unbounded">
+				<xs:element ref="handler" />
+			</xs:choice>
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="handler">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="formatter" />
+				<xs:element ref="params" />
+			</xs:choice>
+			<xs:attribute name="type" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="params">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="param" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="param">
+		<xs:complexType>
+			<xs:simpleContent>
 				<xs:extension base="xs:string">
-					<xs:anyAttribute />
+					<xs:attribute name="name" type="xs:string" />
+					<xs:attribute name="type" type="xs:string" />
 				</xs:extension>
 			</xs:simpleContent>
 		</xs:complexType>
