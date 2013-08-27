@@ -15,7 +15,7 @@
 			<xs:choice maxOccurs="unbounded">
 				<xs:element ref="description" />
 				<xs:element ref="classLoader" />
-				<xs:element ref="servers" />
+				<xs:element ref="storage" />
 			</xs:choice>
 			<xs:attribute name="type" type="xs:string" />
 			<xs:anyAttribute />
@@ -34,6 +34,14 @@
 		<xs:complexType>
 			<xs:attribute name="type" type="xs:string" />
 			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="storage">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="servers" />
+			</xs:choice>
+			<xs:attribute name="type" type="xs:string" />
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="servers">

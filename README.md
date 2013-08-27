@@ -4,6 +4,7 @@ Version 0.6
 
 * Integrate Monolog Logger
 * Integration Annotations for session beans
+* Stateful + Singleton session bean functionality
 * PHPUnit test suite for TechDivision_ApplicationServer project
 * AOP
 * DI
