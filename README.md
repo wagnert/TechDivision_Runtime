@@ -21,6 +21,7 @@ Version 0.7
 * Container based caching for Doctrine entity beans
 * SSL Encryption for TechDivision_ServletContainer project
 * HTTP basic authentication for TechDivision_ServletContainer project
+* mod_rewrite functionality for TechDivision_ServletContainer project
 * PHPUnit test suite for TechDivision_ServletContainer project
 
 Version 0.8
