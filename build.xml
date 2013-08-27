@@ -996,10 +996,6 @@
         <exec dir="${php-target.dir}" executable="${appserver.compile.prefix}/bin/php">
             <arg line="installer -- --install-dir ${appserver.compile.prefix}/bin"/>
         </exec>
-        <!-- install composer packages -->
-        <exec dir="${appserver.compile.prefix}" executable="${appserver.compile.prefix}/bin/php">
-            <arg line="bin/composer.phar --working-dir=app/code update"/>
-        </exec>
     </target>
 
     <!-- ==================================================================== -->
