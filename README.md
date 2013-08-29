@@ -26,12 +26,15 @@ Version 0.7
 * mod_rewrite functionality for TechDivision_ServletContainer project
 * PHPUnit test suite for TechDivision_ServletContainer project
 * Windows installer
+* Add dynamic load of application specific PECL extensions
 
 Version 0.8
 
 * Distributed and redundant cluster caching system with automated failover
 * PHPUnit test suite for TechDivision_PersistenceContainer project
 * Webservice for session beans
+* Separate configuration files for server, container and appliction
+* Set environment variables in XML configuration files
 
 Version 0.9
 
