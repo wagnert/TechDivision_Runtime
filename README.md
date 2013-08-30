@@ -2,9 +2,7 @@
 
 Version 0.6 [Application Server]
 
-* Integrate Monolog Logger
-* Integrate annotations for session beans
-* PHPUnit test suite for TechDivision_ApplicationServer project
+* Logging
 * AOP
 * DI
 * Refactoring routing
@@ -26,6 +24,7 @@ Version 0.6 [Application Server]
 
 Version 0.7 [Servlet Container]
 
+* Integrate annotations for session beans
 * Administration interface with drag-and-drop PHAR installer
 * SSL Encryption for TechDivision_ServletContainer project
 * HTTP basic authentication for TechDivision_ServletContainer project
