@@ -13,6 +13,7 @@ Version 0.6 [Application Server]
 * Set environment variables in XML configuration files
 * PHAR based deployment
 * 100 % Coverage for PHPUnit test suite for TechDivision_ApplicationServer project
+* Automated Build- and Deployment using Travis-CI
 
 * Running Magento CE 1.7.x demo application
 * Running TYPO3 6.x demo application
@@ -25,9 +26,7 @@ Version 0.6 [Application Server]
 
 Version 0.7 [Servlet Container]
 
-* Stateful + Singleton session bean functionality
 * Administration interface with drag-and-drop PHAR installer
-* Automated Build- and Deployment using Travis-CI
 * SSL Encryption for TechDivision_ServletContainer project
 * HTTP basic authentication for TechDivision_ServletContainer project
 * mod_rewrite functionality for TechDivision_ServletContainer project
@@ -36,19 +35,22 @@ Version 0.7 [Servlet Container]
 
 Version 0.8 [Persistence Container]
 
-* Container based caching for Doctrine entity beans
+* Stateful + Singleton session bean functionality
+* Container managed entity beans for Doctrine
 * Webservice for session beans
 * 100 % Coverage for PHPUnit test suite for TechDivision_PersistenceContainer project
 
 Version 0.9 [Message Queue]
 
 * Message bean functionality
-* PHPUnit test suite for TechDivision_MessageQueue project
+* 100 % Coverage for PHPUnit test suite for TechDivision_MessageQueue project
 
 Version 1.0 [Timer Service]
 
 * Timer Service
 * 100 % Coverage for PHPUnit test suite for TechDivision_TimerService project
+
+-------------------- CE ------------------------------------------------------------------
 
 Version 1.1 [Cluster Functionality]
 
@@ -56,13 +58,13 @@ Version 1.1 [Cluster Functionality]
 * Container based transactions
 * Farming deployment
 
+-------------------- EE ------------------------------------------------------------------
+
 Version 1.2 [Additional Containers]
 
 * Distributed and redundant cluster caching system with automated failover
 * Fast-CGI container
 * WebSocket integration
-
-*
 
 # Default PHP compile settings
 	
