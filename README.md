@@ -1,54 +1,68 @@
 # Roadmap
 
-Version 0.6
+Version 0.6 [Application Server]
 
 * Integrate Monolog Logger
-* Integration Annotations for session beans
-* Stateful + Singleton session bean functionality
+* Integrate annotations for session beans
 * PHPUnit test suite for TechDivision_ApplicationServer project
 * AOP
 * DI
+* Refactoring routing
+* Merging XML configuration files
+* Separate configuration files for server, container and application
+* Set environment variables in XML configuration files
+* PHAR based deployment
+* 100 % Coverage for PHPUnit test suite for TechDivision_ApplicationServer project
 
 * Running Magento CE 1.7.x demo application
-* Running TYPO3 demo application
+* Running TYPO3 6.x demo application
 * Running TYPO3 Flow 2.0.x demo application
 * Running TYPO3 Neos 1.x demo application
 
-Version 0.7
+* Mac OS X Universal installer
+* rpm Packages
+* Windows installer
 
+Version 0.7 [Servlet Container]
+
+* Stateful + Singleton session bean functionality
 * Administration interface with drag-and-drop PHAR installer
-* Refactoring routing
-* Merging XML configuration files
 * Automated Build- and Deployment using Travis-CI
-* Timer Service
-* Container based caching for Doctrine entity beans
 * SSL Encryption for TechDivision_ServletContainer project
 * HTTP basic authentication for TechDivision_ServletContainer project
 * mod_rewrite functionality for TechDivision_ServletContainer project
-* PHPUnit test suite for TechDivision_ServletContainer project
-* Windows installer
 * Add dynamic load of application specific PECL extensions
+* 100 % Coverage for PHPUnit test suite for TechDivision_ServletContainer project
 
-Version 0.8
+Version 0.8 [Persistence Container]
 
-* Distributed and redundant cluster caching system with automated failover
-* PHPUnit test suite for TechDivision_PersistenceContainer project
+* Container based caching for Doctrine entity beans
 * Webservice for session beans
-* Separate configuration files for server, container and appliction
-* Set environment variables in XML configuration files
+* 100 % Coverage for PHPUnit test suite for TechDivision_PersistenceContainer project
 
-Version 0.9
+Version 0.9 [Message Queue]
 
-* Fast-CGI container
-* WebSocket integration
-* PHAR based deployment
+* Message bean functionality
 * PHPUnit test suite for TechDivision_MessageQueue project
 
-Version 1.0
+Version 1.0 [Timer Service]
 
-* Transaktionen
+* Timer Service
+* 100 % Coverage for PHPUnit test suite for TechDivision_TimerService project
+
+Version 1.1 [Cluster Functionality]
+
 * Cluster functionality
+* Container based transactions
 * Farming deployment
+
+Version 1.2 [Additional Containers]
+
+* Distributed and redundant cluster caching system with automated failover
+* Fast-CGI container
+* WebSocket integration
+
+*
 
 # Default PHP compile settings
 	
