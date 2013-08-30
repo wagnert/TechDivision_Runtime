@@ -16,6 +16,7 @@ Version 0.6
 
 Version 0.7
 
+* Administration interface with drag-and-drop PHAR installer
 * Refactoring routing
 * Merging XML configuration files
 * Automated Build- and Deployment using Travis-CI
