@@ -76,7 +76,7 @@
                             <alias>appserver.local</alias>
                         </aliases>
                     </vhost>
-                    <vhost name="magento.local" appBase="/magento" />
+                    <vhost name="neos.local" appBase="/neos" />
                 </vhosts>
             </host>
         </container>
