@@ -235,6 +235,13 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Check if ext-appserver sources has been downloaded yet   		 	  -->
+    <!-- ==================================================================== -->
+    <target name="check-ext-appserver-src-present" description="Check if ext appserver sources has been downloaded yet.">
+        <available file="${lib.dir}/ext-appserver-${appserver.ext-appserver.version}.tgz" property="ext-appserver-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Check if PECL AOP sources has been downloaded yet  		 	      -->
     <!-- ==================================================================== -->
     <target name="check-AOP-src-present" description="Check if PECL AOP sources has been downloaded yet.">
@@ -375,6 +382,13 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Get PECL appserver source package by given version number		          -->
+    <!-- ==================================================================== -->
+    <target name="get-ext-appserver-src" depends="check-ext-appserver-src-present" unless="${ext-appserver-src.present}" description="Get php ext appserver source package by given version number">
+        <get src="https://github.com/techdivision/php-ext-appserver/releases/download/v${appserver.ext-appserver.version}/appserver-${appserver.ext-appserver.version}.tgz" dest="${lib.dir}/ext-appserver-${appserver.ext-appserver.version}.tgz"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Get memcached server source package by given version number		  -->
     <!-- ==================================================================== -->
     <target name="get-memcached-server-src" depends="check-memcached-server-src-present" unless="${memcached-server-src.present}" description="Get memcached server source package by given version number.">
@@ -465,6 +479,12 @@
     <!-- Prepares the PECL sources for static compilation (not active!!)      -->
     <!-- ==================================================================== -->
     <target name="prepare-pecl-extension" description="Prepares the PECL sources for static compilation (not active!!)">
+        <!-- prepare php ext appserver sources sources for static compilation -->
+        <antcall target="get-ext-appserver-src"/>
+        <untar src="${lib.dir}/ext-appserver-${appserver.ext-appserver.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/appserver">
+            <fileset dir="${php-target.dir}/appserver-${appserver.ext-appserver.version}"/>
+        </move>
         <!-- prepare PECL memcached sources sources for static compilation -->
         <antcall target="get-memcached-src"/>
         <untar src="${lib.dir}/memcached-${appserver.memcached.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
@@ -518,11 +538,13 @@
         </move>
         -->
         <!-- prepare PECL xdebug sources for static compilation -->
+        <!--
         <antcall target="get-xdebug-src"/>
         <untar src="${lib.dir}/xdebug-${appserver.xdebug.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <move todir="${php-target.dir}/php-${appserver.php.version}/ext/xdebug">
             <fileset dir="${php-target.dir}/xdebug-${appserver.xdebug.version}"/>
         </move>
+        -->
         <!-- prepare PECL redis sources for static compilation -->
         <antcall target="get-redis-src"/>
         <untar src="${lib.dir}/redis-${appserver.redis.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
