@@ -80,7 +80,7 @@
 				<params>
 					<param name="workerNumber" type="integer">16</param>
 					<param name="address" type="string">0.0.0.0</param>
-					<param name="port" type="integer">80</param>
+					<param name="port" type="integer">8586</param>
 				</params>
             </receiver>
             <deployment type="TechDivision\ServletContainer\Deployment"/>
@@ -108,7 +108,7 @@
 				<params>
 					<param name="workerNumber" type="integer">16</param>
 					<param name="address" type="string">0.0.0.0</param>
-					<param name="port" type="integer">443</param>
+					<param name="port" type="integer">8588</param>
 				</params>
             </receiver>
             <deployment type="TechDivision\ServletContainer\Deployment"/>
