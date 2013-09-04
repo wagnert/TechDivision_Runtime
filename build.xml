@@ -1145,4 +1145,21 @@
         </exec>
     </target>
 
+    <!-- ==================================================================== -->
+    <!-- Deploys all packages related to the appserver base to               -->
+    <!-- ==================================================================== -->
+    <target name="deploy-all">
+        <parallel>
+            <exec dir="${basedir}" executable="ant"><arg value="deploy" /></exec>
+            <exec dir="${basedir}/../TechDivision_ApplicationServer" executable="ant"><arg value="deploy" /></exec>
+            <exec dir="${basedir}/../TechDivision_MessageQueue" executable="ant"><arg value="deploy" /></exec>
+            <exec dir="${basedir}/../TechDivision_MessageQueueClient" executable="ant"><arg value="deploy" /></exec>
+            <exec dir="${basedir}/../TechDivision_PersistenceContainer" executable="ant"><arg value="deploy" /></exec>
+            <exec dir="${basedir}/../TechDivision_PersistenceContainerClient" executable="ant"><arg value="deploy" /></exec>
+            <exec dir="${basedir}/../TechDivision_ServletContainer" executable="ant"><arg value="deploy" /></exec>
+            <exec dir="${basedir}/../TechDivision_Socket" executable="ant"><arg value="deploy" /></exec>
+            <exec dir="${basedir}/../TechDivision_Stream" executable="ant"><arg value="deploy" /></exec>
+       </parallel>
+    </target>
+    
 </project>
