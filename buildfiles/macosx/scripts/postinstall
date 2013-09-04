@@ -6,6 +6,9 @@ chmod +x /opt/appserver/appserver
 chgrp -R staff /opt/appserver
 chmod -R 775 /opt/appserver
 
+/opt/appserver/bin/pear channel-discover pear.phpunit.de
+/opt/appserver/bin/pear install phpunit/PHPUnit
+
 /opt/appserver/bin/composer update
 
 /opt/appserver/sbin/memcachedctl start
