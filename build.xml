@@ -829,6 +829,7 @@
 
         <!-- build the PECL ev package as shared library -->
         <antcall target="pecl-build-ev"/>
+        <antcall target="pecl-build-xdebug"/>
 
     	<!-- copy runtime files from src directory -->
         <antcall target="copy-runtime"/>
