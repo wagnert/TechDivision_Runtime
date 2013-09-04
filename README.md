@@ -12,12 +12,10 @@ Version 0.6 [Application Server]
 * PHAR based deployment
 * 100 % Coverage for PHPUnit test suite for TechDivision_ApplicationServer project
 * Automated Build- and Deployment using Travis-CI
-
 * Running Magento CE 1.7.x demo application
 * Running TYPO3 6.x demo application
 * Running TYPO3 Flow 2.0.x demo application
 * Running TYPO3 Neos 1.x demo application
-
 * Mac OS X Universal installer
 * rpm Packages
 * Windows installer
