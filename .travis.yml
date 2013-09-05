@@ -9,7 +9,7 @@ matrix:
     - php: 5.5
  
 script:
- - ant run-tests
+ - ant create-pkg
 
 notifications:
   email: tw@techdivision.com
