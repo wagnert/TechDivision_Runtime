@@ -9,7 +9,7 @@ matrix:
     - php: 5.5
  
 script:
- - ant -Dos.family=mac create-pkg
+ - sudo ant -Dos.family=mac create-pkg
 
 notifications:
   email: tw@techdivision.com
