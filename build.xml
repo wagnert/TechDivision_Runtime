@@ -1066,7 +1066,7 @@
     <!-- ==================================================================== -->
     <target name="copy-build-to-target" description="Copies build files to target directory.">
         <move todir="${php-target.dir}/re${appserver.compile.prefix}">
-            <fileset dir="${appserver.compile.prefix}"/>
+            <fileset dir="${appserver.compile.prefix}" followsymlinks="true"/>
         </move>
     </target>
 
