@@ -1,4 +1,4 @@
-language: php
+language: objective-c
 
 php:
   - 5.4
