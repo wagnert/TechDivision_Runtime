@@ -1,3 +1,30 @@
+# Installation
+
+To build the runtime on Mac OS X you need the following tools:
+
+* XCode commandline tools (can be installed from the App Store)
+* automake (Download from http://www.gnu.org/software/autoconf/)
+* autoconf (Download from http://www.gnu.org/software/automake/)
+
+After that, change your workspace and clone the sources from our GitHub repository with
+	
+```
+$ git clone https://github.com/techdivision/TechDivision_Runtime.git)
+	
+```
+
+Change into the project directory and start the build using ANT:
+
+	
+```
+$ cd TechDivision_Runtime
+$ ant create-pkg
+	
+```
+
+After compiling the runtime you'll find the installable .pkg file in the target directory.
+
+
 # Roadmap
 
 Version 0.6 [Application Server]
