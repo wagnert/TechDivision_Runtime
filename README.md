@@ -1,14 +1,14 @@
 # Runtime
 
 On Mac OS X, the runtime provides you with system independent, thread-safe compiled PHP environment. 
-Besides the most recent PHP 5.5.x version the package came with the statically compiled
+Besides the most recent PHP 5.5.x version the package came with statically compiled
 
 * pthreads
 * memcached
 * redis
 * appserver (contains some replacement functions for XDebug)
 
-PECL extensions. Additionally XDebug and ev are compiled as a shared module. XDebug is necessary to
+PECL extensions. Additionally the PECL extensions XDebug and ev are compiled as a shared modules. XDebug is necessary to
 render detailed code coverage reports when running unit and intergration tests. ev will be used to
 integrate a timer service in one of the future versions.
 
