@@ -1065,6 +1065,7 @@
     <!-- Copy build files to target directory                                 -->
     <!-- ==================================================================== -->
     <target name="move-build-to-target" description="Copies build files to target directory.">
+        <mkdir dir="${php-target.dir}/re/opt" />
     	<exec dir="${php-target.dir}" executable="mv">
     		<arg value="${appserver.compile.prefix}"/> 
     		<arg value="${php-target.dir}/re/opt"/>	
