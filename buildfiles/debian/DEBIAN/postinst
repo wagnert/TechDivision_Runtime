@@ -3,6 +3,9 @@
 chmod 755 -R /opt/appserver/bin
 chmod 755 /etc/init.d/appserver
 
+/opt/appserver/bin/pear channel-discover pear.phpunit.de
+/opt/appserver/bin/pear install phpunit/PHPUnit
+
 /opt/appserver/bin/composer update
 
 /etc/init.d/appserver start

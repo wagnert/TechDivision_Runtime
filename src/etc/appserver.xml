@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<appserver>
-
+<appserver xmlns="http://www.appserver.io/appserver">
 	<initialContext type="TechDivision\ApplicationServer\InitialContext">
 		<description><![CDATA[The initial context configuration.]]></description>
-		<classLoader type="TechDivision\ApplicationServer\SplClassLoader"/>
-		<storage type="TechDivision\ApplicationServer\InitialContext\MemcachedStorage">
+		<classLoader type="TechDivision\ApplicationServer\SplClassLoader" />
+		<storage
+			type="TechDivision\ApplicationServer\InitialContext\MemcachedStorage">
 			<servers>
-				<server address="127.0.0.1" port="11211" weight="0"/>
+				<server address="127.0.0.1" port="11211" weight="0" />
 			</servers>
 		</storage>
 	</initialContext>
-	
+
 	<systemLogger type="Monolog\Logger" channelName="system">
 		<processors>
-			<processor type="Monolog\Processor\IntrospectionProcessor"/>
+			<processor type="Monolog\Processor\IntrospectionProcessor" />
 		</processors>
 		<handlers>
 			<handler type="Monolog\Handler\ErrorLogHandler">
@@ -24,110 +24,107 @@
 					</params>
 				</formatter>
 				<params>
-					<param name="messageType" type="integer">ErrorLogHandler::OPERATING_SYSTEM</param>
+					<param name="messageType" type="integer">ErrorLogHandler::OPERATING_SYSTEM
+					</param>
 					<param name="level" type="integer">Logger::DEBUG</param>
 					<param name="bubble" type="boolean">true</param>
 				</params>
 			</handler>
 		</handlers>
 	</systemLogger>
-	
-    <containers>
-    
-        <container threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\PersistenceContainer\Container">
+
+	<containers>
+
+		<container threadType="TechDivision\ApplicationServer\ContainerThread"
+			type="TechDivision\PersistenceContainer\Container">
 			<description><![CDATA[This is an example of a container that uses a socket for sending and receiving messages. This solution can be used for clients connecting over a network.]]></description>
-            <receiver type="TechDivision\ApplicationServer\Socket\Receiver">
-                <worker type="TechDivision\ApplicationServer\Socket\Worker"/>
-                <thread type="TechDivision\PersistenceContainer\ThreadRequest"/>
+			<receiver type="TechDivision\ApplicationServer\Socket\Receiver">
+				<worker type="TechDivision\ApplicationServer\Socket\Worker" />
+				<thread type="TechDivision\PersistenceContainer\ThreadRequest" />
 				<params>
 					<param name="workerNumber" type="integer">16</param>
 					<param name="address" type="string">0.0.0.0</param>
 					<param name="port" type="integer">8585</param>
 				</params>
-            </receiver>
-            <deployment type="TechDivision\PersistenceContainer\Deployment"/>
-            <host name="localhost"
-                  appBase="/webapps"
-                  serverAdmin="${appserver.admin.email}"
-                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
-            </host>
-        </container>
+			</receiver>
+			<deployment type="TechDivision\PersistenceContainer\Deployment" />
+			<host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
+				serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
 
-        <container threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\MessageQueue\Container">
+		</container>
+
+		<container threadType="TechDivision\ApplicationServer\ContainerThread"
+			type="TechDivision\MessageQueue\Container">
 			<description><![CDATA[This is an example of a message queue that uses a socket to receive messages. This solution can be used for clients connecting over a network.]]></description>
-            <receiver type="TechDivision\ApplicationServer\Socket\Receiver">
-                <worker type="TechDivision\ApplicationServer\Socket\Worker"/>
-                <thread type="TechDivision\MessageQueue\ThreadRequest"/>
+			<receiver type="TechDivision\ApplicationServer\Socket\Receiver">
+				<worker type="TechDivision\ApplicationServer\Socket\Worker" />
+				<thread type="TechDivision\MessageQueue\ThreadRequest" />
 				<params>
 					<param name="workerNumber" type="integer">16</param>
 					<param name="address" type="string">0.0.0.0</param>
 					<param name="port" type="integer">8587</param>
 				</params>
-            </receiver>
-            <deployment type="TechDivision\MessageQueue\Deployment"/>
-            <host name="localhost"
-                  appBase="/webapps"
-                  serverAdmin="${appserver.admin.email}"
-                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
-            </host>
-        </container>
-        
-        <container threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\ServletContainer\Container">
+			</receiver>
+			<deployment type="TechDivision\MessageQueue\Deployment" />
+			<host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
+				serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
+
+		</container>
+
+		<container threadType="TechDivision\ApplicationServer\ContainerThread"
+			type="TechDivision\ServletContainer\Container">
 			<description><![CDATA[This is an example of a servlet container that uses a socket for sending and receiving HTML requests/responses. This solution can be used for running a web server.]]></description>
-            <receiver type="TechDivision\ApplicationServer\Socket\Receiver">
-                <worker type="TechDivision\ApplicationServer\Socket\Worker"/>
-                <thread type="TechDivision\ServletContainer\Socket\Request"/>
+			<receiver type="TechDivision\ApplicationServer\Socket\Receiver">
+				<worker type="TechDivision\ApplicationServer\Socket\Worker" />
+				<thread type="TechDivision\ServletContainer\Socket\Request" />
 				<params>
 					<param name="workerNumber" type="integer">16</param>
 					<param name="address" type="string">0.0.0.0</param>
 					<param name="port" type="integer">8586</param>
 				</params>
-            </receiver>
-            <deployment type="TechDivision\ServletContainer\Deployment"/>
-            <host name="localhost"
-                  appBase="/webapps"
-                  serverAdmin="${appserver.admin.email}"
-                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
-                <vhosts>
-                    <vhost name="www.appserver.io" appBase="/site">
-                        <aliases>
-                            <alias>appserver.io</alias>
-                            <alias>appserver.local</alias>
-                        </aliases>
-                    </vhost>
-                    <vhost name="neos.local" appBase="/neos" />
-                </vhosts>
-            </host>
-        </container>
-        
-        <container threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\ServletContainer\Container">
+			</receiver>
+			<deployment type="TechDivision\ServletContainer\Deployment" />
+			<host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
+				serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
+				<vhosts>
+					<vhost name="www.appserver.io" appBase="/site">
+						<aliases>
+							<alias>appserver.io</alias>
+							<alias>appserver.local</alias>
+						</aliases>
+					</vhost>
+					<vhost name="neos.local" appBase="/neos" />
+				</vhosts>
+			</host>
+		</container>
+
+		<container threadType="TechDivision\ApplicationServer\ContainerThread"
+			type="TechDivision\ServletContainer\Container">
 			<description><![CDATA[This is an example of a servlet container that uses a socket for sending and receiving HTML requests/responses. This solution can be used for running a web server.]]></description>
-            <receiver type="TechDivision\ApplicationServer\Stream\Receiver">
-                <worker type="TechDivision\ApplicationServer\Stream\Worker"/>
-                <thread type="TechDivision\ServletContainer\Stream\Request"/>
+			<receiver type="TechDivision\ApplicationServer\Stream\Receiver">
+				<worker type="TechDivision\ApplicationServer\Stream\Worker" />
+				<thread type="TechDivision\ServletContainer\Stream\Request" />
 				<params>
 					<param name="workerNumber" type="integer">16</param>
 					<param name="address" type="string">0.0.0.0</param>
 					<param name="port" type="integer">8588</param>
 				</params>
-            </receiver>
-            <deployment type="TechDivision\ServletContainer\Deployment"/>
-            <host name="localhost"
-                  appBase="/webapps"
-                  serverAdmin="${appserver.admin.email}"
-                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
-                <vhosts>
-                    <vhost name="www.appserver.io" appBase="/site">
-                        <aliases>
-                            <alias>appserver.io</alias>
-                            <alias>appserver.local</alias>
-                        </aliases>
-                    </vhost>
-                    <vhost name="neos.local" appBase="/neos" />
-                </vhosts>
-            </host>
-        </container>
-        
-    </containers>
+			</receiver>
+			<deployment type="TechDivision\ServletContainer\Deployment" />
+			<host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
+				serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
+				<vhosts>
+					<vhost name="www.appserver.io" appBase="/site">
+						<aliases>
+							<alias>appserver.io</alias>
+							<alias>appserver.local</alias>
+						</aliases>
+					</vhost>
+					<vhost name="neos.local" appBase="/neos" />
+				</vhosts>
+			</host>
+		</container>
+
+	</containers>
 
 </appserver>

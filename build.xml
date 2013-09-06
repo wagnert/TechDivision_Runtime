@@ -829,6 +829,7 @@
 
         <!-- build the PECL ev package as shared library -->
         <antcall target="pecl-build-ev"/>
+        <antcall target="pecl-build-xdebug"/>
 
     	<!-- copy runtime files from src directory -->
         <antcall target="copy-runtime"/>
@@ -1063,10 +1064,11 @@
     <!-- ==================================================================== -->
     <!-- Copy build files to target directory                                 -->
     <!-- ==================================================================== -->
-    <target name="copy-build-to-target" description="Copies build files to target directory.">
-        <move todir="${php-target.dir}/re${appserver.compile.prefix}">
-            <fileset dir="${appserver.compile.prefix}"/>
-        </move>
+    <target name="move-build-to-target" description="Copies build files to target directory.">
+    	<exec dir="${php-target.dir}" executable="mv">
+    		<arg value="${appserver.compile.prefix}"/> 
+    		<arg value="${php-target.dir}/re/opt"/>	
+    	</exec>
     </target>
 
     <!-- ==================================================================== -->
@@ -1074,7 +1076,7 @@
     <!-- ==================================================================== -->
     <target name="create-deb" depends="install-demo-project" description="Creates a DEBIAN package with the local ApplicationServer runtime.">
         <!-- copy build files to target directory -->
-        <antcall target="copy-build-to-target"/>
+        <antcall target="move-build-to-target"/>
         <!-- prepare the DEBIAN build system -->
         <antcall target="prepare-DEBIAN-build-system"/>
         <!-- copy init scripts to required directory -->
@@ -1093,35 +1095,11 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Changes the dylib path for Mac OS X installation                     -->
-    <!-- ==================================================================== -->
-    <target name="change-dylib-path" description="Changes the dylib path for Mac OS X installation.">
-        <!-- change dylib pathes -->
-        <exec dir="${appserver.compile.prefix}/bin" executable="install_name_tool">
-            <arg line="-change /usr/local/lib/libpng${libpng.dylib.version}.dylib ${appserver.compile.prefix}/lib/libpng${libpng.dylib.version}.dylib php"/>
-        </exec>
-        <exec dir="${appserver.compile.prefix}/bin" executable="install_name_tool">
-            <arg line="-change /usr/local/lib/libjpeg.${libjpeg.dylib.version}.dylib ${appserver.compile.prefix}/lib/libjpeg.${libjpeg.dylib.version}.dylib php"/>
-        </exec>
-        <exec dir="${appserver.compile.prefix}/bin" executable="install_name_tool">
-            <arg line="-change /usr/local/lib/libfreetype.${libfreetype.dylib.version}.dylib ${appserver.compile.prefix}/lib/libfreetype.${libfreetype.dylib.version}.dylib php"/>
-        </exec>
-        <exec dir="${appserver.compile.prefix}/bin" executable="install_name_tool">
-            <arg line="-change /usr/local/lib/libmemcached.${libmemcached.dylib.version}.dylib ${appserver.compile.prefix}/lib/libmemcached.${libmemcached.dylib.version}.dylib php"/>
-        </exec>
-        <exec dir="${appserver.compile.prefix}/bin" executable="install_name_tool">
-            <arg line="-change /usr/local/lib/libmcrypt.${libmcrypt.dylib.version}.dylib ${appserver.compile.prefix}/lib/libmcrypt.${libmcrypt.dylib.version}.dylib php"/>
-        </exec>
-    </target>
-
-    <!-- ==================================================================== -->
     <!-- Creates a .pkg package with the local ApplicationServer runtime      -->
     <!-- ==================================================================== -->
     <target name="create-pkg" depends="install-demo-project" description="Creates a .pkg package with the local ApplicationServer runtime.">
-        <!-- change dylib path in binaries -->
-        <antcall target="change-dylib-path"/>
         <!-- copy build files to target directory -->
-        <antcall target="copy-build-to-target"/>
+        <antcall target="move-build-to-target"/>
         <!-- copy plist files to required directory -->
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/macosx/plist">
