@@ -1087,6 +1087,7 @@
             <arg value="libpng-devel"/>
             <arg value="libevent-devel"/>
             <arg value="libev-devel"/>
+            <arg value="gcc-c++"/>
         </exec>
     </target>
 
