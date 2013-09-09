@@ -385,7 +385,7 @@
     <!-- Get PECL appserver source package by given version number		          -->
     <!-- ==================================================================== -->
     <target name="get-ext-appserver-src" depends="check-ext-appserver-src-present" unless="${ext-appserver-src.present}" description="Get php ext appserver source package by given version number">
-        <get src="https://github.com/techdivision/php-ext-appserver/releases/download/v${appserver.ext-appserver.version}/appserver-${appserver.ext-appserver.version}.tgz" dest="${lib.dir}/ext-appserver-${appserver.ext-appserver.version}.tgz"/>
+        <get src="https://github.com/techdivision/php-ext-appserver/releases/download/v${appserver.ext-appserver.version}-beta/appserver-${appserver.ext-appserver.version}.tgz" dest="${lib.dir}/ext-appserver-${appserver.ext-appserver.version}.tgz"/>
     </target>
 
     <!-- ==================================================================== -->
