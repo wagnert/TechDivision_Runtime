@@ -1013,7 +1013,7 @@
     <target name="install-composer" depends="build-runtime" description="Install composer and ApplicationServer packages.">
         <!-- download the composer installer -->
         <exec dir="${php-target.dir}" executable="curl">
-            <arg line="-sS https://getcomposer.org/installer -o installer"/>
+            <arg line="-sS http://getcomposer.org/installer -o installer"/>
         </exec>
         <!-- install composer itself -->
         <exec dir="${php-target.dir}" executable="${appserver.compile.prefix}/bin/php">
