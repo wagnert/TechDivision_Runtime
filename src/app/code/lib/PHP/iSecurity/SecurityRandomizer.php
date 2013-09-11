@@ -17,7 +17,7 @@
  *
  * @since 1.00
  */
-class Security_Randomizer
+class SecurityRandomizer
 {
     private static $chiSquareZMax = 6.0;
     private static $chiSquareLogSqrtPi = 0.5723649429247000870717135;
@@ -52,7 +52,7 @@ class Security_Randomizer
      */
     public static function getRandomToken($length)
     {
-        return bin2hex(Security_Randomizer::getRandomBytes($length));
+        return bin2hex(SecurityRandomizer::getRandomBytes($length));
     }
 
     /**
@@ -62,7 +62,7 @@ class Security_Randomizer
      */
     public static function getRandomBoolean()
     {
-        $randomByte = Security_Randomizer::getRandomBytes(1);
+        $randomByte = SecurityRandomizer::getRandomBytes(1);
         return (ord($randomByte) % 2) ? true : false;
     }
 
@@ -78,7 +78,7 @@ class Security_Randomizer
         $string = '';
         for ($a = 0; $a < $length; $a++)
         {
-            $string .= $charset[Security_Randomizer::getRandomInteger(0,strlen((binary) $charset)-1)];
+            $string .= $charset[SecurityRandomizer::getRandomInteger(0,strlen((binary) $charset)-1)];
         }
         return $string;
     }
@@ -99,7 +99,7 @@ class Security_Randomizer
         $difference = $max-$min;
         $bytesNeeded = ceil($difference/256);
 
-        $randomBytes = Security_Randomizer::getRandomBytes($bytesNeeded);
+        $randomBytes = SecurityRandomizer::getRandomBytes($bytesNeeded);
         $sum = 0;
         for ($a = 0; $a < $bytesNeeded; $a++)
             $sum += ord($randomBytes[$a]);
@@ -120,11 +120,11 @@ class Security_Randomizer
 
         $float = '';
         for ($a = 0; $a < $maximumPrecision; $a++)
-            $float .= Security_Randomizer::getRandomInteger(0,9);
+            $float .= SecurityRandomizer::getRandomInteger(0,9);
 
         // All numbers are 0.
         if (array_sum(str_split($float)) == 0)
-            $float = (Security_Randomizer::getRandomBoolean() ? '1.' : '0.') . $float;
+            $float = (SecurityRandomizer::getRandomBoolean() ? '1.' : '0.') . $float;
         else
             $float = '0.' . $float;
 
@@ -138,7 +138,7 @@ class Security_Randomizer
      */
     public static function getRandomGUID()
     {
-        $hex = strtoupper(bin2hex(Security_Randomizer::getRandomBytes(16)));
+        $hex = strtoupper(bin2hex(SecurityRandomizer::getRandomBytes(16)));
         return substr($hex,0,8) . '-' . substr($hex,8,4) . '-' . substr($hex,12,4) . '-' . substr($hex,16,4) . '-' . substr($hex,20,12);
     }
 

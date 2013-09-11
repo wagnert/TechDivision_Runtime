@@ -15,6 +15,7 @@
         "techdivision/persistencecontainerclient": "dev-master",
         "techdivision/messagequeue": "dev-master",
         "techdivision/messagequeueclient": "dev-master",
+        "techdivision/websocketcontainer": "dev-master",
         "doctrine/orm": "*",
         "psr/log": "*",
         "symfony/symfony": "*",
