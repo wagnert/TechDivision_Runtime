@@ -94,6 +94,7 @@
 						</aliases>
 					</vhost>
 					<vhost name="neos.local" appBase="/neos" />
+					<vhost name="neos.appserver.io" appBase="/neos" />
 				</vhosts>
 			</host>
 		</container>
