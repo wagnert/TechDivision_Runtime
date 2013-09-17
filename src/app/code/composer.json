@@ -19,7 +19,7 @@
         "doctrine/orm": "*",
         "psr/log": "*",
         "symfony/symfony": "*",
-        "react/react": "0.3.*",
-        "herrera-io/annotations": "1.0.*"
+        "herrera-io/annotations": "1.0.*",
+        "cboden/Ratchet": "0.2.*"
     }
 }

@@ -126,20 +126,19 @@
 			</host>
 		</container>
 
-		<!--
 		<container threadType="TechDivision\ApplicationServer\ContainerThread"
-			type="TechDivision\ServletContainer\Container">
-			<description><![CDATA[This is an example of a web socket container that uses a socket for sending and receiving web socket requests/responses.]]></description>
-			<receiver type="TechDivision\ApplicationServer\Stream\Receiver">
-				<worker type="TechDivision\ApplicationServer\Stream\Worker"/>
-				<thread type="TechDivision\WebSocketContainer\Stream\Request"/>
+			type="TechDivision\WebSocketContainer\Container">
+			<description><![CDATA[This is an example of a web socket container that handles web socket requests/responses.]]></description>
+			<receiver type="TechDivision\WebSocketContainer\RatchetReceiver">
+                <worker type="TechDivision\WebSocketContainer\RatchetWorker"/>
+                <thread type="TechDivision\ServletContainer\Stream\Request" />
 				<params>
 					<param name="workerNumber" type="integer">16</param>
 					<param name="address" type="string">0.0.0.0</param>
 					<param name="port" type="integer">8589</param>
 				</params>
 			</receiver>
-			<deployment type="TechDivision\ServletContainer\Deployment" />
+			<deployment type="TechDivision\WebSocketContainer\Deployment" />
 			<host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
 				serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
 				<vhosts>
@@ -153,7 +152,6 @@
 				</vhosts>
 			</host>
 		</container>
-  		-->
 
 	</containers>
 
