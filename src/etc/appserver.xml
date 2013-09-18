@@ -131,7 +131,7 @@
 			<description><![CDATA[This is an example of a web socket container that handles web socket requests/responses.]]></description>
 			<receiver type="TechDivision\WebSocketContainer\RatchetReceiver">
                 <worker type="TechDivision\WebSocketContainer\RatchetWorker"/>
-                <thread type="TechDivision\ServletContainer\Stream\Request" />
+                <thread type="TechDivision\WebSocketContainer\RatchetRequest" />
 				<params>
 					<param name="workerNumber" type="integer">16</param>
 					<param name="address" type="string">0.0.0.0</param>
