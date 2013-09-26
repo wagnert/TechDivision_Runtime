@@ -35,7 +35,7 @@
 
 	<containers>
 
-		<container threadType="TechDivision\ApplicationServer\ContainerThread"
+		<container name="persistence" threadType="TechDivision\ApplicationServer\ContainerThread"
 			type="TechDivision\PersistenceContainer\Container">
 			<description><![CDATA[This is an example of a container that uses a socket for sending and receiving messages. This solution can be used for clients connecting over a network.]]></description>
 			<receiver type="TechDivision\ApplicationServer\Socket\Receiver">
@@ -53,7 +53,7 @@
 
 		</container>
 
-		<container threadType="TechDivision\ApplicationServer\ContainerThread"
+		<container name="message-queue" threadType="TechDivision\ApplicationServer\ContainerThread"
 			type="TechDivision\MessageQueue\Container">
 			<description><![CDATA[This is an example of a message queue that uses a socket to receive messages. This solution can be used for clients connecting over a network.]]></description>
 			<receiver type="TechDivision\ApplicationServer\Socket\Receiver">
@@ -71,7 +71,7 @@
 
 		</container>
 
-		<container threadType="TechDivision\ApplicationServer\ContainerThread"
+		<container name="http" threadType="TechDivision\ApplicationServer\ContainerThread"
 			type="TechDivision\ServletContainer\Container">
 			<description><![CDATA[This is an example of a servlet container that uses a socket for sending and receiving HTML requests/responses. This solution can be used for running a web server.]]></description>
 			<receiver type="TechDivision\ApplicationServer\Socket\Receiver">
@@ -99,7 +99,7 @@
 			</host>
 		</container>
 
-		<container threadType="TechDivision\ApplicationServer\ContainerThread"
+		<container name="http-ssl" threadType="TechDivision\ApplicationServer\ContainerThread"
 			type="TechDivision\ServletContainer\Container">
 			<description><![CDATA[This is an example of a servlet container that uses a socket for sending and receiving HTML requests/responses. This solution can be used for running a web server.]]></description>
 			<receiver type="TechDivision\ApplicationServer\Stream\Receiver">
@@ -126,7 +126,7 @@
 			</host>
 		</container>
 
-		<container threadType="TechDivision\ApplicationServer\ContainerThread"
+		<container name="web-socket" threadType="TechDivision\ApplicationServer\ContainerThread"
 			type="TechDivision\WebSocketContainer\Container">
 			<description><![CDATA[This is an example of a web socket container that handles web socket requests/responses.]]></description>
 			<receiver type="TechDivision\WebSocketContainer\RatchetReceiver">

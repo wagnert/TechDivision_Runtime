@@ -1008,7 +1008,7 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Install composer and ApplicationServer packages                      -->
+    <!-- Install composer packages                                            -->
     <!-- ==================================================================== -->
     <target name="install-composer" depends="build-runtime" description="Install composer and ApplicationServer packages.">
         <!-- download the composer installer -->
@@ -1022,9 +1022,18 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Install ApplicationServer packages                                   -->
+    <!-- ==================================================================== -->
+	<target name="install-sources" depends="install-composer" description="Install ApplicationServer packages.">
+        <exec dir="${appserver.compile.prefix}/app/code" executable="${appserver.compile.prefix}/bin/php">
+            <arg line="${appserver.compile.prefix}/bin/composer.phar update"/>
+        </exec>
+	</target>
+
+    <!-- ==================================================================== -->
     <!-- Install the ApplicationServer demo project                           -->
     <!-- ==================================================================== -->
-    <target name="install-demo-project" depends="install-composer" description="Install the ApplicationServer demo project.">
+    <target name="install-demo-project" depends="install-sources" description="Install the ApplicationServer demo project.">
         <exec dir="${appserver.compile.prefix}" executable="${appserver.compile.prefix}/bin/php">
             <arg line="${appserver.compile.prefix}/bin/composer.phar create-project techdivision/techdivision_applicationserverproject ${appserver.compile.prefix}/webapps/demo dev-master"/>
         </exec>
@@ -1091,8 +1100,6 @@
         </exec>
     </target>
 
-
-
     <!-- ==================================================================== -->
     <!-- Copy build files to target directory                                 -->
     <!-- ==================================================================== -->
@@ -1125,6 +1132,16 @@
         <exec dir="${php-target.dir}" executable="dpkg-deb">
             <arg line="--build ${php-target.dir}/re appserver_${appserver.version}_${appserver.architecture}.deb"/>
         </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Creates a RPM package with the local ApplicationServer runtime       -->
+    <!-- ==================================================================== -->
+    <target name="create-rpm" depends="install-demo-project" description="Creates a RPM package with the local ApplicationServer runtime.">
+        <!-- copy build files to target directory -->
+        <antcall target="move-build-to-target"/>
+        <!-- prepare the DEBIAN build system -->
+        <antcall target="prepare-FEDORA-build-system"/>
     </target>
 
     <!-- ==================================================================== -->

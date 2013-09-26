@@ -39,13 +39,3 @@ rm -rf %{buildroot}
 
 
 %post
-
-chmod 755 -R /opt/appserver/bin
-/opt/appserver/bin/pear channel-discover pear.phpunit.de
-/opt/appserver/bin/pear channel-discover pear.symfony.com
-
-cd /opt/appserver/bin
-curl -sS https://getcomposer.org/installer | ./php
-
-/opt/appserver/bin/pear install phpunit/PHPUnit
-/opt/appserver/bin/composer update
