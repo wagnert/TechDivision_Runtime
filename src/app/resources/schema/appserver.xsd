@@ -92,6 +92,7 @@
 				<xs:element ref="appserver:deployment" />
 				<xs:element ref="appserver:host" />
 			</xs:choice>
+            <xs:attribute name="name" type="xs:string" />
 			<xs:attribute name="threadType" type="xs:string" />
 			<xs:attribute name="type" type="xs:string" />
 			<xs:anyAttribute />
