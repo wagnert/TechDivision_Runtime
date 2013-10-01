@@ -6,7 +6,7 @@ Besides the most recent PHP 5.5.x version the package came with statically compi
 * [pthreads](http://pecl.php.net/package/pthreads) 
 * [memcached](http://pecl.php.net/package/memcached)
 * [redis](http://pecl.php.net/package/redis)
-* appserver (contains some replacement functions for XDebug)
+* [appserver](https://github.com/techdivision/php-ext-appserver) (contains some replacement functions for XDebug)
 
 PECL extensions. Additionally the PECL extensions [XDebug](http://pecl.php.net/package/xdebug) and [ev](http://pecl.php.net/package/ev) are compiled as a shared modules. XDebug is necessary to
 render detailed code coverage reports when running unit and intergration tests. ev will be used to
