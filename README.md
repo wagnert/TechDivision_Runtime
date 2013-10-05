@@ -1,4 +1,4 @@
-# Runtime
+# Introduction
 
 On Mac OS X, the runtime provides you with system independent, thread-safe compiled PHP environment. 
 Besides the most recent PHP 5.5.x version the package came with statically compiled
