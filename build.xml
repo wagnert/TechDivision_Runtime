@@ -1047,6 +1047,7 @@
             <arg value="install"/>
             <arg value="ant"/>
             <arg value="autoconf"/>
+		    <arg value="make"/>
             <arg value="curl"/>
             <arg value="bison"/>
             <arg value="libxml2-dev"/>
