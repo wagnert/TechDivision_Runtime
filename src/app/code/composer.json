@@ -20,7 +20,8 @@
         "psr/log": "*",
         "symfony/symfony": "*",
         "herrera-io/annotations": "1.0.*",
-        "cboden/Ratchet": "0.2.*"
+        "cboden/Ratchet": "0.2.*",
+        "rhumsaa/uuid": "~2.4"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
