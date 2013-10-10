@@ -4,10 +4,7 @@
 		<description><![CDATA[The initial context configuration.]]></description>
 		<classLoader type="TechDivision\ApplicationServer\SplClassLoader" />
 		<storage
-			type="TechDivision\ApplicationServer\InitialContext\MemcachedStorage">
-			<servers>
-				<server address="127.0.0.1" port="11211" weight="0" />
-			</servers>
+			type="TechDivision\ApplicationServer\InitialContext\ApcuStorage">
 		</storage>
 	</initialContext>
 
