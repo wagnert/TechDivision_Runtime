@@ -7,15 +7,15 @@
     "require": {
         "php" : ">=5.4.0",
         "monolog/monolog": "*",
-        "techdivision/socket": "0.5.7*",
-        "techdivision/stream": "0.5.7*",
-        "techdivision/appserver": "0.5.7*",
-        "techdivision/servletcontainer": "0.5.7*",
-        "techdivision/persistencecontainer": "0.5.7*",
-        "techdivision/persistencecontainerclient": "0.5.7*",
-        "techdivision/messagequeue": "0.5.7*",
-        "techdivision/messagequeueclient": "0.5.7*",
-        "techdivision/websocketcontainer": "0.5.7*",
+        "techdivision/socket": "~0.5.7@beta",
+        "techdivision/stream": "~0.5.7@beta",
+        "techdivision/appserver": "~0.5.7@beta",
+        "techdivision/servletcontainer": "~0.5.7@beta",
+        "techdivision/persistencecontainer": "~0.5.7@beta",
+        "techdivision/persistencecontainerclient": "~0.5.7@beta",
+        "techdivision/messagequeue": "~0.5.7@beta",
+        "techdivision/messagequeueclient": "~0.5.7@beta",
+        "techdivision/websocketcontainer": "~0.5.7@beta",
         "doctrine/orm": "*",
         "psr/log": "*",
         "symfony/symfony": "*",
@@ -25,6 +25,5 @@
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
-    },
-    "minimum-stability": "beta"
+    }
 }
