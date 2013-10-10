@@ -4,6 +4,7 @@
     <property environment="env" />
 
     <property name="lib.dir" value="${basedir}/lib" />
+    <property name="custom-lib.dir" value="${basedir}/custom-lib" />
     <property name="php-src.dir" value="${basedir}/src" />
     <property name="php-test.dir" value="${basedir}/tests" />
     <property name="php-target.dir" value="${basedir}/target"/>
@@ -182,7 +183,7 @@
     <!-- Check if PECL pthreads sources has been downloaded yet  		 	  -->
     <!-- ==================================================================== -->
     <target name="check-pthreads-src-present" description="Check if PECL pthreads sources has been downloaded yet.">
-        <available file="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" property="pthreads-src.present"/>
+        <available file="${custom-lib.dir}/pthreads-${appserver.pthreads.version}.tgz" property="pthreads-src.present"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -329,7 +330,7 @@
     <!-- Get PECL pthreads source package by given version number		      -->
     <!-- ==================================================================== -->
     <target name="get-pthreads-src" depends="check-pthreads-src-present" unless="${pthreads-src.present}" description="Get PECL pthreads source package by given version number">
-        <get src="http://pecl.php.net/get/pthreads-${appserver.pthreads.version}.tgz" dest="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz"/>
+        <get src="http://pecl.php.net/get/pthreads-${appserver.pthreads.version}.tgz" dest="${custom-lib.dir}/pthreads-${appserver.pthreads.version}.tgz"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -507,7 +508,7 @@
         </move>
         <!-- prepare PECL pthread sources for static compilation -->
         <antcall target="get-pthreads-src"/>
-        <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <untar src="${custom-lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <move todir="${php-target.dir}/php-${appserver.php.version}/ext/pthreads">
             <fileset dir="${php-target.dir}/pthreads-${appserver.pthreads.version}"/>
         </move>
@@ -865,7 +866,7 @@
     <!-- ==================================================================== -->
     <target name="pecl-build-pthreads" description="Builds the PECL pthreads as shared extension.">
         <antcall target="get-pthreads-src"/>
-        <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <untar src="${custom-lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
         <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="sh">
             <arg value="configure"/>
