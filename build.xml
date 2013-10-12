@@ -27,6 +27,7 @@
     <target name="prepare" depends="clean" description="Prepares all the required directories.">
         <mkdir dir="${php-target.dir}" />
         <mkdir dir="${lib.dir}" />
+        <mkdir dir="custom-lib"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -218,7 +219,7 @@
     <!-- Get PECL pthreads source package by given version number		      -->
     <!-- ==================================================================== -->
     <target name="get-pthreads-src" depends="check-pthreads-src-present" unless="${pthreads-src.present}" description="Get PECL pthreads source package by given version number">
-        <get src="https://github.com/krakjoe/pthreads/archive/master.zip" dest="${custom-lib.dir}/pthreads-master.zip"/>
+        <get src="https://nodeload.github.com/krakjoe/pthreads/zip/master" dest="${custom-lib.dir}/pthreads-master.zip"/>
     </target>
 
     <!-- ==================================================================== -->
