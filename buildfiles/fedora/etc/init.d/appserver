@@ -12,8 +12,7 @@
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 BASE_PATH='/opt/appserver'
-DAEMON="${BASE_PATH}/bin/php"
-DAEMON_OPTS="${BASE_PATH}/server.php"
+DAEMON="${BASE_PATH}/bin/appserver"
 NAME="appserver"
 DESC="appserver"
 PIDFILE="/var/run/${NAME}.pid"
@@ -31,7 +30,7 @@ set -e
 case "$1" in
   start)
 	echo -n "Starting $DESC ... "
-	$NOHUP $DAEMON $DAEMON_OPTS 2>1 >/dev/null </dev/null &
+	$NOHUP $DAEMON 2>1 >/dev/null </dev/null &
 	if [ $? -eq 0 ];
 	then
 	    echo $! > $PIDFILE
