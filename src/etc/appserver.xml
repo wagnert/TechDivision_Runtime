@@ -3,8 +3,7 @@
 	<initialContext type="TechDivision\ApplicationServer\InitialContext">
 		<description><![CDATA[The initial context configuration.]]></description>
 		<classLoader type="TechDivision\ApplicationServer\SplClassLoader" />
-		<storage
-			type="TechDivision\ApplicationServer\InitialContext\ApcuStorage">
+		<storage type="TechDivision\ApplicationServer\InitialContext\ApcuStorage">
 		</storage>
 	</initialContext>
 
@@ -32,8 +31,8 @@
 
 	<containers>
 
-		<container name="persistence" threadType="TechDivision\ApplicationServer\ContainerThread"
-			type="TechDivision\PersistenceContainer\Container">
+		<container name="persistence"
+			threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\PersistenceContainer\Container">
 			<description><![CDATA[This is an example of a container that uses a socket for sending and receiving messages. This solution can be used for clients connecting over a network.]]></description>
 			<receiver type="TechDivision\ApplicationServer\Socket\Receiver">
 				<worker type="TechDivision\ApplicationServer\Socket\Worker" />
@@ -50,8 +49,8 @@
 
 		</container>
 
-		<container name="message-queue" threadType="TechDivision\ApplicationServer\ContainerThread"
-			type="TechDivision\MessageQueue\Container">
+		<container name="message-queue"
+			threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\MessageQueue\Container">
 			<description><![CDATA[This is an example of a message queue that uses a socket to receive messages. This solution can be used for clients connecting over a network.]]></description>
 			<receiver type="TechDivision\ApplicationServer\Socket\Receiver">
 				<worker type="TechDivision\ApplicationServer\Socket\Worker" />
@@ -68,8 +67,8 @@
 
 		</container>
 
-		<container name="http" threadType="TechDivision\ApplicationServer\ContainerThread"
-			type="TechDivision\ServletContainer\Container">
+		<container name="http"
+			threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\ServletContainer\Container">
 			<description><![CDATA[This is an example of a servlet container that uses a socket for sending and receiving HTML requests/responses. This solution can be used for running a web server.]]></description>
 			<receiver type="TechDivision\ApplicationServer\Socket\Receiver">
 				<worker type="TechDivision\ApplicationServer\Socket\Worker" />
@@ -96,8 +95,8 @@
 			</host>
 		</container>
 
-		<container name="http-ssl" threadType="TechDivision\ApplicationServer\ContainerThread"
-			type="TechDivision\ServletContainer\Container">
+		<container name="http-ssl"
+			threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\ServletContainer\Container">
 			<description><![CDATA[This is an example of a servlet container that uses a socket for sending and receiving HTML requests/responses. This solution can be used for running a web server.]]></description>
 			<receiver type="TechDivision\ApplicationServer\Stream\Receiver">
 				<worker type="TechDivision\ApplicationServer\Stream\Worker" />
@@ -124,12 +123,12 @@
 			</host>
 		</container>
 
-		<container name="web-socket" threadType="TechDivision\ApplicationServer\ContainerThread"
-			type="TechDivision\WebSocketContainer\Container">
+		<container name="web-socket"
+			threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\WebSocketContainer\Container">
 			<description><![CDATA[This is an example of a web socket container that handles web socket requests/responses.]]></description>
 			<receiver type="TechDivision\WebSocketContainer\RatchetReceiver">
-                <worker type="TechDivision\WebSocketContainer\RatchetWorker"/>
-                <thread type="TechDivision\WebSocketContainer\RatchetRequest" />
+				<worker type="TechDivision\WebSocketContainer\RatchetWorker" />
+				<thread type="TechDivision\WebSocketContainer\RatchetRequest" />
 				<params>
 					<param name="workerNumber" type="integer">16</param>
 					<param name="address" type="string">0.0.0.0</param>
@@ -149,6 +148,24 @@
 					<vhost name="neos.local" appBase="/neos" />
 					<vhost name="neos.appserver.io" appBase="/neos" />
 				</vhosts>
+			</host>
+		</container>
+
+		<container name="lemcache"
+			threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\LemCacheContainer\Container">
+			<description><![CDATA[A memcache API compatible PHP implementation of a key value storage server.]]></description>
+			<receiver type="TechDivision\LemCacheContainer\Receiver">
+				<worker type="TechDivision\LemCacheContainer\Worker" />
+				<thread type="TechDivision\LemCacheContainer\ThreadRequest" />
+				<params>
+					<param name="workerNumber" type="integer">8</param>
+					<param name="address" type="string">0.0.0.0</param>
+					<param name="port" type="integer">11210</param>
+				</params>
+			</receiver>
+			<deployment type="TechDivision\LemCacheContainer\Deployment" />
+			<host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
+				serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
 			</host>
 		</container>
 

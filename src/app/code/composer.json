@@ -16,6 +16,7 @@
         "techdivision/messagequeue": "dev-0.5.8-beta",
         "techdivision/messagequeueclient": "dev-0.5.8-beta",
         "techdivision/websocketcontainer": "dev-0.5.8-beta",
+        "techdivision/lemcachecontainer": "dev-master",
         "doctrine/orm": "*",
         "psr/log": "*",
         "symfony/symfony": "*",
