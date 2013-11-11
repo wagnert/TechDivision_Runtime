@@ -27,7 +27,7 @@
     <target name="prepare" depends="clean" description="Prepares all the required directories.">
         <mkdir dir="${php-target.dir}" />
         <mkdir dir="${lib.dir}" />
-        <mkdir dir="${custom-lib}" />
+        <mkdir dir="${custom-lib.dir}" />
     </target>
 
     <!-- ==================================================================== -->
