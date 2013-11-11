@@ -17,7 +17,7 @@
     <!-- ==================================================================== -->
     <!-- Cleans the directories with the generated source files				  -->
     <!-- ==================================================================== -->
-    <target name="clean" description="Cleans almost everything, so use carefully.">
+    <target name="clean" description="Cleans build directory in preparation for new build.">
         <delete dir="${php-target.dir}" includeemptydirs="true" quiet="false" verbose="true" failonerror="true"/>
     </target>
 
@@ -27,6 +27,7 @@
     <target name="prepare" depends="clean" description="Prepares all the required directories.">
         <mkdir dir="${php-target.dir}" />
         <mkdir dir="${lib.dir}" />
+        <mkdir dir="${custom-lib}" />
     </target>
 
     <!-- ==================================================================== -->
@@ -889,7 +890,9 @@
             <env key="CC" value="${appserver.cc}"/>
             <arg line="configure ${appserver.compile.configuration}"/>
         </exec>
-        <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make"/>
+        <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make">
+            <arg value="-j8"/>
+        </exec>
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make">
             <arg value="install"/>
         </exec>
@@ -1247,8 +1250,19 @@
     <target name="create-rpm" depends="install-demo-project" description="Creates a RPM package with the local ApplicationServer runtime.">
         <!-- copy build files to target directory -->
         <antcall target="move-build-to-target"/>
-        <!-- prepare the DEBIAN build system -->
+        <!-- prepare the FEDORA build system -->
         <antcall target="prepare-FEDORA-build-system"/>
+        <copy todir="${php-target.dir}/re">
+            <fileset dir="${basedir}/buildfiles/fedora">
+                <include name="**/*"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+        <exec dir="${php-target.dir}" executable="rpmbuild" failonerror="true">
+            <arg line="--buildroot ${php-target.dir}/re -bb ${php-target.dir}/re/rpmbuild/SPECS/appserver.spec"/>
+        </exec>
     </target>
 
     <!-- ==================================================================== -->
