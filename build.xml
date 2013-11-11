@@ -17,7 +17,7 @@
     <!-- ==================================================================== -->
     <!-- Cleans the directories with the generated source files				  -->
     <!-- ==================================================================== -->
-    <target name="clean" description="Cleans almost everything, so use carefully.">
+    <target name="clean" description="Cleans build directory in preparation for new build.">
         <delete dir="${php-target.dir}" includeemptydirs="true" quiet="false" verbose="true" failonerror="true"/>
     </target>
 
@@ -27,6 +27,7 @@
     <target name="prepare" depends="clean" description="Prepares all the required directories.">
         <mkdir dir="${php-target.dir}" />
         <mkdir dir="${lib.dir}" />
+        <mkdir dir="${custom-lib.dir}" />
     </target>
 
     <!-- ==================================================================== -->
@@ -190,7 +191,7 @@
     <!-- Check if PECL apcu sources has been downloaded yet               -->
     <!-- ==================================================================== -->
     <target name="check-apcu-src-present" description="Check if PECL apcu sources has been downloaded yet.">
-        <available file="${lib.dir}/apcu-${appserver.apcu.version}.tgz" property="apcu-src.present"/>
+        <available file="${custom-lib.dir}/apcu-${appserver.apcu.version}.tgz" property="apcu-src.present"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -313,6 +314,13 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Check if openssl sources has been downloaded yet   		 	      -->
+    <!-- ==================================================================== -->
+    <target name="check-openssl-src-present" description="Check if openssl sources has been downloaded yet.">
+        <available file="${lib.dir}/openssl-${openssl.version}.tar.gz" property="openssl-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Get PHP source package by given version number		  		          -->
     <!-- ==================================================================== -->
     <target name="get-php-src" depends="check-php-src-present" unless="${php-src.present}" description="Get PHP source package by given version number">
@@ -337,7 +345,7 @@
     <!-- Get PECL apcu source package by given version number                 -->
     <!-- ==================================================================== -->
     <target name="get-apcu-src" depends="check-apcu-src-present" unless="${apcu-src.present}" description="Get PECL apcu source package by given version number">
-        <get src="http://pecl.php.net/get/apcu-${appserver.apcu.version}.tgz" dest="${lib.dir}/apcu-${appserver.apcu.version}.tgz"/>
+        <get src="http://pecl.php.net/get/apcu-${appserver.apcu.version}.tgz" dest="${custom-lib.dir}/apcu-${appserver.apcu.version}.tgz"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -481,6 +489,13 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Get openssl source package by given version number		          -->
+    <!-- ==================================================================== -->
+    <target name="get-openssl-src" depends="check-openssl-src-present" unless="${openssl-src.present}" description="Get openssl source package by given version number.">
+        <get src="${openssl.download.url}" dest="${lib.dir}/openssl-${openssl.version}.tar.gz"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Prepares the PHP sources for the runtime                             -->
     <!-- ==================================================================== -->
     <target name="prepare-source" depends="prepare" description="Prepares the PHP sources for the runtime.">
@@ -514,7 +529,7 @@
         </move>
         <!-- prepare PECL apcu sources for static compilation -->
         <antcall target="get-apcu-src"/>
-        <untar src="${lib.dir}/apcu-${appserver.apcu.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <untar src="${custom-lib.dir}/apcu-${appserver.apcu.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <move todir="${php-target.dir}/php-${appserver.php.version}/ext/apcu">
             <fileset dir="${php-target.dir}/apcu-${appserver.apcu.version}"/>
         </move>
@@ -702,6 +717,41 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Prepares the openssl sources for the runtime                		  -->
+    <!-- ==================================================================== -->
+    <target name="build-openssl" if="${openssl.build}" description="Prepares the openssl sources for the runtime.">
+    	<antcall target="get-openssl-src"/>
+        <!--
+        <untar src="${lib.dir}/openssl-${openssl.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+    	<move  todir="${php-target.dir}/openssl_x86_64">
+    		<fileset dir="${php-target.dir}/openssl-${openssl.version}" />
+    	</move>
+    	-->
+    	<copy file="${basedir}/scripts/build_openssl_dylib_x86_64.sh" todir="${php-target.dir}">
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+    	</copy>
+        <chmod perm="755" file="${php-target.dir}/build_openssl_dylib_x86_64.sh" />
+    	<exec dir="${php-target.dir}" executable="sh">
+    		<arg value="build_openssl_dylib_x86_64.sh" />
+    	</exec>
+    	
+    	<!--
+        <chmod perm="755" file="${php-target.dir}/openssl_x86_64/Configure" />
+    	<exec dir="${php-target.dir}/openssl_x86_64" executable="${php-target.dir}/openssl_x86_64/Configure">
+            <arg line="darwin64-x86_64-cc -shared -prefix=${openssl.compile.prefix}" />
+        </exec>
+        <exec dir="${php-target.dir}/openssl_x86_64" executable="make"/>
+        -->
+        <!--
+    	<exec dir="${php-target.dir}/openssl_x86_64" executable="make">
+            <arg value="install"/>
+        </exec>
+        -->
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Builds the memcached server binaries                                 -->
     <!-- ==================================================================== -->
     <target name="build-memcached-server" if="${memcached.server.build}" description="Builds the memcached server binaries.">
@@ -816,6 +866,7 @@
         <antcall target="build-libmemcached"/>
         <antcall target="build-libmcrypt"/>
         <antcall target="build-libevent"/>
+        <antcall target="build-openssl"/>
         <antcall target="build-pcre"/>
         <antcall target="build-memcached-server"/>
         <antcall target="build-nginx-server"/>
@@ -843,7 +894,9 @@
             <env key="CC" value="${appserver.cc}"/>
             <arg line="configure ${appserver.compile.configuration}"/>
         </exec>
-        <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make"/>
+        <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make">
+            <arg value="-j8"/>
+        </exec>
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make">
             <arg value="install"/>
         </exec>
@@ -883,7 +936,7 @@
     <!-- ==================================================================== -->
     <target name="pecl-build-apcu" description="Builds the PECL apcu as shared extension.">
         <antcall target="get-apcu-src"/>
-        <untar src="${lib.dir}/apcu-${appserver.apcu.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <untar src="${custom-lib.dir}/apcu-${appserver.apcu.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <exec dir="${php-target.dir}/apcu-${appserver.apcu.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
         <exec dir="${php-target.dir}/apcu-${appserver.apcu.version}" executable="sh">
             <arg value="configure"/>
@@ -1201,8 +1254,19 @@
     <target name="create-rpm" depends="install-demo-project" description="Creates a RPM package with the local ApplicationServer runtime.">
         <!-- copy build files to target directory -->
         <antcall target="move-build-to-target"/>
-        <!-- prepare the DEBIAN build system -->
+        <!-- prepare the FEDORA build system -->
         <antcall target="prepare-FEDORA-build-system"/>
+        <copy todir="${php-target.dir}/re">
+            <fileset dir="${basedir}/buildfiles/fedora">
+                <include name="**/*"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+        <exec dir="${php-target.dir}" executable="rpmbuild" failonerror="true">
+            <arg line="--buildroot ${php-target.dir}/re -bb ${php-target.dir}/re/rpmbuild/SPECS/appserver.spec"/>
+        </exec>
     </target>
 
     <!-- ==================================================================== -->
