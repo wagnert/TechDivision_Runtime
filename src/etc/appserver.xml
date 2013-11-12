@@ -100,7 +100,7 @@
 			<description><![CDATA[This is an example of a servlet container that uses a socket for sending and receiving HTML requests/responses. This solution can be used for running a web server.]]></description>
 			<receiver type="TechDivision\ApplicationServer\Stream\SecureReceiver">
 				<worker type="TechDivision\ApplicationServer\Stream\Worker" />
-				<thread type="TechDivision\ServletContainer\Stream\Request" />
+				<thread type="TechDivision\ServletContainer\Stream\SecureRequest" />
 				<params>
 					<param name="workerNumber" type="integer">16</param>
 					<param name="address" type="string">0.0.0.0</param>
