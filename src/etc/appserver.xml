@@ -71,8 +71,8 @@
 			threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\ServletContainer\Container">
 			<description><![CDATA[This is an example of a servlet container that uses a socket for sending and receiving HTML requests/responses. This solution can be used for running a web server.]]></description>
 			<receiver type="TechDivision\ApplicationServer\Socket\Receiver">
-				<worker type="TechDivision\ApplicationServer\Socket\Worker" />
-				<thread type="TechDivision\ServletContainer\Socket\Request" />
+				<worker type="TechDivision\ServletContainer\Socket\Worker" />
+				<thread type="TechDivision\ServletContainer\RequestHandler" />
 				<params>
 					<param name="workerNumber" type="integer">16</param>
 					<param name="address" type="string">0.0.0.0</param>
@@ -99,8 +99,8 @@
 			threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\ServletContainer\Container">
 			<description><![CDATA[This is an example of a servlet container that uses a socket for sending and receiving HTML requests/responses. This solution can be used for running a web server.]]></description>
 			<receiver type="TechDivision\ApplicationServer\Stream\SecureReceiver">
-				<worker type="TechDivision\ApplicationServer\Stream\Worker" />
-				<thread type="TechDivision\ServletContainer\Stream\SecureRequest" />
+				<worker type="TechDivision\ServletContainer\Stream\SecureWorker" />
+				<thread type="TechDivision\ServletContainer\RequestHandler" />
 				<params>
 					<param name="workerNumber" type="integer">16</param>
 					<param name="address" type="string">0.0.0.0</param>
