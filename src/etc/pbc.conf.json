@@ -1,0 +1,13 @@
+{
+    "environment": "production",
+
+    "cache": {
+
+        "dir": "/opt/appserver/var/tmp/pbc/cache"
+    },
+
+    "project-dirs": [
+        "/opt/appserver/app/code/vendor/techdivision",
+        "/opt/appserver/webapps"
+    ]
+}
