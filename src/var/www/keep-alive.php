@@ -14,14 +14,13 @@ class Test extends Thread
     {
         
         $client = socket_accept($this->socket);
-            
-        error_log("Connection accepted by thread: {$this->getThreadId()}");
+        socket_set_option($client, SOL_SOCKET, SO_RCVTIMEO, array("sec" => 5, "usec" => 0));
 
         $counter = 1;
         $connectionOpen = true;
         $startTime = time();
         
-        $timeout = 120;
+        $timeout = 5;
         $maxRequests = 5;
         
         do {
@@ -45,9 +44,11 @@ class Test extends Thread
             $availableRequests = $maxRequests - $counter++;
             $ttl = ($startTime + $timeout) - time();
     
-            $message = '<html><head><title>A Title</title></head><body><img src="some.jpg"><p>A content handled by thread: ' . $this->getThreadId(). '</p></body></html>';
-            $contentLength = strlen($message);
+            ob_start();
+            require 'phpinfo.php';
+            $contentLength = strlen($message = ob_get_clean());
             
+            // prepare response headers
             $headers = array(
                 "HTTP/1.1 200 OK",
                 "Content-Type: text/html",
@@ -57,39 +58,36 @@ class Test extends Thread
             // check if this will be the last requests handled by this thread
             if ($availableRequests > 0 && $ttl > 0) {
                 $headers[] = "Connection: keep-alive";
-                $headers[] = "Keep-Alive: max=$availableRequests, timeout=$timeout";
+                $headers[] = "Keep-Alive: max=$availableRequests, timeout=$timeout, thread={$this->getThreadId()}";
             } else {
                 $headers[] = "Connection: close";
             }
             
+            // prepare the response head/body
             $response = array(
                 "head" => implode("\r\n", $headers) . "\r\n",
                 "body" => $message
             );
             
+            // write the result back to the socket
             socket_write($client, implode("\r\n", $response));
             
             // check if this is the last request
             if ($availableRequests <= 0 || $ttl <= 0) {
                 
-                // if yes, close the socket and end the do/while 
-                error_log("TTL: $ttl");
-                error_log("Available requests: $availableRequests");
-                error_log("Now closing connection for thread: {$this->getThreadId()}");
-                
+                // if yes, close the socket and end the do/while
                 socket_close($client);
                 $connectionOpen = false;
             }
             
         } while ($connectionOpen);
-
-        error_log("Successfully closed connection");
-        error_log("Successfully closed thread: {$this->getThreadId()}");
     }
 }
 
 $workers = array();
-$socket = socket_create_listen($argv[1]);
+$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+socket_bind($socket, '0.0.0.0', $argv[1]);
+socket_listen($socket);
 
 if ($socket) {
     
