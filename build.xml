@@ -279,6 +279,13 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Check if readline sources has been downloaded yet   		 	      -->
+    <!-- ==================================================================== -->
+    <target name="check-readline-src-present" description="Check if readline sources has been downloaded yet.">
+        <available file="${lib.dir}/readline-${readline.version}.tar.gz" property="readline-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Check if libpng sources has been downloaded yet   		 	          -->
     <!-- ==================================================================== -->
     <target name="check-libpng-src-present" description="Check if libpng sources has been downloaded yet.">
@@ -437,6 +444,13 @@
     <!-- ==================================================================== -->
     <target name="get-libmcrypt-src" depends="check-libmcrypt-src-present" unless="${libmcrypt-src.present}" description="Get libmcrypt source package by given version number.">
         <get src="${libmcrypt.download.url}" dest="${lib.dir}/libmcrypt-${libmcrypt.version}.tar.gz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get readline source package by given version number		          -->
+    <!-- ==================================================================== -->
+    <target name="get-readline-src" depends="check-readline-src-present" unless="${readline-src.present}" description="Get readline source package by given version number.">
+        <get src="${readline.download.url}" dest="${lib.dir}/readline-${readline.version}.tar.gz"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -680,6 +694,25 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Prepares the readline sources for the runtime                       -->
+    <!-- ==================================================================== -->
+    <target name="build-readline" if="${readline.build}" description="Prepares the readline sources for the runtime.">
+    	<antcall target="get-readline-src"/>
+        <untar src="${lib.dir}/readline-${readline.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/readline-${readline.version}" executable="sh">
+            <env key="CC" value="${readline.cc}"/>
+            <arg value="configure"/>
+            <arg value="--prefix=${appserver.compile.prefix}"/>
+        </exec>
+    	<!-- BUGFIX: http://techdebug.com/blog/2009/01/03/compiling-readline-on-an-osx-105-intel-x86_64/ -->
+    	<replace file="${php-target.dir}/readline-${readline.version}/shlib/Makefile" token="-dynamic" value="-dynamiclib"/>
+        <exec dir="${php-target.dir}/readline-${readline.version}" executable="make"/>
+        <exec dir="${php-target.dir}/readline-${readline.version}" executable="make">
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Prepares the libevent sources for the runtime                -->
     <!-- ==================================================================== -->
     <target name="build-libevent" if="${libevent.build}" description="Prepares the libevent sources for the runtime.">
@@ -865,6 +898,7 @@
         <antcall target="build-libfreetype"/>
         <antcall target="build-libmemcached"/>
         <antcall target="build-libmcrypt"/>
+        <antcall target="build-readline"/>
         <antcall target="build-libevent"/>
         <antcall target="build-openssl"/>
         <antcall target="build-pcre"/>
