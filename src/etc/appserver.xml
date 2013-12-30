@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <appserver xmlns="http://www.appserver.io/appserver">
+
 	<initialContext type="TechDivision\ApplicationServer\InitialContext">
 		<description><![CDATA[The initial context configuration.]]></description>
 		<classLoader type="TechDivision\ApplicationServer\SplClassLoader" />
-		<storage type="TechDivision\ApplicationServer\InitialContext\ApcuStorage">
+		<storage type="TechDivision\ApplicationServer\InitialContext\StackableStorage">
 		</storage>
 	</initialContext>
 
@@ -20,9 +21,8 @@
 					</params>
 				</formatter>
 				<params>
-					<param name="messageType" type="integer">ErrorLogHandler::OPERATING_SYSTEM
-					</param>
-					<param name="level" type="integer">Logger::DEBUG</param>
+					<param name="messageType" type="integer">0</param>
+					<param name="level" type="integer">400</param>
 					<param name="bubble" type="boolean">true</param>
 				</params>
 			</handler>
