@@ -1184,7 +1184,21 @@
         <exec dir="${appserver.compile.prefix}" executable="${appserver.compile.prefix}/bin/php">
             <arg line="${appserver.compile.prefix}/bin/composer.phar create-project techdivision/techdivision_applicationserverproject ${appserver.compile.prefix}/webapps/demo dev-master"/>
         </exec>
+    	<!-- we'll also deliver the default webapps -->
+    	<antcall target="deploy-default-webapps" />
     </target>
+
+    <!-- ==================================================================== -->
+    <!-- Deploys the ApplicationServer default webapps               		  -->
+    <!-- ==================================================================== -->
+	<target name="deploy-default-webapps" description="Deploys the ApplicationServer default webapps.">
+    	<copy todir="${appserver.compile.prefix}/deploy">
+    		<fileset dir="${basedir}/webapps">
+    			<include name="*-${appserver.version}.phar"/>
+    		</fileset>
+    		<globmapper from="*-${appserver.version}.phar" to="*.phar"/>
+    	</copy>
+	</target>
 
     <!-- ==================================================================== -->
     <!-- Install the necessary libraries to build the DEBIAN runtime          -->
