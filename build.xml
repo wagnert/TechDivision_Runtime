@@ -9,8 +9,8 @@
     <property name="php-test.dir" value="${basedir}/tests" />
     <property name="php-target.dir" value="${basedir}/target"/>
 
-    <property file="${user.home}/build.properties"/>
     <property file="${basedir}/build.properties"/>
+    <property file="${user.home}/build.properties"/>
     <property file="${basedir}/build.default.properties"/>
     <property file="${basedir}/build.${os.family}.properties"/>
 
@@ -1360,6 +1360,130 @@
             <exec dir="${basedir}/../TechDivision_Socket" executable="ant"><arg value="deploy" /></exec>
             <exec dir="${basedir}/../TechDivision_Stream" executable="ant"><arg value="deploy" /></exec>
        </parallel>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Check if Windows PHP binaries has been downloaded yet   		 	  -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-php-binaries-present" description="Check if Windows PHP binaries has been downloaded yet.">
+        <available file="${lib.dir}/php-${win.php.version}-Win32-VC11-x86.zip" property="win-php-binaries.present"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Get Windows PHP binaries package by given version number		      -->
+    <!-- ==================================================================== -->
+    <target name="WIN-get-php-binaries" depends="WIN-check-php-binaries-present" unless="${win-php-binaries.present}" description="Get Windows PHP binaries package by given version number.">
+        <get src="${win.php.download.url}" dest="${lib.dir}/php-${win.php.version}-Win32-VC11-x86.zip"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Check if Windows apcu binaries has been downloaded yet   		 	  -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-apcu-binaries-present" description="Check if Windows apcu binaries has been downloaded yet.">
+        <available file="${lib.dir}/php_apcu-${win.apcu.version}-5.5-ts-vc11-x86.zip" property="win-apcu-binaries.present"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Get Windows apcu binaries package by given version number		      -->
+    <!-- ==================================================================== -->
+    <target name="WIN-get-apcu-binaries" depends="WIN-check-apcu-binaries-present" unless="${win-apcu-binaries.present}" description="Get Windows apcu binaries package by given version number.">
+        <get src="${win.apcu.download.url}" dest="${lib.dir}/php_apcu-${win.apcu.version}-5.5-ts-vc11-x86.zip"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Check if Windows pthreads binaries has been downloaded yet   		  -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-pthreads-binaries-present" description="Check if Windows pthreads binaries has been downloaded yet.">
+        <available file="${lib.dir}/php_pthreads-${win.pthreads.version}-5.5-ts-vc11-x86.zip" property="win-pthreads-binaries.present"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Get Windows pthreads binaries package by given version number		  -->
+    <!-- ==================================================================== -->
+    <target name="WIN-get-pthreads-binaries" depends="WIN-check-pthreads-binaries-present" unless="${win-pthreads-binaries.present}" description="Get Windows pthreads binaries package by given version number.">
+        <get src="${win.pthreads.download.url}" dest="${lib.dir}/php_pthreads-${win.pthreads.version}-5.5-ts-vc11-x86.zip"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Prepares the PHP/PECL Windows binaries 							  -->
+    <!-- ==================================================================== -->
+	<target name="WIN-prepare-binaries" depends="prepare" description="Prepares the PHP/PECL Windows binaries.">
+		<!-- download the PHP/PECL binaries if not already available -->
+		<antcall target="WIN-get-php-binaries"/>
+        <antcall target="WIN-get-apcu-binaries"/>
+        <antcall target="WIN-get-pthreads-binaries"/>
+		<!-- extract the PHP/PECL binaries into the target folder -->
+        <unzip src="${lib.dir}/php-${win.php.version}-Win32-VC11-x86.zip" dest="${php-target.dir}/appserver/php"/>
+        <unzip src="${lib.dir}/php_apcu-${win.apcu.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/apcu"/>
+        <unzip src="${lib.dir}/php_pthreads-${win.pthreads.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/pthreads"/>
+		<!-- copy the DLL's to the PHP ext directory -->
+		<copy file="${php-target.dir}/apcu/php_apcu.dll" todir="${php-target.dir}/appserver/php/ext"/>
+		<copy file="${php-target.dir}/pthreads/pthreadVC2.dll" todir="${php-target.dir}/appserver/php"/>
+		<copy file="${php-target.dir}/pthreads/php_pthreads.dll" todir="${php-target.dir}/appserver/php/ext"/>
+		<!-- copy runtime sources to target directory -->
+        <copy todir="${php-target.dir}/appserver" preservelastmodified="true" overwrite="true">
+            <fileset dir="${php-src.dir}">
+                <include name="**/*" />
+                <exclude name="etc/**/*"/>
+            </fileset>
+        </copy>
+        <copy todir="${php-target.dir}/appserver" preservelastmodified="true" overwrite="true">
+            <fileset dir="${php-src.dir}">
+                <include name="etc/**/*"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+		<!-- copy windows related files to the target directory -->
+        <copy todir="${php-target.dir}">
+            <fileset dir="${basedir}/buildfiles/win">
+                <include name="**/*"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+		<!-- download and install the composer -->
+		<get src="${win.composer.download.url}" dest="${php-target.dir}/installer"/>
+        <exec dir="${php-target.dir}" executable="${php-target.dir}/appserver/php/php">
+            <arg line="installer -- --install-dir ${php-target.dir}/appserver/bin"/>
+        </exec>
+		<!-- install appserver libraries with composer -->
+        <exec dir="${php-target.dir}/appserver/app/code" executable="${php-target.dir}/appserver/php/php">
+            <arg line="${php-target.dir}/appserver/bin/composer.phar update"/>
+        </exec>
+		<!-- copy API/Admin + example phars -->
+    	<copy todir="${php-target.dir}/appserver/deploy">
+    		<fileset dir="${basedir}/webapps">
+    			<include name="*-${appserver.version}.phar"/>
+    		</fileset>
+    		<globmapper from="*-${appserver.version}.phar" to="*.phar"/>
+    	</copy>
+		
+	</target>
+	
+    <!-- ==================================================================== -->
+    <!-- Creates the IzPack installer as a JAR file 					      -->
+    <!-- ==================================================================== -->
+	<target name="WIN-create-jar" description="Creates the IzPack installer as a JAR file.">
+		<!-- prepare the PHP/PECL binaries + appserver sources -->
+		<antcall target="WIN-prepare-binaries"/>
+		<!-- extend the classpath with the IzPack JAR's -->
+		<path id="build.classpath">
+	        <fileset dir="${izpack.installation.dir}">
+	            <include name="lib/*.jar" />
+	        </fileset>
+	    </path>
+		<!-- declare the IzPack task -->
+	    <taskdef name="izpack" classpathref="build.classpath" classname="com.izforge.izpack.ant.IzPackTask" />
+		<!-- create the IzPack installer JAR file -->
+        <izpack input="${php-target.dir}\appserver-izpack.xml"
+                output="${php-target.dir}\appserver-${appserver.version}.jar"
+                installerType="standard"
+                inheritAll="true"
+                basedir="${php-target.dir}"
+                izPackDir=" ${izpack.installation.dir}" />
     </target>
     
 </project>
