@@ -28,8 +28,8 @@
 	</panels>
 
 	<packs>
-	
-		<pack name="Core Files" required="yes">
+
+		<pack name="Core Files" required="yes" installGroups="New Application">
 			<description>The appserver.io core files needed to run the server</description>
 			<fileset dir="appserver" targetdir="${INSTALL_PATH}"
 				override="true">
@@ -37,7 +37,7 @@
 			</fileset>
 		</pack>
 
-		<pack name="API/Admin" required="no">
+		<pack name="API/Admin" required="no" preselected="yes" installGroups="New Application">
 			<description>The API and admin webapps</description>
 			<fileset dir="appserver" targetdir="${INSTALL_PATH}"
 				override="true">
@@ -46,7 +46,7 @@
 			</fileset>
 		</pack>
 
-		<pack name="Example Application" required="no">
+		<pack name="Example Application" required="no" installGroups="New Application">
 			<description>A example webapp</description>
 			<fileset dir="appserver" targetdir="${INSTALL_PATH}"
 				override="true">

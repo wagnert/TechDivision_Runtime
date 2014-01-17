@@ -1420,6 +1420,8 @@
 		<copy file="${php-target.dir}/apcu/php_apcu.dll" todir="${php-target.dir}/appserver/php/ext"/>
 		<copy file="${php-target.dir}/pthreads/pthreadVC2.dll" todir="${php-target.dir}/appserver/php"/>
 		<copy file="${php-target.dir}/pthreads/php_pthreads.dll" todir="${php-target.dir}/appserver/php/ext"/>
+		<!-- copy the appserver DLL to the PHP ext directory -->
+		<copy file="${lib.dir}/php_appserver.dll" todir="${php-target.dir}/appserver/php/ext"/>
 		<!-- copy runtime sources to target directory -->
         <copy todir="${php-target.dir}/appserver" preservelastmodified="true" overwrite="true">
             <fileset dir="${php-src.dir}">
