@@ -184,14 +184,14 @@
     <!-- Check if PECL pthreads sources has been downloaded yet  		 	  -->
     <!-- ==================================================================== -->
     <target name="check-pthreads-src-present" description="Check if PECL pthreads sources has been downloaded yet.">
-        <available file="${custom-lib.dir}/pthreads-${appserver.pthreads.version}.tgz" property="pthreads-src.present"/>
+        <available file="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" property="pthreads-src.present"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Check if PECL apcu sources has been downloaded yet               -->
     <!-- ==================================================================== -->
     <target name="check-apcu-src-present" description="Check if PECL apcu sources has been downloaded yet.">
-        <available file="${custom-lib.dir}/apcu-${appserver.apcu.version}.tgz" property="apcu-src.present"/>
+        <available file="${lib.dir}/apcu-${appserver.apcu.version}.tgz" property="apcu-src.present"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -345,14 +345,14 @@
     <!-- Get PECL pthreads source package by given version number		      -->
     <!-- ==================================================================== -->
     <target name="get-pthreads-src" depends="check-pthreads-src-present" unless="${pthreads-src.present}" description="Get PECL pthreads source package by given version number">
-        <get src="http://pecl.php.net/get/pthreads-${appserver.pthreads.version}.tgz" dest="${custom-lib.dir}/pthreads-${appserver.pthreads.version}.tgz"/>
+        <get src="http://pecl.php.net/get/pthreads-${appserver.pthreads.version}.tgz" dest="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get PECL apcu source package by given version number                 -->
     <!-- ==================================================================== -->
     <target name="get-apcu-src" depends="check-apcu-src-present" unless="${apcu-src.present}" description="Get PECL apcu source package by given version number">
-        <get src="http://pecl.php.net/get/apcu-${appserver.apcu.version}.tgz" dest="${custom-lib.dir}/apcu-${appserver.apcu.version}.tgz"/>
+        <get src="http://pecl.php.net/get/apcu-${appserver.apcu.version}.tgz" dest="${lib.dir}/apcu-${appserver.apcu.version}.tgz"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -537,13 +537,13 @@
         </move>
         <!-- prepare PECL pthread sources for static compilation -->
         <antcall target="get-pthreads-src"/>
-        <untar src="${custom-lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <move todir="${php-target.dir}/php-${appserver.php.version}/ext/pthreads">
             <fileset dir="${php-target.dir}/pthreads-${appserver.pthreads.version}"/>
         </move>
         <!-- prepare PECL apcu sources for static compilation -->
         <antcall target="get-apcu-src"/>
-        <untar src="${custom-lib.dir}/apcu-${appserver.apcu.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <untar src="${lib.dir}/apcu-${appserver.apcu.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <move todir="${php-target.dir}/php-${appserver.php.version}/ext/apcu">
             <fileset dir="${php-target.dir}/apcu-${appserver.apcu.version}"/>
         </move>
@@ -953,7 +953,7 @@
     <!-- ==================================================================== -->
     <target name="pecl-build-pthreads" description="Builds the PECL pthreads as shared extension.">
         <antcall target="get-pthreads-src"/>
-        <untar src="${custom-lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
         <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="sh">
             <arg value="configure"/>
@@ -970,7 +970,7 @@
     <!-- ==================================================================== -->
     <target name="pecl-build-apcu" description="Builds the PECL apcu as shared extension.">
         <antcall target="get-apcu-src"/>
-        <untar src="${custom-lib.dir}/apcu-${appserver.apcu.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <untar src="${lib.dir}/apcu-${appserver.apcu.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <exec dir="${php-target.dir}/apcu-${appserver.apcu.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
         <exec dir="${php-target.dir}/apcu-${appserver.apcu.version}" executable="sh">
             <arg value="configure"/>
