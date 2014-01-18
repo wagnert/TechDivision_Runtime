@@ -28,19 +28,17 @@
 	</panels>
 
 	<packs>
-	
+
 		<pack name="Core Files" required="yes">
-			<description>The appserver.io core files needed to run the server</description>
-			<fileset dir="appserver" targetdir="${INSTALL_PATH}"
-				override="true">
+			<description>The core files needed to run the server</description>
+			<fileset dir="appserver" targetdir="${INSTALL_PATH}" override="true">
 				<exclude name="deploy/**" />
 			</fileset>
 		</pack>
 
-		<pack name="API/Admin" required="no">
+		<pack name="API/Admin" required="no" preselected="yes">
 			<description>The API and admin webapps</description>
-			<fileset dir="appserver" targetdir="${INSTALL_PATH}"
-				override="true">
+			<fileset dir="appserver" targetdir="${INSTALL_PATH}" override="true">
 				<include name="deploy/api.phar" />
 				<include name="deploy/admin.phar" />
 			</fileset>
@@ -48,10 +46,14 @@
 
 		<pack name="Example Application" required="no">
 			<description>A example webapp</description>
-			<fileset dir="appserver" targetdir="${INSTALL_PATH}"
-				override="true">
+			<fileset dir="appserver" targetdir="${INSTALL_PATH}" override="true">
 				<include name="deploy/example.phar" />
 			</fileset>
+		</pack>
+
+		<pack name="Microsoft Visual C++ 2010 Redistributable Package (x86)" required="no" preselected="yes">
+			<description>The Microsoft Visual C++ 2010 Redistributable Packe (x86)</description>
+			<executable targetfile="$INSTALL_PATH/lib/vcredist_x86.exe" stage="postinstall" />
 		</pack>
 
 	</packs>
