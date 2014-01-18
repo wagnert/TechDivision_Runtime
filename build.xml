@@ -1366,42 +1366,42 @@
     <!-- Check if Windows PHP binaries has been downloaded yet   		 	  -->
     <!-- ==================================================================== -->
     <target name="WIN-check-php-binaries-present" description="Check if Windows PHP binaries has been downloaded yet.">
-        <available file="${lib.dir}/php-${win.php.version}-Win32-VC11-x86.zip" property="win-php-binaries.present"/>
+        <available file="${lib.dir}/php-${appserver.php.version}-Win32-VC11-x86.zip" property="win-php-binaries.present"/>
     </target>
 	
     <!-- ==================================================================== -->
     <!-- Get Windows PHP binaries package by given version number		      -->
     <!-- ==================================================================== -->
     <target name="WIN-get-php-binaries" depends="WIN-check-php-binaries-present" unless="${win-php-binaries.present}" description="Get Windows PHP binaries package by given version number.">
-        <get src="${win.php.download.url}" dest="${lib.dir}/php-${win.php.version}-Win32-VC11-x86.zip"/>
+        <get src="${win.php.download.url}" dest="${lib.dir}/php-${appserver.php.version}-Win32-VC11-x86.zip"/>
     </target>
 	
     <!-- ==================================================================== -->
     <!-- Check if Windows apcu binaries has been downloaded yet   		 	  -->
     <!-- ==================================================================== -->
     <target name="WIN-check-apcu-binaries-present" description="Check if Windows apcu binaries has been downloaded yet.">
-        <available file="${lib.dir}/php_apcu-${win.apcu.version}-5.5-ts-vc11-x86.zip" property="win-apcu-binaries.present"/>
+        <available file="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc11-x86.zip" property="win-apcu-binaries.present"/>
     </target>
 	
     <!-- ==================================================================== -->
     <!-- Get Windows apcu binaries package by given version number		      -->
     <!-- ==================================================================== -->
     <target name="WIN-get-apcu-binaries" depends="WIN-check-apcu-binaries-present" unless="${win-apcu-binaries.present}" description="Get Windows apcu binaries package by given version number.">
-        <get src="${win.apcu.download.url}" dest="${lib.dir}/php_apcu-${win.apcu.version}-5.5-ts-vc11-x86.zip"/>
+        <get src="${win.apcu.download.url}" dest="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc11-x86.zip"/>
     </target>
 	
     <!-- ==================================================================== -->
     <!-- Check if Windows pthreads binaries has been downloaded yet   		  -->
     <!-- ==================================================================== -->
     <target name="WIN-check-pthreads-binaries-present" description="Check if Windows pthreads binaries has been downloaded yet.">
-        <available file="${lib.dir}/php_pthreads-${win.pthreads.version}-5.5-ts-vc11-x86.zip" property="win-pthreads-binaries.present"/>
+        <available file="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip" property="win-pthreads-binaries.present"/>
     </target>
 	
     <!-- ==================================================================== -->
     <!-- Get Windows pthreads binaries package by given version number		  -->
     <!-- ==================================================================== -->
     <target name="WIN-get-pthreads-binaries" depends="WIN-check-pthreads-binaries-present" unless="${win-pthreads-binaries.present}" description="Get Windows pthreads binaries package by given version number.">
-        <get src="${win.pthreads.download.url}" dest="${lib.dir}/php_pthreads-${win.pthreads.version}-5.5-ts-vc11-x86.zip"/>
+        <get src="${win.pthreads.download.url}" dest="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip"/>
     </target>
 	
     <!-- ==================================================================== -->
@@ -1413,15 +1413,15 @@
         <antcall target="WIN-get-apcu-binaries"/>
         <antcall target="WIN-get-pthreads-binaries"/>
 		<!-- extract the PHP/PECL binaries into the target folder -->
-        <unzip src="${lib.dir}/php-${win.php.version}-Win32-VC11-x86.zip" dest="${php-target.dir}/appserver/php"/>
-        <unzip src="${lib.dir}/php_apcu-${win.apcu.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/apcu"/>
-        <unzip src="${lib.dir}/php_pthreads-${win.pthreads.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/pthreads"/>
+        <unzip src="${lib.dir}/php-${appserver.php.version}-Win32-VC11-x86.zip" dest="${php-target.dir}/appserver/php"/>
+        <unzip src="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/apcu"/>
+        <unzip src="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/pthreads"/>
 		<!-- copy the DLL's to the PHP ext directory -->
 		<copy file="${php-target.dir}/apcu/php_apcu.dll" todir="${php-target.dir}/appserver/php/ext"/>
-		<copy file="${php-target.dir}/pthreads/pthreadVC2.dll" todir="${php-target.dir}/appserver/php"/>
 		<copy file="${php-target.dir}/pthreads/php_pthreads.dll" todir="${php-target.dir}/appserver/php/ext"/>
+		<copy file="${php-target.dir}/pthreads/pthreadVC2.dll" todir="${php-target.dir}/appserver/php"/>
 		<!-- copy the appserver DLL to the PHP ext directory -->
-		<copy file="${lib.dir}/php_appserver.dll" todir="${php-target.dir}/appserver/php/ext"/>
+		<copy file="${custom-lib.dir}/php_appserver-${appserver.ext-appserver.version}.dll" tofile="${php-target.dir}/appserver/php/ext/php_appserver.dll"/>
 		<!-- copy runtime sources to target directory -->
         <copy todir="${php-target.dir}/appserver" preservelastmodified="true" overwrite="true">
             <fileset dir="${php-src.dir}">
@@ -1441,12 +1441,16 @@
         <copy todir="${php-target.dir}">
             <fileset dir="${basedir}/buildfiles/win">
                 <include name="**/*"/>
+            	<exclude name="appserver-izpack.xml"/>
             </fileset>
+        </copy>
+		<!-- copy IzPack configuration file to the target directory -->
+        <copy todir="${php-target.dir}" file="${basedir}/buildfiles/win/appserver-izpack.xml">
             <filterchain>
                 <expandproperties/>
             </filterchain>
         </copy>
-		<!-- download and install the composer -->
+		<!-- download and install composer -->
 		<get src="${win.composer.download.url}" dest="${php-target.dir}/installer"/>
         <exec dir="${php-target.dir}" executable="${php-target.dir}/appserver/php/php">
             <arg line="installer -- --install-dir ${php-target.dir}/appserver/bin"/>
@@ -1462,13 +1466,12 @@
     		</fileset>
     		<globmapper from="*-${appserver.version}.phar" to="*.phar"/>
     	</copy>
-		
 	</target>
 	
     <!-- ==================================================================== -->
-    <!-- Creates the IzPack installer as a JAR file 					      -->
+    <!-- Creates the IzPack installer JAR file 					      		  -->
     <!-- ==================================================================== -->
-	<target name="WIN-create-jar" description="Creates the IzPack installer as a JAR file.">
+	<target name="WIN-create-jar" description="Creates the IzPack installer JAR file.">
 		<!-- prepare the PHP/PECL binaries + appserver sources -->
 		<antcall target="WIN-prepare-binaries"/>
 		<!-- extend the classpath with the IzPack JAR's -->
