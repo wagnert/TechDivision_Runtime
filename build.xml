@@ -866,6 +866,7 @@
         <chmod perm="755" dir="${php-target.dir}/redis-${redis.server.version}" includes="**/*"/>
         <exec dir="${php-target.dir}/redis-${redis.server.version}" executable="make"/>
         <exec dir="${php-target.dir}/redis-${redis.server.version}" executable="make">
+            <arg value="PREFIX=${appserver.compile.prefix}"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -926,6 +927,7 @@
     	<!-- configure, compile and install PHP binary -->
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="sh">
             <env key="CC" value="${appserver.cc}"/>
+            <env key="EXTRA_LIBS" value="-llber"/>
             <arg line="configure ${appserver.compile.configuration}"/>
         </exec>
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make">
@@ -935,7 +937,7 @@
             <arg value="install"/>
         </exec>
 
-        <!-- build the PECL ev package as shared library -->
+        <!-- build the PECL package's as shared library -->
         <antcall target="pecl-build-pthreads"/>
         <antcall target="pecl-build-memcached"/>
         <antcall target="pecl-build-redis"/>
