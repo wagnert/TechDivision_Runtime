@@ -105,6 +105,7 @@
 					<param name="workerNumber" type="integer">16</param>
 					<param name="address" type="string">0.0.0.0</param>
 					<param name="port" type="integer">8588</param>
+                    <param name="certPath" type="string">etc/server.pem</param>
 				</params>
 			</receiver>
 			<deployment type="TechDivision\ServletContainer\Deployment" />
