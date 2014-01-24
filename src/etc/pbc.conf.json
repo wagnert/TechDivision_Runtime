@@ -1,6 +1,16 @@
 {
     "environment": "production",
 
+    "autoloader": {
+
+        "omit": [
+            "TechDivision\\PBC",
+            "Doctrine",
+            "Ratchet",
+            "Symfony"
+        ]
+    },
+
     "cache": {
 
         "dir": "/opt/appserver/var/tmp/pbc/cache"
