@@ -1231,7 +1231,13 @@
             <arg value="libpng12-dev"/>
             <arg value="libevent-dev"/>
             <arg value="libev-dev"/>
+        	<arg value="libldap2-dev"/>
         </exec>
+    	<!-- Bugfix for missing symlink -->
+    	<exec dir="/usr/lib" executable="ln">
+    		<arg value="-s"/>
+    		<arg value="x86_64-linux-gnu/libldap.so"/>
+    	</exec>
     </target>
 
     <!-- ==================================================================== -->
