@@ -1267,7 +1267,7 @@
             <arg value="libevent-devel"/>
             <arg value="libev-devel"/>
             <arg value="gcc-c++"/>
-            <arg value="openldap-dev"/>
+            <arg value="openldap-devel"/>
             <arg value="rpm-build"/>
         </exec>
     </target>
