@@ -12,38 +12,30 @@ class Test extends Thread
 
     public function run()
     {
-        
-        $client = socket_accept($this->socket);
-        socket_set_option($client, SOL_SOCKET, SO_RCVTIMEO, array("sec" => 5, "usec" => 0));
+
+        $timeout = 5;
+
+        $client = @stream_socket_accept($this->socket, $timeout, $peername);
 
         $counter = 1;
         $connectionOpen = true;
         $startTime = time();
-        
-        $timeout = 5;
+
         $maxRequests = 5;
-        
+
         do {
             
             $buffer = '';
             
-            while ($buffer .= socket_read($client, 1024)) {
+            while ($buffer .= @fread($client, 1024)) {
                 if (false !== strpos($buffer, "\r\n\r\n")) {
                     break;
                 }
             }
 
-            echo __LINE__ . PHP_EOL;
-
-            if ($buffer === '') {
-                
-                socket_close($client);
-                $connectionOpen = false;
-                
-                continue;
-            }
-            
             $availableRequests = $maxRequests - $counter++;
+            echo '$availableRequests = ' . $availableRequests . PHP_EOL;
+
             $ttl = ($startTime + $timeout) - time();
     
             ob_start();
@@ -72,30 +64,63 @@ class Test extends Thread
             );
             
             // write the result back to the socket
-            socket_write($client, implode("\r\n", $response));
+            @fwrite($client, implode("\r\n", $response));
             
             // check if this is the last request
             if ($availableRequests <= 0 || $ttl <= 0) {
                 
                 // if yes, close the socket and end the do/while
-                socket_close($client);
+                @fclose($client);
+                echo "CLOSE CLIENT SOCKET" . PHP_EOL;
                 $connectionOpen = false;
             }
             
         } while ($connectionOpen);
+
     }
 }
+
+// generate certificate
+$privkey = openssl_pkey_new();
+$cert = openssl_csr_new(array(
+    "countryName" => "DE",
+    "stateOrProvinceName" => "Bavaria",
+    "localityName" => "Kolbermoor",
+    "organizationName" => "appserver.io",
+    "organizationalUnitName" => md5(microtime()),
+    "commonName" => "127.0.0.1",
+    "emailAddress" => "mail@appserver.io"
+), $privkey);
+$cert = openssl_csr_sign($cert, null, $privkey, 365);
+// generate pem file
+$pem = array();
+openssl_x509_export($cert, $pem[0]);
+openssl_pkey_export($privkey, $pem[1]);
+$pem = implode($pem);
+// save pem file
+$pemfile = './keep-alive-ssl-cert.pem';
+file_put_contents($pemfile, $pem);
+
 
 // check if port was given via arg values
 if (!isset($argv[1])) {
     // set 9015 by default
-    $argv[1] = 9080;
+    $argv[1] = 9443;
 }
 
+// init workers array
 $workers = array();
-$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-socket_bind($socket, '0.0.0.0', $argv[1]);
-socket_listen($socket);
+
+// create ssl context
+$context = @stream_context_create();
+stream_context_set_option($context, 'ssl', 'local_cert', $pemfile);
+stream_context_set_option($context, 'ssl', 'allow_self_signed', true);
+stream_context_set_option($context, 'ssl', 'verify_peer', false);
+
+// create a new socket connection and listen to it
+$socketAddress = "ssl://0.0.0.0:$argv[1]";
+$socket = @stream_socket_server($socketAddress, $errno, $errstr, STREAM_SERVER_BIND | STREAM_SERVER_LISTEN, $context);
+@stream_set_blocking($socket, true);
 
 if ($socket) {
     
