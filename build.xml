@@ -9,8 +9,8 @@
     <property name="php-test.dir" value="${basedir}/tests" />
     <property name="php-target.dir" value="${basedir}/target"/>
 
-    <property file="${user.home}/build.properties"/>
     <property file="${basedir}/build.properties"/>
+    <property file="${user.home}/build.properties"/>
     <property file="${basedir}/build.default.properties"/>
     <property file="${basedir}/build.${os.family}.properties"/>
 
@@ -184,14 +184,14 @@
     <!-- Check if PECL pthreads sources has been downloaded yet  		 	  -->
     <!-- ==================================================================== -->
     <target name="check-pthreads-src-present" description="Check if PECL pthreads sources has been downloaded yet.">
-        <available file="${custom-lib.dir}/pthreads-${appserver.pthreads.version}.tgz" property="pthreads-src.present"/>
+        <available file="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" property="pthreads-src.present"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Check if PECL apcu sources has been downloaded yet               -->
     <!-- ==================================================================== -->
     <target name="check-apcu-src-present" description="Check if PECL apcu sources has been downloaded yet.">
-        <available file="${custom-lib.dir}/apcu-${appserver.apcu.version}.tgz" property="apcu-src.present"/>
+        <available file="${lib.dir}/apcu-${appserver.apcu.version}.tgz" property="apcu-src.present"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -345,14 +345,14 @@
     <!-- Get PECL pthreads source package by given version number		      -->
     <!-- ==================================================================== -->
     <target name="get-pthreads-src" depends="check-pthreads-src-present" unless="${pthreads-src.present}" description="Get PECL pthreads source package by given version number">
-        <get src="http://pecl.php.net/get/pthreads-${appserver.pthreads.version}.tgz" dest="${custom-lib.dir}/pthreads-${appserver.pthreads.version}.tgz"/>
+        <get src="http://pecl.php.net/get/pthreads-${appserver.pthreads.version}.tgz" dest="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get PECL apcu source package by given version number                 -->
     <!-- ==================================================================== -->
     <target name="get-apcu-src" depends="check-apcu-src-present" unless="${apcu-src.present}" description="Get PECL apcu source package by given version number">
-        <get src="http://pecl.php.net/get/apcu-${appserver.apcu.version}.tgz" dest="${custom-lib.dir}/apcu-${appserver.apcu.version}.tgz"/>
+        <get src="http://pecl.php.net/get/apcu-${appserver.apcu.version}.tgz" dest="${lib.dir}/apcu-${appserver.apcu.version}.tgz"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -537,13 +537,13 @@
         </move>
         <!-- prepare PECL pthread sources for static compilation -->
         <antcall target="get-pthreads-src"/>
-        <untar src="${custom-lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <move todir="${php-target.dir}/php-${appserver.php.version}/ext/pthreads">
             <fileset dir="${php-target.dir}/pthreads-${appserver.pthreads.version}"/>
         </move>
         <!-- prepare PECL apcu sources for static compilation -->
         <antcall target="get-apcu-src"/>
-        <untar src="${custom-lib.dir}/apcu-${appserver.apcu.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <untar src="${lib.dir}/apcu-${appserver.apcu.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <move todir="${php-target.dir}/php-${appserver.php.version}/ext/apcu">
             <fileset dir="${php-target.dir}/apcu-${appserver.apcu.version}"/>
         </move>
@@ -866,6 +866,7 @@
         <chmod perm="755" dir="${php-target.dir}/redis-${redis.server.version}" includes="**/*"/>
         <exec dir="${php-target.dir}/redis-${redis.server.version}" executable="make"/>
         <exec dir="${php-target.dir}/redis-${redis.server.version}" executable="make">
+            <arg value="PREFIX=${appserver.compile.prefix}"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -926,6 +927,7 @@
     	<!-- configure, compile and install PHP binary -->
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="sh">
             <env key="CC" value="${appserver.cc}"/>
+            <env key="EXTRA_LIBS" value="-llber"/>
             <arg line="configure ${appserver.compile.configuration}"/>
         </exec>
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make">
@@ -935,7 +937,7 @@
             <arg value="install"/>
         </exec>
 
-        <!-- build the PECL ev package as shared library -->
+        <!-- build the PECL package's as shared library -->
         <antcall target="pecl-build-pthreads"/>
         <antcall target="pecl-build-memcached"/>
         <antcall target="pecl-build-redis"/>
@@ -953,7 +955,7 @@
     <!-- ==================================================================== -->
     <target name="pecl-build-pthreads" description="Builds the PECL pthreads as shared extension.">
         <antcall target="get-pthreads-src"/>
-        <untar src="${custom-lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <untar src="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
         <exec dir="${php-target.dir}/pthreads-${appserver.pthreads.version}" executable="sh">
             <arg value="configure"/>
@@ -970,7 +972,7 @@
     <!-- ==================================================================== -->
     <target name="pecl-build-apcu" description="Builds the PECL apcu as shared extension.">
         <antcall target="get-apcu-src"/>
-        <untar src="${custom-lib.dir}/apcu-${appserver.apcu.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <untar src="${lib.dir}/apcu-${appserver.apcu.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <exec dir="${php-target.dir}/apcu-${appserver.apcu.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
         <exec dir="${php-target.dir}/apcu-${appserver.apcu.version}" executable="sh">
             <arg value="configure"/>
@@ -1229,7 +1231,13 @@
             <arg value="libpng12-dev"/>
             <arg value="libevent-dev"/>
             <arg value="libev-dev"/>
+        	<arg value="libldap2-dev"/>
         </exec>
+    	<!-- Bugfix for missing symlink -->
+    	<exec dir="/usr/lib" executable="ln">
+    		<arg value="-s"/>
+    		<arg value="x86_64-linux-gnu/libldap.so"/>
+    	</exec>
     </target>
 
     <!-- ==================================================================== -->
@@ -1259,6 +1267,8 @@
             <arg value="libevent-devel"/>
             <arg value="libev-devel"/>
             <arg value="gcc-c++"/>
+            <arg value="openldap-devel"/>
+            <arg value="rpm-build"/>
         </exec>
     </target>
 
@@ -1360,6 +1370,135 @@
             <exec dir="${basedir}/../TechDivision_Socket" executable="ant"><arg value="deploy" /></exec>
             <exec dir="${basedir}/../TechDivision_Stream" executable="ant"><arg value="deploy" /></exec>
        </parallel>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Check if Windows PHP binaries has been downloaded yet   		 	  -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-php-binaries-present" description="Check if Windows PHP binaries has been downloaded yet.">
+        <available file="${lib.dir}/php-${appserver.php.version}-Win32-VC11-x86.zip" property="win-php-binaries.present"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Get Windows PHP binaries package by given version number		      -->
+    <!-- ==================================================================== -->
+    <target name="WIN-get-php-binaries" depends="WIN-check-php-binaries-present" unless="${win-php-binaries.present}" description="Get Windows PHP binaries package by given version number.">
+        <get src="${win.php.download.url}" dest="${lib.dir}/php-${appserver.php.version}-Win32-VC11-x86.zip"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Check if Windows apcu binaries has been downloaded yet   		 	  -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-apcu-binaries-present" description="Check if Windows apcu binaries has been downloaded yet.">
+        <available file="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc11-x86.zip" property="win-apcu-binaries.present"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Get Windows apcu binaries package by given version number		      -->
+    <!-- ==================================================================== -->
+    <target name="WIN-get-apcu-binaries" depends="WIN-check-apcu-binaries-present" unless="${win-apcu-binaries.present}" description="Get Windows apcu binaries package by given version number.">
+        <get src="${win.apcu.download.url}" dest="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc11-x86.zip"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Check if Windows pthreads binaries has been downloaded yet   		  -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-pthreads-binaries-present" description="Check if Windows pthreads binaries has been downloaded yet.">
+        <available file="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip" property="win-pthreads-binaries.present"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Get Windows pthreads binaries package by given version number		  -->
+    <!-- ==================================================================== -->
+    <target name="WIN-get-pthreads-binaries" depends="WIN-check-pthreads-binaries-present" unless="${win-pthreads-binaries.present}" description="Get Windows pthreads binaries package by given version number.">
+        <get src="${win.pthreads.download.url}" dest="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Prepares the PHP/PECL Windows binaries 							  -->
+    <!-- ==================================================================== -->
+	<target name="WIN-prepare-binaries" depends="prepare" description="Prepares the PHP/PECL Windows binaries.">
+		<!-- download the PHP/PECL binaries if not already available -->
+		<antcall target="WIN-get-php-binaries"/>
+        <antcall target="WIN-get-apcu-binaries"/>
+        <antcall target="WIN-get-pthreads-binaries"/>
+		<!-- extract the PHP/PECL binaries into the target folder -->
+        <unzip src="${lib.dir}/php-${appserver.php.version}-Win32-VC11-x86.zip" dest="${php-target.dir}/appserver/php"/>
+        <unzip src="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/apcu"/>
+        <unzip src="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/pthreads"/>
+		<!-- copy the DLL's to the PHP ext directory -->
+		<copy file="${php-target.dir}/apcu/php_apcu.dll" todir="${php-target.dir}/appserver/php/ext"/>
+		<copy file="${php-target.dir}/pthreads/php_pthreads.dll" todir="${php-target.dir}/appserver/php/ext"/>
+		<copy file="${php-target.dir}/pthreads/pthreadVC2.dll" todir="${php-target.dir}/appserver/php"/>
+		<!-- copy the appserver DLL to the PHP ext directory -->
+		<copy file="${custom-lib.dir}/php_appserver-${appserver.ext-appserver.version}.dll" tofile="${php-target.dir}/appserver/php/ext/php_appserver.dll"/>
+		<!-- copy runtime sources to target directory -->
+        <copy todir="${php-target.dir}/appserver" preservelastmodified="true" overwrite="true">
+            <fileset dir="${php-src.dir}">
+                <include name="**/*" />
+                <exclude name="etc/**/*"/>
+            </fileset>
+        </copy>
+        <copy todir="${php-target.dir}/appserver" preservelastmodified="true" overwrite="true">
+            <fileset dir="${php-src.dir}">
+                <include name="etc/**/*"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+		<!-- copy windows related files to the target directory -->
+        <copy todir="${php-target.dir}">
+            <fileset dir="${basedir}/buildfiles/win">
+                <include name="**/*"/>
+            	<exclude name="appserver-izpack.xml"/>
+            </fileset>
+        </copy>
+		<!-- copy IzPack configuration file to the target directory -->
+        <copy todir="${php-target.dir}" file="${basedir}/buildfiles/win/appserver-izpack.xml">
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+		<!-- download and install composer -->
+		<get src="${win.composer.download.url}" dest="${php-target.dir}/installer"/>
+        <exec dir="${php-target.dir}" executable="${php-target.dir}/appserver/php/php">
+            <arg line="installer -- --install-dir ${php-target.dir}/appserver/bin"/>
+        </exec>
+		<!-- install appserver libraries with composer -->
+        <exec dir="${php-target.dir}/appserver/app/code" executable="${php-target.dir}/appserver/php/php">
+            <arg line="${php-target.dir}/appserver/bin/composer.phar update"/>
+        </exec>
+		<!-- copy API/Admin + example phars -->
+    	<copy todir="${php-target.dir}/appserver/deploy">
+    		<fileset dir="${basedir}/webapps">
+    			<include name="*-${appserver.version}.phar"/>
+    		</fileset>
+    		<globmapper from="*-${appserver.version}.phar" to="*.phar"/>
+    	</copy>
+	</target>
+	
+    <!-- ==================================================================== -->
+    <!-- Creates the IzPack installer JAR file 					      		  -->
+    <!-- ==================================================================== -->
+	<target name="WIN-create-jar" description="Creates the IzPack installer JAR file.">
+		<!-- prepare the PHP/PECL binaries + appserver sources -->
+		<antcall target="WIN-prepare-binaries"/>
+		<!-- extend the classpath with the IzPack JAR's -->
+		<path id="build.classpath">
+	        <fileset dir="${izpack.installation.dir}">
+	            <include name="lib/*.jar" />
+	        </fileset>
+	    </path>
+		<!-- declare the IzPack task -->
+	    <taskdef name="izpack" classpathref="build.classpath" classname="com.izforge.izpack.ant.IzPackTask" />
+		<!-- create the IzPack installer JAR file -->
+        <izpack input="${php-target.dir}\appserver-izpack.xml"
+                output="${php-target.dir}\appserver-${appserver.version}.jar"
+                installerType="standard"
+                inheritAll="true"
+                basedir="${php-target.dir}"
+                izPackDir=" ${izpack.installation.dir}" />
     </target>
     
 </project>
