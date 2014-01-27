@@ -33,8 +33,6 @@ class Test extends Thread
                 }
             }
 
-            echo __LINE__ . PHP_EOL;
-
             if ($buffer === '') {
                 
                 socket_close($client);
@@ -44,6 +42,8 @@ class Test extends Thread
             }
             
             $availableRequests = $maxRequests - $counter++;
+            echo '$availableRequests = ' . $availableRequests . PHP_EOL;
+
             $ttl = ($startTime + $timeout) - time();
     
             ob_start();
