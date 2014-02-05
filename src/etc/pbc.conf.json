@@ -17,7 +17,6 @@
     },
 
     "project-dirs": [
-        "/opt/appserver/app/code/vendor/techdivision",
-        "/opt/appserver/webapps"
+        "/opt/appserver/app/code/vendor/techdivision"
     ]
 }
