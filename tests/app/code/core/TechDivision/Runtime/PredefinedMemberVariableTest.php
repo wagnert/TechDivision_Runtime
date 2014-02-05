@@ -32,7 +32,7 @@ namespace TechDivision\Runtime;
  */
 
 const CONTAINERKEY = "PredefinedMemberVariableTest";
-const EXPECTED     = 1;
+const EXPECTED = 1;
 
 class PredefinedMemberVariableTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,26 +45,44 @@ class PredefinedMemberVariableTest extends \PHPUnit_Framework_TestCase
         $this->testThread = new TestThread($this->testContainer);
     }
 
-    public function testPredefinedMemberVariablesContainValues()
+    public function testPredefinedMemberVariablesContainValueByContainer()
+    {
+        $this->runTestThread();
+        $this->assertEquals(EXPECTED, $this->testContainer[CONTAINERKEY]);
+    }
+
+    public function testPredefinedMemberVariableContainsValueByThread()
+    {
+        $this->runTestThread();
+        $this->assertEquals(EXPECTED, $this->testThread->predefinedMember);
+    }
+
+    public function testPredefinedMemberVariableAssignedInConstructToSameLocalVariable()
+    {
+        $this->runTestThread();
+        $this->assertEquals(EXPECTED, $this->testThread->localPredefinedMemberWithSameNameAsMember);
+    }
+
+    public function runTestThread()
     {
         $this->testThread->start();
         $this->testThread->join();
-
-        var_dump($this->testContainer);
-        $this->assertEquals(EXPECTED, $this->testContainer[CONTAINERKEY]);
     }
 }
 
 class TestThread extends \Thread
 {
-    protected $predefinedMember = EXPECTED;
-    //protected $predefinedMember;
+    public $predefinedMember = EXPECTED;
+    public $localPredefinedMemberWithSameNameAsMember = EXPECTED;
     protected $container;
 
     public function __construct($container)
     {
-        $this->container = $container;
         //$this->predefinedMember = EXPECTED;
+        //$this->localPredefinedMemberWithSameNameAsMember = EXPECTED;
+
+        $this->container = $container;
+        $localPredefinedMemberWithSameNameAsMember = $this->localPredefinedMemberWithSameNameAsMember;
     }
 
     public function run()
