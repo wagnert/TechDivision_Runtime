@@ -230,6 +230,13 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Check if PECL event sources has been downloaded yet  		 	      -->
+    <!-- ==================================================================== -->
+    <target name="check-event-src-present" description="Check if PECL event sources has been downloaded yet.">
+        <available file="${lib.dir}/event-${appserver.event.version}.zip" property="event-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Check if PECL operator sources has been downloaded yet  		 	  -->
     <!-- ==================================================================== -->
     <target name="check-operator-src-present" description="Check if PECL operator sources has been downloaded yet.">
@@ -372,8 +379,15 @@
     <!-- ==================================================================== -->
     <!-- Get PECL ev source package by given version number		              -->
     <!-- ==================================================================== -->
-    <target name="get-ev-src" depends="check-ev-src-present" unless="$ev-src.present}" description="Get PECL ev source package by given version number">
+    <target name="get-ev-src" depends="check-ev-src-present" unless="${ev-src.present}" description="Get PECL ev source package by given version number">
         <get src="http://pecl.php.net/get/ev-${appserver.ev.version}.tgz" dest="${lib.dir}/ev-${appserver.ev.version}.tgz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get PECL event source package by given version number		          -->
+    <!-- ==================================================================== -->
+    <target name="get-event-src" depends="check-event-src-present" unless="${event-src.present}" description="Get PECL event source package by given version number">
+        <get src="http://pecl.php.net/get/event-${appserver.event.version}.tgz" dest="${lib.dir}/ev-${appserver.event.version}.tgz"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -571,6 +585,12 @@
         <move todir="${php-target.dir}/php-${appserver.php.version}/ext/libevent">
             <fileset dir="${php-target.dir}/libevent-${appserver.libevent.version}"/>
         </move>
+        <!-- prepare PECL redis sources for static compilation -->
+        <antcall target="get-redis-src"/>
+        <untar src="${lib.dir}/redis-${appserver.redis.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/redis">
+            <fileset dir="${php-target.dir}/redis-${appserver.redis.version}"/>
+        </move>
         <!-- prepare PECL libev sources for static compilation -->
         <!--
     	<antcall target="get-libev-src"/>
@@ -595,12 +615,14 @@
             <fileset dir="${php-target.dir}/xdebug-${appserver.xdebug.version}"/>
         </move>
         -->
-        <!-- prepare PECL redis sources for static compilation -->
-        <antcall target="get-redis-src"/>
-        <untar src="${lib.dir}/redis-${appserver.redis.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/redis">
-            <fileset dir="${php-target.dir}/redis-${appserver.redis.version}"/>
+        <!-- prepare PECL event sources for static compilation -->
+    	<!--
+    	<antcall target="get-event-src"/>
+        <unzip src="${lib.dir}/event-${appserver.event.version}.zip" dest="${php-target.dir}"/>
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/event">
+            <fileset dir="${php-target.dir}/event-${appserver.event.version}"/>
         </move>
+        -->
     </target>
 
     <!-- ==================================================================== -->
@@ -944,6 +966,7 @@
         <antcall target="pecl-build-appserver"/>
         <antcall target="pecl-build-apcu"/>
         <antcall target="pecl-build-ev"/>
+        <antcall target="pecl-build-event"/>
         <antcall target="pecl-build-xdebug"/>
 
     	<!-- copy runtime files from src directory -->
@@ -1067,6 +1090,24 @@
         </exec>
         <exec dir="${php-target.dir}/php-libev-${appserver.libev.version}" executable="make"/>
         <exec dir="${php-target.dir}/php-libev-${appserver.libev.version}" executable="make">
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Builds the PECL event as shared extension                            -->
+    <!-- ==================================================================== -->
+    <target name="pecl-build-event" description="Builds the PECL event as shared extension.">
+        <antcall target="get-event-src"/>
+        <untar src="${lib.dir}/event-${appserver.event.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/event-${appserver.event.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/event-${appserver.event.version}" executable="sh">
+            <arg value="configure"/>
+            <arg value="--with-php-config=${appserver.compile.prefix}/bin/php-config"/>
+        	<arg value="--with-event-libevent-dir=${appserver.compile.prefix}"/>
+        </exec>
+        <exec dir="${php-target.dir}/event-${appserver.event.version}" executable="make"/>
+        <exec dir="${php-target.dir}/event-${appserver.event.version}" executable="make">
             <arg value="install"/>
         </exec>
     </target>
@@ -1394,6 +1435,13 @@
     </target>
 	
     <!-- ==================================================================== -->
+    <!-- Check if Windows event binaries has been downloaded yet   		 	  -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-event-binaries-present" description="Check if Windows event binaries has been downloaded yet.">
+        <available file="${lib.dir}/php_event-${appserver.event.version}-5.5-ts-vc11-x86.zip" property="win-event-binaries.present"/>
+    </target>
+	
+    <!-- ==================================================================== -->
     <!-- Get Windows apcu binaries package by given version number		      -->
     <!-- ==================================================================== -->
     <target name="WIN-get-apcu-binaries" depends="WIN-check-apcu-binaries-present" unless="${win-apcu-binaries.present}" description="Get Windows apcu binaries package by given version number.">
@@ -1415,6 +1463,13 @@
     </target>
 	
     <!-- ==================================================================== -->
+    <!-- Get Windows event binaries package by given version number		      -->
+    <!-- ==================================================================== -->
+    <target name="WIN-get-event-binaries" depends="WIN-check-event-binaries-present" unless="${win-event-binaries.present}" description="Get Windows event binaries package by given version number.">
+        <get src="${win.event.download.url}" dest="${lib.dir}/php_event-${appserver.event.version}-5.5-ts-vc11-x86.zip"/>
+    </target>
+	
+    <!-- ==================================================================== -->
     <!-- Prepares the PHP/PECL Windows binaries 							  -->
     <!-- ==================================================================== -->
 	<target name="WIN-prepare-binaries" depends="prepare" description="Prepares the PHP/PECL Windows binaries.">
@@ -1422,14 +1477,17 @@
 		<antcall target="WIN-get-php-binaries"/>
         <antcall target="WIN-get-apcu-binaries"/>
         <antcall target="WIN-get-pthreads-binaries"/>
+        <antcall target="WIN-get-event-binaries"/>
 		<!-- extract the PHP/PECL binaries into the target folder -->
         <unzip src="${lib.dir}/php-${appserver.php.version}-Win32-VC11-x86.zip" dest="${php-target.dir}/appserver/php"/>
         <unzip src="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/apcu"/>
         <unzip src="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/pthreads"/>
+        <unzip src="${lib.dir}/php_event-${appserver.event.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/event"/>
 		<!-- copy the DLL's to the PHP ext directory -->
 		<copy file="${php-target.dir}/apcu/php_apcu.dll" todir="${php-target.dir}/appserver/php/ext"/>
 		<copy file="${php-target.dir}/pthreads/php_pthreads.dll" todir="${php-target.dir}/appserver/php/ext"/>
 		<copy file="${php-target.dir}/pthreads/pthreadVC2.dll" todir="${php-target.dir}/appserver/php"/>
+		<copy file="${php-target.dir}/event/php_event.dll" todir="${php-target.dir}/appserver/php/ext"/>
 		<!-- copy the appserver DLL to the PHP ext directory -->
 		<copy file="${custom-lib.dir}/php_appserver-${appserver.ext-appserver.version}.dll" tofile="${php-target.dir}/appserver/php/ext/php_appserver.dll"/>
 		<!-- copy runtime sources to target directory -->
