@@ -40,6 +40,16 @@ $configuration = new Configuration();
 $configuration->initFromFile($configurationFileName);
 $configuration->addChildWithNameAndValue('baseDirectory', APPSERVER_BP);
 
-// start the server finally
+// create the server instance
 $server = new Server($configuration);
-$server->start();
+
+// check if server.php has been started with -w option
+$watch = 'w';
+$arguments = getopt("$watch::");
+
+// if -w option has been passed, watch deployment directory only
+if (array_key_exists($watch, $arguments)) {
+    $server->watch();
+} else {
+    $server->start();
+}
