@@ -46,7 +46,7 @@ ULIMIT_MAX_FILES=""
 # ||||||||||||||||||||   END CONFIGURATION SECTION  ||||||||||||||||||||
 
 LAUNCHCTL="/bin/launchctl"
-LAUNCHD_JOB="/Library/LaunchDaemons/io.appserver.appserver.plist"
+LAUNCHD_JOB="/Library/LaunchDaemons/io.appserver.watcher.plist"
 
 run_launchctl() {
     if [ $UID != 0 ]; then
