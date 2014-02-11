@@ -387,7 +387,7 @@
     <!-- Get PECL event source package by given version number		          -->
     <!-- ==================================================================== -->
     <target name="get-event-src" depends="check-event-src-present" unless="${event-src.present}" description="Get PECL event source package by given version number">
-        <get src="http://pecl.php.net/get/event-${appserver.event.version}.tgz" dest="${lib.dir}/ev-${appserver.event.version}.tgz"/>
+        <get src="http://pecl.php.net/get/event-${appserver.event.version}.tgz" dest="${lib.dir}/event-${appserver.event.version}.tgz"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -1241,6 +1241,12 @@
     		</fileset>
     		<globmapper from="*-${appserver.version}.phar" to="*.phar"/>
     	</copy>
+		<touch file="foo">
+    		<fileset dir="${appserver.compile.prefix}/deploy">
+    			<include name="*.phar"/>
+    		</fileset>
+			<globmapper from="*.phar" to="${appserver.compile.prefix}/deploy/*.phar.doeploy"/>
+	  	</touch>
 	</target>
 
     <!-- ==================================================================== -->
