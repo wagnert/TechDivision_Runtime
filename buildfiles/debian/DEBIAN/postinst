@@ -2,7 +2,9 @@
 
 chmod 755 -R /opt/appserver/bin
 chmod 755 /etc/init.d/appserver
+chmod 755 /etc/init.d/watcher
 
 /etc/init.d/appserver start
+/etc/init.d/watcher start
 
 exit 0

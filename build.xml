@@ -1245,7 +1245,7 @@
     		<fileset dir="${appserver.compile.prefix}/deploy">
     			<include name="*.phar"/>
     		</fileset>
-			<globmapper from="*.phar" to="${appserver.compile.prefix}/deploy/*.phar.doeploy"/>
+			<globmapper from="*.phar" to="${appserver.compile.prefix}/deploy/*.phar.dodeploy"/>
 	  	</touch>
 	</target>
 

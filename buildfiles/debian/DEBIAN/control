@@ -35,7 +35,8 @@ Depends: libc6,
   autoconf,
   git,
   redis-server,
-  memcached
+  memcached,
+  libldap2-dev
 Architecture: ${appserver.architecture}
 Version: ${appserver.version}
 Homepage: http://appserver.io
