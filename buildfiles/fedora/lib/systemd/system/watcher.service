@@ -1,0 +1,6 @@
+
+[Unit]
+Description=appserver watcher
+
+[Service]
+ExecStart=/opt/appserver/bin/watcher -D FOREGROUND
