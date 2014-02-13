@@ -36,8 +36,8 @@ ldconfig
 chmod -R 755 /opt/appserver
 
 # Make the link to our system systemd file
-ls -l /lib/systemd/system/appserver.service /etc/systemd/system/appserver.service
-ls -l /lib/systemd/system/watcher.service /etc/systemd/system/watcher.service
+ln -s /lib/systemd/system/appserver.service /etc/systemd/system/appserver.service
+ln -s /lib/systemd/system/watcher.service /etc/systemd/system/watcher.service
 
 # Reload the systemd daemon
 systemctl daemon-reload
