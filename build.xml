@@ -1535,7 +1535,7 @@
         </exec>
 		<!-- install the demo application -->
         <exec dir="${php-target.dir}/appserver" executable="${php-target.dir}/appserver/php/php">
-            <arg line="${php-target.dir}/appserver/bin/composer.phar create-project techdivision/techdivision_applicationserverproject ${php-target.dir}/appserver/webapps/demo dev-master"/>
+            <arg line="${php-target.dir}/appserver/bin/composer.phar create-project --keep-vcs techdivision/techdivision_applicationserverproject ${php-target.dir}/appserver/webapps/demo dev-master"/>
         </exec>
 		<!-- copy API/Admin + example phars -->
     	<copy todir="${php-target.dir}/appserver/deploy">
