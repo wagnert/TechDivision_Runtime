@@ -24,8 +24,22 @@ Provides:   appserver
 
 %files
 /opt/appserver/*
-/etc/init.d/*
+/lib/systemd/system/*
 
 %changelog
 
 %post
+# Reload shared library list
+ldconfig
+
+# Set needed files as executable
+chmod -R 755 /opt/appserver
+
+# Make the link to our system systemd file
+ls -l /lib/systemd/system/appserver.service /etc/systemd/system/appserver.service
+
+# Reload the systemd daemon
+systemctl daemon-reload
+
+# Start the appserver + watcher
+systemctl start appserver.service
