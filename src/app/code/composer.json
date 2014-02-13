@@ -17,13 +17,13 @@
         "techdivision/messagequeueclient": "dev-master",
         "techdivision/websocketcontainer": "dev-master",
         "techdivision/lemcachecontainer": "dev-master",
+        "techdivision/php-by-contract": "dev-master",
         "doctrine/orm": "*",
         "psr/log": "*",
         "symfony/symfony": "*",
         "herrera-io/annotations": "1.0.*",
         "cboden/Ratchet": "0.2.*",
-        "rhumsaa/uuid": "~2.4",
-        "techdivision/php-by-contract": "dev-master"
+        "rhumsaa/uuid": "~2.4"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
