@@ -1245,7 +1245,7 @@
     		<fileset dir="${appserver.compile.prefix}/deploy">
     			<include name="*.phar"/>
     		</fileset>
-			<globmapper from="*.phar" to="${appserver.compile.prefix}/deploy/*.phar.doeploy"/>
+			<globmapper from="*.phar" to="${appserver.compile.prefix}/deploy/*.phar.dodeploy"/>
 	  	</touch>
 	</target>
 
@@ -1533,6 +1533,10 @@
         <exec dir="${php-target.dir}/appserver/app/code" executable="${php-target.dir}/appserver/php/php">
             <arg line="${php-target.dir}/appserver/bin/composer.phar update"/>
         </exec>
+		<!-- install the demo application -->
+        <exec dir="${php-target.dir}/appserver" executable="${php-target.dir}/appserver/php/php">
+            <arg line="${php-target.dir}/appserver/bin/composer.phar create-project techdivision/techdivision_applicationserverproject ${php-target.dir}/appserver/webapps/demo dev-master"/>
+        </exec>
 		<!-- copy API/Admin + example phars -->
     	<copy todir="${php-target.dir}/appserver/deploy">
     		<fileset dir="${basedir}/webapps">
@@ -1540,6 +1544,13 @@
     		</fileset>
     		<globmapper from="*-${appserver.version}.phar" to="*.phar"/>
     	</copy>
+		<!-- create the .dodeploy files -->
+        <touch file="foo">
+            <fileset dir="${php-target.dir}/appserver/deploy">
+                <include name="*.phar"/>
+            </fileset>
+            <globmapper from="*.phar" to="${php-target.dir}/appserver/deploy/*.phar.dodeploy"/>
+        </touch>
 	</target>
 	
     <!-- ==================================================================== -->
