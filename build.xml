@@ -1198,9 +1198,9 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Install composer packages                                            -->
+    <!-- Install composer                                                     -->
     <!-- ==================================================================== -->
-    <target name="install-composer" depends="build-runtime" description="Install composer and ApplicationServer packages.">
+    <target name="install-composer" depends="build-runtime" description="Install composer.">
         <!-- download the composer installer -->
         <exec dir="${php-target.dir}" executable="curl">
             <arg line="-sS http://getcomposer.org/installer -o installer"/>
@@ -1216,7 +1216,7 @@
     <!-- ==================================================================== -->
 	<target name="install-sources" depends="install-composer" description="Install ApplicationServer packages.">
         <exec dir="${appserver.compile.prefix}/app/code" executable="${appserver.compile.prefix}/bin/php">
-            <arg line="${appserver.compile.prefix}/bin/composer.phar update"/>
+            <arg line="${appserver.compile.prefix}/bin/composer.phar --no-interaction update"/>
         </exec>
 	</target>
 
@@ -1225,7 +1225,7 @@
     <!-- ==================================================================== -->
     <target name="install-demo-project" depends="install-sources" description="Install the ApplicationServer demo project.">
         <exec dir="${appserver.compile.prefix}" executable="${appserver.compile.prefix}/bin/php">
-            <arg line="${appserver.compile.prefix}/bin/composer.phar create-project techdivision/techdivision_applicationserverproject ${appserver.compile.prefix}/webapps/demo dev-master"/>
+            <arg line="${appserver.compile.prefix}/bin/composer.phar --no-interaction create-project techdivision/techdivision_applicationserverproject ${appserver.compile.prefix}/webapps/demo dev-master"/>
         </exec>
     	<!-- we'll also deliver the default webapps -->
     	<antcall target="deploy-default-webapps" />
@@ -1531,11 +1531,11 @@
         </exec>
 		<!-- install appserver libraries with composer -->
         <exec dir="${php-target.dir}/appserver/app/code" executable="${php-target.dir}/appserver/php/php">
-            <arg line="${php-target.dir}/appserver/bin/composer.phar update"/>
+            <arg line="${php-target.dir}/appserver/bin/composer.phar --no-interaction update"/>
         </exec>
 		<!-- install the demo application -->
         <exec dir="${php-target.dir}/appserver" executable="${php-target.dir}/appserver/php/php">
-            <arg line="${php-target.dir}/appserver/bin/composer.phar create-project --keep-vcs techdivision/techdivision_applicationserverproject ${php-target.dir}/appserver/webapps/demo dev-master"/>
+            <arg line="${php-target.dir}/appserver/bin/composer.phar --no-interaction create-project --keep-vcs techdivision/techdivision_applicationserverproject ${php-target.dir}/appserver/webapps/demo dev-master"/>
         </exec>
 		<!-- copy API/Admin + example phars -->
     	<copy todir="${php-target.dir}/appserver/deploy">
