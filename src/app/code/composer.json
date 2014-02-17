@@ -16,6 +16,8 @@
         "techdivision/messagequeue": "dev-master",
         "techdivision/messagequeueclient": "dev-master",
         "techdivision/websocketcontainer": "dev-master",
+        "techdivision/lemcachecontainer": "dev-master",
+        "techdivision/php-by-contract": "dev-master",
         "doctrine/orm": "*",
         "psr/log": "*",
         "symfony/symfony": "*",

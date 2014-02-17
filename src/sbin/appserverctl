@@ -31,9 +31,6 @@ ARGV="$@"
 #
 # |||||||||||||||||||| START CONFIGURATION SECTION  ||||||||||||||||||||
 # --------------------                              --------------------
-# 
-# the path to your httpd binary, including options if necessary
-APPSERVERD='/opt/appserver/appserver'
 #
 # pick up any necessary environment variables
 if test -f /usr/sbin/envvars; then
@@ -85,8 +82,6 @@ restart|graceful)
     ERROR=$?
     ;;
 *)
-    $APPSERVERD $ARGV
-    ERROR=$?
 esac
 
 exit $ERROR

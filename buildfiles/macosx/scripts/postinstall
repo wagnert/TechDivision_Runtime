@@ -1,12 +1,13 @@
 #!/bin/sh
 
 chmod +x /opt/appserver/bin/composer
-chmod +x /opt/appserver/appserver
+chmod +x /opt/appserver/bin/appserver
+chmod +x /opt/appserver/bin/watcher
 
 chgrp -R staff /opt/appserver
 chmod -R 775 /opt/appserver
 
-/opt/appserver/sbin/memcachedctl start
 /opt/appserver/sbin/appserverctl start
+/opt/appserver/sbin/watcherctl start
 
 exit 0

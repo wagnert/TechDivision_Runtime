@@ -4,19 +4,20 @@
     <property environment="env" />
 
     <property name="lib.dir" value="${basedir}/lib" />
+    <property name="custom-lib.dir" value="${basedir}/custom-lib" />
     <property name="php-src.dir" value="${basedir}/src" />
     <property name="php-test.dir" value="${basedir}/tests" />
     <property name="php-target.dir" value="${basedir}/target"/>
 
-    <property file="${user.home}/build.properties"/>
     <property file="${basedir}/build.properties"/>
+    <property file="${user.home}/build.properties"/>
     <property file="${basedir}/build.default.properties"/>
     <property file="${basedir}/build.${os.family}.properties"/>
 
     <!-- ==================================================================== -->
     <!-- Cleans the directories with the generated source files				  -->
     <!-- ==================================================================== -->
-    <target name="clean" description="Cleans almost everything, so use carefully.">
+    <target name="clean" description="Cleans build directory in preparation for new build.">
         <delete dir="${php-target.dir}" includeemptydirs="true" quiet="false" verbose="true" failonerror="true"/>
     </target>
 
@@ -26,6 +27,7 @@
     <target name="prepare" depends="clean" description="Prepares all the required directories.">
         <mkdir dir="${php-target.dir}" />
         <mkdir dir="${lib.dir}" />
+        <mkdir dir="${custom-lib.dir}" />
     </target>
 
     <!-- ==================================================================== -->
@@ -228,6 +230,13 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Check if PECL event sources has been downloaded yet  		 	      -->
+    <!-- ==================================================================== -->
+    <target name="check-event-src-present" description="Check if PECL event sources has been downloaded yet.">
+        <available file="${lib.dir}/event-${appserver.event.version}.zip" property="event-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Check if PECL operator sources has been downloaded yet  		 	  -->
     <!-- ==================================================================== -->
     <target name="check-operator-src-present" description="Check if PECL operator sources has been downloaded yet.">
@@ -277,6 +286,13 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Check if readline sources has been downloaded yet   		 	      -->
+    <!-- ==================================================================== -->
+    <target name="check-readline-src-present" description="Check if readline sources has been downloaded yet.">
+        <available file="${lib.dir}/readline-${readline.version}.tar.gz" property="readline-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Check if libpng sources has been downloaded yet   		 	          -->
     <!-- ==================================================================== -->
     <target name="check-libpng-src-present" description="Check if libpng sources has been downloaded yet.">
@@ -309,6 +325,13 @@
     <!-- ==================================================================== -->
     <target name="check-redis-server-src-present" description="Check if the redis server source package has been downloaded yet.">
         <available file="${lib.dir}/redis-${redis.server.version}.zip" property="redis-server-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if openssl sources has been downloaded yet   		 	      -->
+    <!-- ==================================================================== -->
+    <target name="check-openssl-src-present" description="Check if openssl sources has been downloaded yet.">
+        <available file="${lib.dir}/openssl-${openssl.version}.tar.gz" property="openssl-src.present"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -356,8 +379,15 @@
     <!-- ==================================================================== -->
     <!-- Get PECL ev source package by given version number		              -->
     <!-- ==================================================================== -->
-    <target name="get-ev-src" depends="check-ev-src-present" unless="$ev-src.present}" description="Get PECL ev source package by given version number">
+    <target name="get-ev-src" depends="check-ev-src-present" unless="${ev-src.present}" description="Get PECL ev source package by given version number">
         <get src="http://pecl.php.net/get/ev-${appserver.ev.version}.tgz" dest="${lib.dir}/ev-${appserver.ev.version}.tgz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get PECL event source package by given version number		          -->
+    <!-- ==================================================================== -->
+    <target name="get-event-src" depends="check-event-src-present" unless="${event-src.present}" description="Get PECL event source package by given version number">
+        <get src="http://pecl.php.net/get/event-${appserver.event.version}.tgz" dest="${lib.dir}/event-${appserver.event.version}.tgz"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -431,6 +461,13 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Get readline source package by given version number		          -->
+    <!-- ==================================================================== -->
+    <target name="get-readline-src" depends="check-readline-src-present" unless="${readline-src.present}" description="Get readline source package by given version number.">
+        <get src="${readline.download.url}" dest="${lib.dir}/readline-${readline.version}.tar.gz"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Get libpng source package by given version number		          -->
     <!-- ==================================================================== -->
     <target name="get-libpng-src" depends="check-libpng-src-present" unless="${libpng-src.present}" description="Get libpng source package by given version number.">
@@ -477,6 +514,13 @@
     <!-- ==================================================================== -->
     <target name="get-pcre-src" depends="check-pcre-src-present" unless="${pcre-src.present}" description="Get pcre source package by given version number.">
         <get src="${pcre.download.url}" dest="${lib.dir}/pcre-${pcre.version}.tar.gz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get openssl source package by given version number		          -->
+    <!-- ==================================================================== -->
+    <target name="get-openssl-src" depends="check-openssl-src-present" unless="${openssl-src.present}" description="Get openssl source package by given version number.">
+        <get src="${openssl.download.url}" dest="${lib.dir}/openssl-${openssl.version}.tar.gz"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -541,6 +585,12 @@
         <move todir="${php-target.dir}/php-${appserver.php.version}/ext/libevent">
             <fileset dir="${php-target.dir}/libevent-${appserver.libevent.version}"/>
         </move>
+        <!-- prepare PECL redis sources for static compilation -->
+        <antcall target="get-redis-src"/>
+        <untar src="${lib.dir}/redis-${appserver.redis.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/redis">
+            <fileset dir="${php-target.dir}/redis-${appserver.redis.version}"/>
+        </move>
         <!-- prepare PECL libev sources for static compilation -->
         <!--
     	<antcall target="get-libev-src"/>
@@ -565,12 +615,14 @@
             <fileset dir="${php-target.dir}/xdebug-${appserver.xdebug.version}"/>
         </move>
         -->
-        <!-- prepare PECL redis sources for static compilation -->
-        <antcall target="get-redis-src"/>
-        <untar src="${lib.dir}/redis-${appserver.redis.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/redis">
-            <fileset dir="${php-target.dir}/redis-${appserver.redis.version}"/>
+        <!-- prepare PECL event sources for static compilation -->
+    	<!--
+    	<antcall target="get-event-src"/>
+        <unzip src="${lib.dir}/event-${appserver.event.version}.zip" dest="${php-target.dir}"/>
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/event">
+            <fileset dir="${php-target.dir}/event-${appserver.event.version}"/>
         </move>
+        -->
     </target>
 
     <!-- ==================================================================== -->
@@ -664,6 +716,25 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Prepares the readline sources for the runtime                       -->
+    <!-- ==================================================================== -->
+    <target name="build-readline" if="${readline.build}" description="Prepares the readline sources for the runtime.">
+    	<antcall target="get-readline-src"/>
+        <untar src="${lib.dir}/readline-${readline.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/readline-${readline.version}" executable="sh">
+            <env key="CC" value="${readline.cc}"/>
+            <arg value="configure"/>
+            <arg value="--prefix=${appserver.compile.prefix}"/>
+        </exec>
+    	<!-- BUGFIX: http://techdebug.com/blog/2009/01/03/compiling-readline-on-an-osx-105-intel-x86_64/ -->
+    	<replace file="${php-target.dir}/readline-${readline.version}/shlib/Makefile" token="-dynamic" value="-dynamiclib"/>
+        <exec dir="${php-target.dir}/readline-${readline.version}" executable="make"/>
+        <exec dir="${php-target.dir}/readline-${readline.version}" executable="make">
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Prepares the libevent sources for the runtime                -->
     <!-- ==================================================================== -->
     <target name="build-libevent" if="${libevent.build}" description="Prepares the libevent sources for the runtime.">
@@ -698,6 +769,41 @@
         <exec dir="${php-target.dir}/pcre-${pcre.version}" executable="make">
             <arg value="install"/>
         </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Prepares the openssl sources for the runtime                		  -->
+    <!-- ==================================================================== -->
+    <target name="build-openssl" if="${openssl.build}" description="Prepares the openssl sources for the runtime.">
+    	<antcall target="get-openssl-src"/>
+        <!--
+        <untar src="${lib.dir}/openssl-${openssl.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
+    	<move  todir="${php-target.dir}/openssl_x86_64">
+    		<fileset dir="${php-target.dir}/openssl-${openssl.version}" />
+    	</move>
+    	-->
+    	<copy file="${basedir}/scripts/build_openssl_dylib_x86_64.sh" todir="${php-target.dir}">
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+    	</copy>
+        <chmod perm="755" file="${php-target.dir}/build_openssl_dylib_x86_64.sh" />
+    	<exec dir="${php-target.dir}" executable="sh">
+    		<arg value="build_openssl_dylib_x86_64.sh" />
+    	</exec>
+    	
+    	<!--
+        <chmod perm="755" file="${php-target.dir}/openssl_x86_64/Configure" />
+    	<exec dir="${php-target.dir}/openssl_x86_64" executable="${php-target.dir}/openssl_x86_64/Configure">
+            <arg line="darwin64-x86_64-cc -shared -prefix=${openssl.compile.prefix}" />
+        </exec>
+        <exec dir="${php-target.dir}/openssl_x86_64" executable="make"/>
+        -->
+        <!--
+    	<exec dir="${php-target.dir}/openssl_x86_64" executable="make">
+            <arg value="install"/>
+        </exec>
+        -->
     </target>
 
     <!-- ==================================================================== -->
@@ -782,6 +888,7 @@
         <chmod perm="755" dir="${php-target.dir}/redis-${redis.server.version}" includes="**/*"/>
         <exec dir="${php-target.dir}/redis-${redis.server.version}" executable="make"/>
         <exec dir="${php-target.dir}/redis-${redis.server.version}" executable="make">
+            <arg value="PREFIX=${appserver.compile.prefix}"/>
             <arg value="install"/>
         </exec>
     </target>
@@ -814,7 +921,9 @@
         <antcall target="build-libfreetype"/>
         <antcall target="build-libmemcached"/>
         <antcall target="build-libmcrypt"/>
+        <antcall target="build-readline"/>
         <antcall target="build-libevent"/>
+        <antcall target="build-openssl"/>
         <antcall target="build-pcre"/>
         <antcall target="build-memcached-server"/>
         <antcall target="build-nginx-server"/>
@@ -840,20 +949,24 @@
     	<!-- configure, compile and install PHP binary -->
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="sh">
             <env key="CC" value="${appserver.cc}"/>
+            <env key="EXTRA_LIBS" value="-llber"/>
             <arg line="configure ${appserver.compile.configuration}"/>
         </exec>
-        <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make"/>
+        <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make">
+            <arg value="-j8"/>
+        </exec>
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make">
             <arg value="install"/>
         </exec>
 
-        <!-- build the PECL ev package as shared library -->
+        <!-- build the PECL package's as shared library -->
         <antcall target="pecl-build-pthreads"/>
         <antcall target="pecl-build-memcached"/>
         <antcall target="pecl-build-redis"/>
         <antcall target="pecl-build-appserver"/>
         <antcall target="pecl-build-apcu"/>
         <antcall target="pecl-build-ev"/>
+        <antcall target="pecl-build-event"/>
         <antcall target="pecl-build-xdebug"/>
 
     	<!-- copy runtime files from src directory -->
@@ -982,6 +1095,24 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Builds the PECL event as shared extension                            -->
+    <!-- ==================================================================== -->
+    <target name="pecl-build-event" description="Builds the PECL event as shared extension.">
+        <antcall target="get-event-src"/>
+        <untar src="${lib.dir}/event-${appserver.event.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/event-${appserver.event.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/event-${appserver.event.version}" executable="sh">
+            <arg value="configure"/>
+            <arg value="--with-php-config=${appserver.compile.prefix}/bin/php-config"/>
+        	<arg value="--with-event-libevent-dir=${appserver.compile.prefix}"/>
+        </exec>
+        <exec dir="${php-target.dir}/event-${appserver.event.version}" executable="make"/>
+        <exec dir="${php-target.dir}/event-${appserver.event.version}" executable="make">
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Builds the PECL ev as shared extension                               -->
     <!-- ==================================================================== -->
     <target name="pecl-build-ev" description="Builds the PECL ev as shared extension.">
@@ -1067,9 +1198,9 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Install composer packages                                            -->
+    <!-- Install composer                                                     -->
     <!-- ==================================================================== -->
-    <target name="install-composer" depends="build-runtime" description="Install composer and ApplicationServer packages.">
+    <target name="install-composer" depends="build-runtime" description="Install composer.">
         <!-- download the composer installer -->
         <exec dir="${php-target.dir}" executable="curl">
             <arg line="-sS http://getcomposer.org/installer -o installer"/>
@@ -1085,7 +1216,7 @@
     <!-- ==================================================================== -->
 	<target name="install-sources" depends="install-composer" description="Install ApplicationServer packages.">
         <exec dir="${appserver.compile.prefix}/app/code" executable="${appserver.compile.prefix}/bin/php">
-            <arg line="${appserver.compile.prefix}/bin/composer.phar update"/>
+            <arg line="${appserver.compile.prefix}/bin/composer.phar --no-interaction update"/>
         </exec>
 	</target>
 
@@ -1094,9 +1225,29 @@
     <!-- ==================================================================== -->
     <target name="install-demo-project" depends="install-sources" description="Install the ApplicationServer demo project.">
         <exec dir="${appserver.compile.prefix}" executable="${appserver.compile.prefix}/bin/php">
-            <arg line="${appserver.compile.prefix}/bin/composer.phar create-project techdivision/techdivision_applicationserverproject ${appserver.compile.prefix}/webapps/demo dev-master"/>
+            <arg line="${appserver.compile.prefix}/bin/composer.phar --no-interaction create-project techdivision/techdivision_applicationserverproject ${appserver.compile.prefix}/webapps/demo dev-master"/>
         </exec>
+    	<!-- we'll also deliver the default webapps -->
+    	<antcall target="deploy-default-webapps" />
     </target>
+
+    <!-- ==================================================================== -->
+    <!-- Deploys the ApplicationServer default webapps               		  -->
+    <!-- ==================================================================== -->
+	<target name="deploy-default-webapps" description="Deploys the ApplicationServer default webapps.">
+    	<copy todir="${appserver.compile.prefix}/deploy">
+    		<fileset dir="${basedir}/webapps">
+    			<include name="*-${appserver.version}.phar"/>
+    		</fileset>
+    		<globmapper from="*-${appserver.version}.phar" to="*.phar"/>
+    	</copy>
+		<touch file="foo">
+    		<fileset dir="${appserver.compile.prefix}/deploy">
+    			<include name="*.phar"/>
+    		</fileset>
+			<globmapper from="*.phar" to="${appserver.compile.prefix}/deploy/*.phar.dodeploy"/>
+	  	</touch>
+	</target>
 
     <!-- ==================================================================== -->
     <!-- Install the necessary libraries to build the DEBIAN runtime          -->
@@ -1127,7 +1278,13 @@
             <arg value="libpng12-dev"/>
             <arg value="libevent-dev"/>
             <arg value="libev-dev"/>
+        	<arg value="libldap2-dev"/>
         </exec>
+    	<!-- Bugfix for missing symlink -->
+    	<exec dir="/usr/lib" executable="ln">
+    		<arg value="-s"/>
+    		<arg value="x86_64-linux-gnu/libldap.so"/>
+    	</exec>
     </target>
 
     <!-- ==================================================================== -->
@@ -1157,6 +1314,8 @@
             <arg value="libevent-devel"/>
             <arg value="libev-devel"/>
             <arg value="gcc-c++"/>
+            <arg value="openldap-devel"/>
+            <arg value="rpm-build"/>
         </exec>
     </target>
 
@@ -1200,8 +1359,19 @@
     <target name="create-rpm" depends="install-demo-project" description="Creates a RPM package with the local ApplicationServer runtime.">
         <!-- copy build files to target directory -->
         <antcall target="move-build-to-target"/>
-        <!-- prepare the DEBIAN build system -->
+        <!-- prepare the FEDORA build system -->
         <antcall target="prepare-FEDORA-build-system"/>
+        <copy todir="${php-target.dir}/re">
+            <fileset dir="${basedir}/buildfiles/fedora">
+                <include name="**/*"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+        <exec dir="${php-target.dir}" executable="rpmbuild" failonerror="true">
+            <arg line="--buildroot ${php-target.dir}/re -bb ${php-target.dir}/re/rpmbuild/SPECS/appserver.spec"/>
+        </exec>
     </target>
 
     <!-- ==================================================================== -->
@@ -1247,6 +1417,163 @@
             <exec dir="${basedir}/../TechDivision_Socket" executable="ant"><arg value="deploy" /></exec>
             <exec dir="${basedir}/../TechDivision_Stream" executable="ant"><arg value="deploy" /></exec>
        </parallel>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Check if Windows PHP binaries has been downloaded yet   		 	  -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-php-binaries-present" description="Check if Windows PHP binaries has been downloaded yet.">
+        <available file="${lib.dir}/php-${appserver.php.version}-Win32-VC11-x86.zip" property="win-php-binaries.present"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Get Windows PHP binaries package by given version number		      -->
+    <!-- ==================================================================== -->
+    <target name="WIN-get-php-binaries" depends="WIN-check-php-binaries-present" unless="${win-php-binaries.present}" description="Get Windows PHP binaries package by given version number.">
+        <get src="${win.php.download.url}" dest="${lib.dir}/php-${appserver.php.version}-Win32-VC11-x86.zip"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Check if Windows apcu binaries has been downloaded yet   		 	  -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-apcu-binaries-present" description="Check if Windows apcu binaries has been downloaded yet.">
+        <available file="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc11-x86.zip" property="win-apcu-binaries.present"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Check if Windows event binaries has been downloaded yet   		 	  -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-event-binaries-present" description="Check if Windows event binaries has been downloaded yet.">
+        <available file="${lib.dir}/php_event-${appserver.event.version}-5.5-ts-vc11-x86.zip" property="win-event-binaries.present"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Get Windows apcu binaries package by given version number		      -->
+    <!-- ==================================================================== -->
+    <target name="WIN-get-apcu-binaries" depends="WIN-check-apcu-binaries-present" unless="${win-apcu-binaries.present}" description="Get Windows apcu binaries package by given version number.">
+        <get src="${win.apcu.download.url}" dest="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc11-x86.zip"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Check if Windows pthreads binaries has been downloaded yet   		  -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-pthreads-binaries-present" description="Check if Windows pthreads binaries has been downloaded yet.">
+        <available file="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip" property="win-pthreads-binaries.present"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Get Windows pthreads binaries package by given version number		  -->
+    <!-- ==================================================================== -->
+    <target name="WIN-get-pthreads-binaries" depends="WIN-check-pthreads-binaries-present" unless="${win-pthreads-binaries.present}" description="Get Windows pthreads binaries package by given version number.">
+        <get src="${win.pthreads.download.url}" dest="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Get Windows event binaries package by given version number		      -->
+    <!-- ==================================================================== -->
+    <target name="WIN-get-event-binaries" depends="WIN-check-event-binaries-present" unless="${win-event-binaries.present}" description="Get Windows event binaries package by given version number.">
+        <get src="${win.event.download.url}" dest="${lib.dir}/php_event-${appserver.event.version}-5.5-ts-vc11-x86.zip"/>
+    </target>
+	
+    <!-- ==================================================================== -->
+    <!-- Prepares the PHP/PECL Windows binaries 							  -->
+    <!-- ==================================================================== -->
+	<target name="WIN-prepare-binaries" depends="prepare" description="Prepares the PHP/PECL Windows binaries.">
+		<!-- download the PHP/PECL binaries if not already available -->
+		<antcall target="WIN-get-php-binaries"/>
+        <antcall target="WIN-get-apcu-binaries"/>
+        <antcall target="WIN-get-pthreads-binaries"/>
+        <antcall target="WIN-get-event-binaries"/>
+		<!-- extract the PHP/PECL binaries into the target folder -->
+        <unzip src="${lib.dir}/php-${appserver.php.version}-Win32-VC11-x86.zip" dest="${php-target.dir}/appserver/php"/>
+        <unzip src="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/apcu"/>
+        <unzip src="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/pthreads"/>
+        <unzip src="${lib.dir}/php_event-${appserver.event.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/event"/>
+		<!-- copy the DLL's to the PHP ext directory -->
+		<copy file="${php-target.dir}/apcu/php_apcu.dll" todir="${php-target.dir}/appserver/php/ext"/>
+		<copy file="${php-target.dir}/pthreads/php_pthreads.dll" todir="${php-target.dir}/appserver/php/ext"/>
+		<copy file="${php-target.dir}/pthreads/pthreadVC2.dll" todir="${php-target.dir}/appserver/php"/>
+		<copy file="${php-target.dir}/event/php_event.dll" todir="${php-target.dir}/appserver/php/ext"/>
+		<!-- copy the appserver DLL to the PHP ext directory -->
+		<copy file="${custom-lib.dir}/php_appserver-${appserver.ext-appserver.version}.dll" tofile="${php-target.dir}/appserver/php/ext/php_appserver.dll"/>
+		<!-- copy runtime sources to target directory -->
+        <copy todir="${php-target.dir}/appserver" preservelastmodified="true" overwrite="true">
+            <fileset dir="${php-src.dir}">
+                <include name="**/*" />
+                <exclude name="etc/**/*"/>
+            </fileset>
+        </copy>
+        <copy todir="${php-target.dir}/appserver" preservelastmodified="true" overwrite="true">
+            <fileset dir="${php-src.dir}">
+                <include name="etc/**/*"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+		<!-- copy windows related files to the target directory -->
+        <copy todir="${php-target.dir}">
+            <fileset dir="${basedir}/buildfiles/win">
+                <include name="**/*"/>
+            	<exclude name="appserver-izpack.xml"/>
+            </fileset>
+        </copy>
+		<!-- copy IzPack configuration file to the target directory -->
+        <copy todir="${php-target.dir}" file="${basedir}/buildfiles/win/appserver-izpack.xml">
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+		<!-- download and install composer -->
+		<get src="${win.composer.download.url}" dest="${php-target.dir}/installer"/>
+        <exec dir="${php-target.dir}" executable="${php-target.dir}/appserver/php/php">
+            <arg line="installer -- --install-dir ${php-target.dir}/appserver/bin"/>
+        </exec>
+		<!-- install appserver libraries with composer -->
+        <exec dir="${php-target.dir}/appserver/app/code" executable="${php-target.dir}/appserver/php/php">
+            <arg line="${php-target.dir}/appserver/bin/composer.phar --no-interaction update"/>
+        </exec>
+		<!-- install the demo application -->
+        <exec dir="${php-target.dir}/appserver" executable="${php-target.dir}/appserver/php/php">
+            <arg line="${php-target.dir}/appserver/bin/composer.phar --no-interaction create-project --keep-vcs techdivision/techdivision_applicationserverproject ${php-target.dir}/appserver/webapps/demo dev-master"/>
+        </exec>
+		<!-- copy API/Admin + example phars -->
+    	<copy todir="${php-target.dir}/appserver/deploy">
+    		<fileset dir="${basedir}/webapps">
+    			<include name="*-${appserver.version}.phar"/>
+    		</fileset>
+    		<globmapper from="*-${appserver.version}.phar" to="*.phar"/>
+    	</copy>
+		<!-- create the .dodeploy files -->
+        <touch file="foo">
+            <fileset dir="${php-target.dir}/appserver/deploy">
+                <include name="*.phar"/>
+            </fileset>
+            <globmapper from="*.phar" to="${php-target.dir}/appserver/deploy/*.phar.dodeploy"/>
+        </touch>
+	</target>
+	
+    <!-- ==================================================================== -->
+    <!-- Creates the IzPack installer JAR file 					      		  -->
+    <!-- ==================================================================== -->
+	<target name="WIN-create-jar" description="Creates the IzPack installer JAR file.">
+		<!-- prepare the PHP/PECL binaries + appserver sources -->
+		<antcall target="WIN-prepare-binaries"/>
+		<!-- extend the classpath with the IzPack JAR's -->
+		<path id="build.classpath">
+	        <fileset dir="${izpack.installation.dir}">
+	            <include name="lib/*.jar" />
+	        </fileset>
+	    </path>
+		<!-- declare the IzPack task -->
+	    <taskdef name="izpack" classpathref="build.classpath" classname="com.izforge.izpack.ant.IzPackTask" />
+		<!-- create the IzPack installer JAR file -->
+        <izpack input="${php-target.dir}\appserver-izpack.xml"
+                output="${php-target.dir}\appserver-${appserver.version}.jar"
+                installerType="standard"
+                inheritAll="true"
+                basedir="${php-target.dir}"
+                izPackDir=" ${izpack.installation.dir}" />
     </target>
     
 </project>
