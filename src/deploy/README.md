@@ -28,8 +28,7 @@ The relevant marker file types are:
 
 | Marker       | Description                                                     |
 |--------------|-----------------------------------------------------------------|
-| .dodeploy    | Placed by the user to indicate that the given content should be 
-                 deployed or redeployed into the runtime.
+| .dodeploy    | Placed by the user to indicate that the given content should be deployed or redeployed into the runtime.                     |
 | .deploying   | Placed by the deployment scanner service to indicate that it has noticed a .dodeploy file and is in the process of deploying the content. This marker file will be deleted when the deployment process completes.                                   |
 | .deployed    | Placed by the deployment scanner service to indicate that the given content has been deployed into the runtime. If an end user deletes this file and no other marker is available, the content will be undeployed.                                     |
 | .failed      | Placed by the deployment scanner service to indicate that the given content failed to deploy into the runtime. The content of the file will include some information about the cause of the failure. Note that, removing this file will make the deployment eligible for deployment again.                       |
