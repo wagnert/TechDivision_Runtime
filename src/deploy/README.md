@@ -27,7 +27,7 @@ example.phar.dodeploy. Different marker file suffixes have different meanings.
 The relevant marker file types are:
 
 | Marker       | Description                                                     |
-|--------------|-----------------------------------------------------------------|
+|:-------------|:----------------------------------------------------------------|
 | .dodeploy    | Placed by the user to indicate that the given content should be deployed or redeployed into the runtime.                     |
 | .deploying   | Placed by the deployment scanner service to indicate that it has noticed a .dodeploy file and is in the process of deploying the content. This marker file will be deleted when the deployment process completes.                                   |
 | .deployed    | Placed by the deployment scanner service to indicate that the given content has been deployed into the runtime. If an end user deletes this file and no other marker is available, the content will be undeployed.                                     |
