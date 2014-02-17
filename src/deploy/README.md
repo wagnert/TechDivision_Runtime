@@ -39,7 +39,7 @@ The relevant marker file types are:
 
 All examples assume variable $AS points to the root of the appserver.io AS distribution.
 
-Windows users: the examples below use UNIX shell commands; see the ([Windows Notes](#windows-notes)) below.
+Windows users: the examples below use UNIX shell commands; see the [Windows Notes](#windows-notes) below.
 
 1. Add new zipped (.phar) content and deploy it:
 
