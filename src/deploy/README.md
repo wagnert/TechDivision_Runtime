@@ -66,7 +66,7 @@ $ mv $AS/deploy/example.phar.deployed $AS/deploy/example.phar.dodeploy
 The above examples use UNIX shell commands. Windows equivalents are:
 
 | UNIX           | Windows                 |
-|----------------|-------------------------|
+|:---------------|:------------------------|
 | cp src dest    | xcopy /y src dest       |
 | cp -r src dest | xcopy /e /s /y src dest |
 | rm afile       | del afile               |
