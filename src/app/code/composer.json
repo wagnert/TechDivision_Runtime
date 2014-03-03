@@ -4,18 +4,35 @@
     "description": "Runtime environment for thread based PHP daemon to implement stuff like message queues.",
     "homepage": "https://github.com/techdivision/TechDivision_Runtime",
     "license": ["OSL-3.0"],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/techdivision/TechDivision_WebServerContainer"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/techdivision/TechDivision_WebServer"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/techdivision/TechDivision_Http"
+        }
+    ],
     "require": {
         "php" : ">=5.4.0",
         "monolog/monolog": "*",
         "techdivision/socket": "dev-master",
         "techdivision/stream": "dev-master",
         "techdivision/appserver": "dev-master",
+        "techdivision/webserver": "dev-master",
+        "techdivision/http": "dev-master",
         "techdivision/servletcontainer": "dev-master",
         "techdivision/persistencecontainer": "dev-master",
         "techdivision/persistencecontainerclient": "dev-master",
         "techdivision/messagequeue": "dev-master",
         "techdivision/messagequeueclient": "dev-master",
         "techdivision/websocketcontainer": "dev-master",
+        "techdivision/webservercontainer": "dev-master",
         "techdivision/lemcachecontainer": "dev-master",
         "techdivision/php-by-contract": "dev-master",
         "doctrine/orm": "*",
