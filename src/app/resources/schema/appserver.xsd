@@ -73,10 +73,8 @@
     <!-- TODO: complete these definitions -->
     <xs:element name="connectionHandlers">
     </xs:element>
-
     <xs:element name="modules">
     </xs:element>
-
     <xs:element name="fileHandlers">
     </xs:element>
 
