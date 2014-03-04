@@ -172,9 +172,9 @@
 
         <container
             name="webserver"
-            threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\WebServerContainer\Container">
+            threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\WebContainer\Container">
             <description><![CDATA[This is an example of a webserver container that handles http requests in common way]]></description>
-            <deployment type="TechDivision\WebServerContainer\Deployment" />
+            <deployment type="TechDivision\WebContainer\Deployment" />
             <servers>
                 <server
                     type="\TechDivision\WebServer\Servers\MultiThreadedServer"
