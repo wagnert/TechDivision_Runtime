@@ -591,38 +591,6 @@
         <move todir="${php-target.dir}/php-${appserver.php.version}/ext/redis">
             <fileset dir="${php-target.dir}/redis-${appserver.redis.version}"/>
         </move>
-        <!-- prepare PECL libev sources for static compilation -->
-        <!--
-    	<antcall target="get-libev-src"/>
-        <unzip src="${lib.dir}/libev-${appserver.libev.version}.zip" dest="${php-target.dir}"/>
-        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/libev">
-            <fileset dir="${php-target.dir}/php-libev-${appserver.libev.version}"/>
-        </move>
-        -->
-        <!-- prepare PECL ev sources for static compilation -->
-        <!--
-    	<antcall target="get-ev-src"/>
-        <untar src="${lib.dir}/ev-${appserver.ev.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/ev">
-            <fileset dir="${php-target.dir}/ev-${appserver.ev.version}"/>
-        </move>
-        -->
-        <!-- prepare PECL xdebug sources for static compilation -->
-        <!--
-        <antcall target="get-xdebug-src"/>
-        <untar src="${lib.dir}/xdebug-${appserver.xdebug.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
-        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/xdebug">
-            <fileset dir="${php-target.dir}/xdebug-${appserver.xdebug.version}"/>
-        </move>
-        -->
-        <!-- prepare PECL event sources for static compilation -->
-    	<!--
-    	<antcall target="get-event-src"/>
-        <unzip src="${lib.dir}/event-${appserver.event.version}.zip" dest="${php-target.dir}"/>
-        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/event">
-            <fileset dir="${php-target.dir}/event-${appserver.event.version}"/>
-        </move>
-        -->
     </target>
 
     <!-- ==================================================================== -->
@@ -776,12 +744,7 @@
     <!-- ==================================================================== -->
     <target name="build-openssl" if="${openssl.build}" description="Prepares the openssl sources for the runtime.">
     	<antcall target="get-openssl-src"/>
-        <!--
-        <untar src="${lib.dir}/openssl-${openssl.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
-    	<move  todir="${php-target.dir}/openssl_x86_64">
-    		<fileset dir="${php-target.dir}/openssl-${openssl.version}" />
-    	</move>
-    	-->
+
     	<copy file="${basedir}/scripts/build_openssl_dylib_x86_64.sh" todir="${php-target.dir}">
             <filterchain>
                 <expandproperties/>
@@ -792,18 +755,6 @@
     		<arg value="build_openssl_dylib_x86_64.sh" />
     	</exec>
     	
-    	<!--
-        <chmod perm="755" file="${php-target.dir}/openssl_x86_64/Configure" />
-    	<exec dir="${php-target.dir}/openssl_x86_64" executable="${php-target.dir}/openssl_x86_64/Configure">
-            <arg line="darwin64-x86_64-cc -shared -prefix=${openssl.compile.prefix}" />
-        </exec>
-        <exec dir="${php-target.dir}/openssl_x86_64" executable="make"/>
-        -->
-        <!--
-    	<exec dir="${php-target.dir}/openssl_x86_64" executable="make">
-            <arg value="install"/>
-        </exec>
-        -->
     </target>
 
     <!-- ==================================================================== -->
@@ -929,10 +880,10 @@
         <antcall target="build-nginx-server"/>
         <antcall target="build-httpd-server"/>
         <antcall target="build-redis-server"/>
-    	
+
     	<!-- prepare the PECL extensions -->
         <antcall target="prepare-pecl-extension"/>
-    	
+
         <!-- compile the PHP sources and PECL extensions static -->
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="make">
             <arg value="clean"/>
@@ -942,10 +893,10 @@
             <arg value="buildconf"/>
             <arg line="--force"/>
         </exec>
-    	
+
     	<!-- log PHP compile configuration -->
     	<echo message="Now compiling PHP using configure params: ${appserver.compile.configuration}"/>
-    	
+
     	<!-- configure, compile and install PHP binary -->
         <exec dir="${php-target.dir}/php-${appserver.php.version}" executable="sh">
             <env key="CC" value="${appserver.cc}"/>
@@ -1363,8 +1314,8 @@
     <target name="move-build-to-target" description="Copies build files to target directory.">
         <mkdir dir="${php-target.dir}/re/opt" />
     	<exec dir="${php-target.dir}" executable="mv">
-    		<arg value="${appserver.compile.prefix}"/> 
-    		<arg value="${php-target.dir}/re/opt"/>	
+    		<arg value="${appserver.compile.prefix}"/>
+    		<arg value="${php-target.dir}/re/opt"/>
     	</exec>
     </target>
 
@@ -1456,63 +1407,63 @@
             <exec dir="${basedir}/../TechDivision_Stream" executable="ant"><arg value="deploy" /></exec>
        </parallel>
     </target>
-	
+
     <!-- ==================================================================== -->
     <!-- Check if Windows PHP binaries has been downloaded yet   		 	  -->
     <!-- ==================================================================== -->
     <target name="WIN-check-php-binaries-present" description="Check if Windows PHP binaries has been downloaded yet.">
         <available file="${lib.dir}/php-${appserver.php.version}-Win32-VC11-x86.zip" property="win-php-binaries.present"/>
     </target>
-	
+
     <!-- ==================================================================== -->
     <!-- Get Windows PHP binaries package by given version number		      -->
     <!-- ==================================================================== -->
     <target name="WIN-get-php-binaries" depends="WIN-check-php-binaries-present" unless="${win-php-binaries.present}" description="Get Windows PHP binaries package by given version number.">
         <get src="${win.php.download.url}" dest="${lib.dir}/php-${appserver.php.version}-Win32-VC11-x86.zip"/>
     </target>
-	
+
     <!-- ==================================================================== -->
     <!-- Check if Windows apcu binaries has been downloaded yet   		 	  -->
     <!-- ==================================================================== -->
     <target name="WIN-check-apcu-binaries-present" description="Check if Windows apcu binaries has been downloaded yet.">
         <available file="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc11-x86.zip" property="win-apcu-binaries.present"/>
     </target>
-	
+
     <!-- ==================================================================== -->
     <!-- Check if Windows event binaries has been downloaded yet   		 	  -->
     <!-- ==================================================================== -->
     <target name="WIN-check-event-binaries-present" description="Check if Windows event binaries has been downloaded yet.">
         <available file="${lib.dir}/php_event-${appserver.event.version}-5.5-ts-vc11-x86.zip" property="win-event-binaries.present"/>
     </target>
-	
+
     <!-- ==================================================================== -->
     <!-- Get Windows apcu binaries package by given version number		      -->
     <!-- ==================================================================== -->
     <target name="WIN-get-apcu-binaries" depends="WIN-check-apcu-binaries-present" unless="${win-apcu-binaries.present}" description="Get Windows apcu binaries package by given version number.">
         <get src="${win.apcu.download.url}" dest="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc11-x86.zip"/>
     </target>
-	
+
     <!-- ==================================================================== -->
     <!-- Check if Windows pthreads binaries has been downloaded yet   		  -->
     <!-- ==================================================================== -->
     <target name="WIN-check-pthreads-binaries-present" description="Check if Windows pthreads binaries has been downloaded yet.">
         <available file="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip" property="win-pthreads-binaries.present"/>
     </target>
-	
+
     <!-- ==================================================================== -->
     <!-- Get Windows pthreads binaries package by given version number		  -->
     <!-- ==================================================================== -->
     <target name="WIN-get-pthreads-binaries" depends="WIN-check-pthreads-binaries-present" unless="${win-pthreads-binaries.present}" description="Get Windows pthreads binaries package by given version number.">
         <get src="${win.pthreads.download.url}" dest="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip"/>
     </target>
-	
+
     <!-- ==================================================================== -->
     <!-- Get Windows event binaries package by given version number		      -->
     <!-- ==================================================================== -->
     <target name="WIN-get-event-binaries" depends="WIN-check-event-binaries-present" unless="${win-event-binaries.present}" description="Get Windows event binaries package by given version number.">
         <get src="${win.event.download.url}" dest="${lib.dir}/php_event-${appserver.event.version}-5.5-ts-vc11-x86.zip"/>
     </target>
-	
+
     <!-- ==================================================================== -->
     <!-- Prepares the PHP/PECL Windows binaries 							  -->
     <!-- ==================================================================== -->
@@ -1590,7 +1541,7 @@
             <globmapper from="*.phar" to="${php-target.dir}/appserver/deploy/*.phar.dodeploy"/>
         </touch>
 	</target>
-	
+
     <!-- ==================================================================== -->
     <!-- Creates the IzPack installer JAR file 					      		  -->
     <!-- ==================================================================== -->
@@ -1613,5 +1564,5 @@
                 basedir="${php-target.dir}"
                 izPackDir=" ${izpack.installation.dir}" />
     </target>
-    
+
 </project>
