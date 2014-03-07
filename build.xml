@@ -867,6 +867,9 @@
         <!-- delete the application server directory -->
         <delete dir="${appserver.compile.prefix}" includeemptydirs="true" quiet="false" verbose="true" failonerror="true"/>
 
+        <!-- prepare the distribution build system -->
+        <antcall target="prepare-${os.distribution}-build-system"/>
+
         <!-- build the necessary libraries -->
     	<antcall target="build-libjpeg"/>
         <antcall target="build-libpng"/>
@@ -1204,7 +1207,7 @@
     <!-- ==================================================================== -->
     <!-- Install the necessary libraries to build the debian runtime          -->
     <!-- ==================================================================== -->
-    <target name="prepare-debian-build-system" depends="prepare" description="Install the necessary libraries to build the debian runtime.">
+    <target name="prepare-debian-build-system" if="${prepare.distribution.build}" depends="prepare" description="Install the necessary libraries to build the debian runtime.">
 	<exec dir="${php-target.dir}" executable="apt-get" inputstring="Y">
             <arg value="install"/>
             <arg value="ant"/>
@@ -1242,7 +1245,7 @@
     <!-- ==================================================================== -->
     <!-- Install the necessary libraries to build the raspbian runtime          -->
     <!-- ==================================================================== -->
-    <target name="prepare-raspbian-build-system" depends="prepare" description="Install the necessary libraries to build the raspbian runtime.">
+    <target name="prepare-raspbian-build-system" if="${prepare.distribution.build}" depends="prepare" description="Install the necessary libraries to build the raspbian runtime.">
 
         <!-- we got identical dependencies, the missing symlink bugfix is properties driven -->
         <antcall target="prepare-debian-build-system"/>
@@ -1252,7 +1255,7 @@
     <!-- ==================================================================== -->
     <!-- Install the necessary libraries to build the fedora runtime          -->
     <!-- ==================================================================== -->
-    <target name="prepare-fedora-build-system" depends="prepare" description="Install the necessary libraries to build the fedora runtime.">
+    <target name="prepare-fedora-build-system" if="${prepare.distribution.build}" depends="prepare" description="Install the necessary libraries to build the fedora runtime.">
         <exec dir="${php-target.dir}" executable="yum" inputstring="Y">
             <arg value="install"/>
             <arg value="ant"/>
@@ -1298,8 +1301,7 @@
     <target name="create-deb" depends="install-demo-project" description="Creates a DEB package with the local ApplicationServer runtime.">
         <!-- copy build files to target directory -->
         <antcall target="move-build-to-target"/>
-        <!-- prepare the distribution build system -->
-        <antcall target="prepare-${os.distribution}-build-system"/>
+
         <!-- copy init scripts to required directory -->
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/debian">
@@ -1321,8 +1323,7 @@
     <target name="create-rpm" depends="install-demo-project" description="Creates a RPM package with the local ApplicationServer runtime.">
         <!-- copy build files to target directory -->
         <antcall target="move-build-to-target"/>
-        <!-- prepare the RPM build system -->
-        <antcall target="prepare-${os.distribution}-build-system"/>
+
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/fedora">
                 <include name="**/*"/>
