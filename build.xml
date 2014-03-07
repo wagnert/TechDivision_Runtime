@@ -1309,7 +1309,7 @@
                 <expandproperties/>
             </filterchain>
         </copy>
-        <chmod perm="755" file="${php-target.dir}/re/${os.distribution}/postinst" />
+        <chmod perm="755" file="${php-target.dir}/re/DEBIAN/postinst" />
         <exec dir="${php-target.dir}" executable="dpkg-deb">
             <arg line="--build ${php-target.dir}/re appserver_${appserver.version}_${appserver.architecture}.deb"/>
         </exec>
@@ -1321,7 +1321,7 @@
     <target name="create-rpm" depends="install-demo-project" description="Creates a RPM package with the local ApplicationServer runtime.">
         <!-- copy build files to target directory -->
         <antcall target="move-build-to-target"/>
-        <!-- prepare the FEDORA build system -->
+        <!-- prepare the RPM build system -->
         <antcall target="prepare-${os.distribution}-build-system"/>
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/fedora">
