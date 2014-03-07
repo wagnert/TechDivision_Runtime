@@ -1252,7 +1252,7 @@
     <!-- ==================================================================== -->
     <!-- Install the necessary libraries to build the DEBIAN runtime          -->
     <!-- ==================================================================== -->
-    <target name="prepare-DEBIAN-build-system" description="Install the necessary libraries to build the DEBIAN runtime.">
+    <target name="prepare-DEBIAN-build-system" depends="prepare" description="Install the necessary libraries to build the DEBIAN runtime.">
 	<exec dir="${php-target.dir}" executable="apt-get" inputstring="Y">
             <arg value="install"/>
             <arg value="ant"/>
@@ -1288,9 +1288,47 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Install the necessary libraries to build the DEBIAN runtime          -->
+    <!-- ==================================================================== -->
+    <target name="prepare-PI-build-system" depends="prepare" description="Install the necessary libraries to build the DEBIAN runtime.">
+	<exec dir="${php-target.dir}" executable="apt-get" inputstring="Y">
+            <arg value="install"/>
+            <arg value="ant"/>
+            <arg value="autoconf"/>
+		    <arg value="make"/>
+            <arg value="curl"/>
+            <arg value="bison"/>
+            <arg value="libxml2-dev"/>
+            <arg value="libssl-dev"/>
+            <arg value="pkg-config"/>
+            <arg value="libbz2-dev"/>
+            <arg value="libjpeg8-dev"/>
+            <arg value="libpng-dev"/>
+            <arg value="libfreetype6-dev"/>
+            <arg value="libmcrypt-dev"/>
+            <arg value="libmemcached-dev"/>
+            <arg value="git-core"/>
+            <arg value="libxpm-dev"/>
+            <arg value="libc-client2007e-dev"/>
+            <arg value="libpcre3-dev"/>
+            <arg value="libpng12-dev"/>
+            <arg value="libcurl4-openssl-dev"/>
+            <arg value="libpng12-dev"/>
+            <arg value="libevent-dev"/>
+            <arg value="libev-dev"/>
+        	<arg value="libldap2-dev"/>
+        </exec>
+    	<!-- Bugfix for missing symlink -->
+    	<exec dir="/usr/lib" executable="ln">
+    		<arg value="-s"/>
+    		<arg value="arm-linux-gnueabihf/libldap.so"/>
+    	</exec>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Install the necessary libraries to build the FEDORA runtime          -->
     <!-- ==================================================================== -->
-    <target name="prepare-FEDORA-build-system" description="Install the necessary libraries to build the FEDORA runtime.">
+    <target name="prepare-FEDORA-build-system" depends="prepare" description="Install the necessary libraries to build the FEDORA runtime.">
         <exec dir="${php-target.dir}" executable="yum" inputstring="Y">
             <arg value="install"/>
             <arg value="ant"/>
