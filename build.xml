@@ -13,6 +13,7 @@
     <property file="${user.home}/build.properties"/>
     <property file="${basedir}/build.default.properties"/>
     <property file="${basedir}/build.${os.family}.properties"/>
+    <property file="${basedir}/build.${os.family}.${os.distribution}.properties"/>
 
     <!-- ==================================================================== -->
     <!-- Cleans the directories with the generated source files				  -->
@@ -745,16 +746,16 @@
     <target name="build-openssl" if="${openssl.build}" description="Prepares the openssl sources for the runtime.">
     	<antcall target="get-openssl-src"/>
 
-    	<copy file="${basedir}/scripts/build_openssl_dylib_x86_64.sh" todir="${php-target.dir}">
+    	<copy file="${basedir}/scripts/build_openssl_dylib_${os.architecture}.sh" todir="${php-target.dir}">
             <filterchain>
                 <expandproperties/>
             </filterchain>
     	</copy>
-        <chmod perm="755" file="${php-target.dir}/build_openssl_dylib_x86_64.sh" />
+        <chmod perm="755" file="${php-target.dir}/build_openssl_dylib_${os.architecture}.sh" />
     	<exec dir="${php-target.dir}" executable="sh">
-    		<arg value="build_openssl_dylib_x86_64.sh" />
+    		<arg value="build_openssl_dylib_${os.architecture}.sh" />
     	</exec>
-    	
+
     </target>
 
     <!-- ==================================================================== -->
@@ -1201,9 +1202,9 @@
 	</target>
 
     <!-- ==================================================================== -->
-    <!-- Install the necessary libraries to build the DEBIAN runtime          -->
+    <!-- Install the necessary libraries to build the debian runtime          -->
     <!-- ==================================================================== -->
-    <target name="prepare-DEBIAN-build-system" depends="prepare" description="Install the necessary libraries to build the DEBIAN runtime.">
+    <target name="prepare-debian-build-system" depends="prepare" description="Install the necessary libraries to build the debian runtime.">
 	<exec dir="${php-target.dir}" executable="apt-get" inputstring="Y">
             <arg value="install"/>
             <arg value="ant"/>
@@ -1234,52 +1235,24 @@
     	<!-- Bugfix for missing symlink -->
     	<exec dir="/usr/lib" executable="ln">
     		<arg value="-s"/>
-    		<arg value="x86_64-linux-gnu/libldap.so"/>
+    		<arg value="${libldap.dir}/libldap.so"/>
     	</exec>
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Install the necessary libraries to build the DEBIAN runtime          -->
+    <!-- Install the necessary libraries to build the raspbian runtime          -->
     <!-- ==================================================================== -->
-    <target name="prepare-PI-build-system" depends="prepare" description="Install the necessary libraries to build the DEBIAN runtime.">
-	<exec dir="${php-target.dir}" executable="apt-get" inputstring="Y">
-            <arg value="install"/>
-            <arg value="ant"/>
-            <arg value="autoconf"/>
-		    <arg value="make"/>
-            <arg value="curl"/>
-            <arg value="bison"/>
-            <arg value="libxml2-dev"/>
-            <arg value="libssl-dev"/>
-            <arg value="pkg-config"/>
-            <arg value="libbz2-dev"/>
-            <arg value="libjpeg8-dev"/>
-            <arg value="libpng-dev"/>
-            <arg value="libfreetype6-dev"/>
-            <arg value="libmcrypt-dev"/>
-            <arg value="libmemcached-dev"/>
-            <arg value="git-core"/>
-            <arg value="libxpm-dev"/>
-            <arg value="libc-client2007e-dev"/>
-            <arg value="libpcre3-dev"/>
-            <arg value="libpng12-dev"/>
-            <arg value="libcurl4-openssl-dev"/>
-            <arg value="libpng12-dev"/>
-            <arg value="libevent-dev"/>
-            <arg value="libev-dev"/>
-        	<arg value="libldap2-dev"/>
-        </exec>
-    	<!-- Bugfix for missing symlink -->
-    	<exec dir="/usr/lib" executable="ln">
-    		<arg value="-s"/>
-    		<arg value="arm-linux-gnueabihf/libldap.so"/>
-    	</exec>
+    <target name="prepare-raspbian-build-system" depends="prepare" description="Install the necessary libraries to build the raspbian runtime.">
+
+        <!-- we got identical dependencies, the missing symlink bugfix is properties driven -->
+        <antcall target="prepare-debian-build-system"/>
+
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Install the necessary libraries to build the FEDORA runtime          -->
+    <!-- Install the necessary libraries to build the fedora runtime          -->
     <!-- ==================================================================== -->
-    <target name="prepare-FEDORA-build-system" depends="prepare" description="Install the necessary libraries to build the FEDORA runtime.">
+    <target name="prepare-fedora-build-system" depends="prepare" description="Install the necessary libraries to build the fedora runtime.">
         <exec dir="${php-target.dir}" executable="yum" inputstring="Y">
             <arg value="install"/>
             <arg value="ant"/>
@@ -1320,13 +1293,13 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Creates a DEBIAN package with the local ApplicationServer runtime    -->
+    <!-- Creates a DEB package with the local ApplicationServer runtime    -->
     <!-- ==================================================================== -->
-    <target name="create-deb" depends="install-demo-project" description="Creates a DEBIAN package with the local ApplicationServer runtime.">
+    <target name="create-deb" depends="install-demo-project" description="Creates a DEB package with the local ApplicationServer runtime.">
         <!-- copy build files to target directory -->
         <antcall target="move-build-to-target"/>
-        <!-- prepare the DEBIAN build system -->
-        <antcall target="prepare-DEBIAN-build-system"/>
+        <!-- prepare the distribution build system -->
+        <antcall target="prepare-${os.distribution}-build-system"/>
         <!-- copy init scripts to required directory -->
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/debian">
@@ -1336,7 +1309,7 @@
                 <expandproperties/>
             </filterchain>
         </copy>
-        <chmod perm="755" file="${php-target.dir}/re/DEBIAN/postinst" />
+        <chmod perm="755" file="${php-target.dir}/re/${os.distribution}/postinst" />
         <exec dir="${php-target.dir}" executable="dpkg-deb">
             <arg line="--build ${php-target.dir}/re appserver_${appserver.version}_${appserver.architecture}.deb"/>
         </exec>
@@ -1349,7 +1322,7 @@
         <!-- copy build files to target directory -->
         <antcall target="move-build-to-target"/>
         <!-- prepare the FEDORA build system -->
-        <antcall target="prepare-FEDORA-build-system"/>
+        <antcall target="prepare-${os.distribution}-build-system"/>
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/fedora">
                 <include name="**/*"/>
