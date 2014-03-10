@@ -868,7 +868,7 @@
         <delete dir="${appserver.compile.prefix}" includeemptydirs="true" quiet="false" verbose="true" failonerror="true"/>
 
         <!-- prepare the distribution build system (use the wrapper task to do so) -->
-        <antcall target="prepare-linux-build-system"/>
+        <antcall target="prepare-${os.distribution}-build-system"/>
 
         <!-- build the necessary libraries -->
     	<antcall target="build-libjpeg"/>
@@ -1211,7 +1211,7 @@
     <!-- similar dependencies as the main build-runtime task. So we wrap it   -->
     <!-- away to avoid ant dependency messups.                                -->
     <!-- ==================================================================== -->
-    <target name="prepare-linux-build-system" if="${prepare.distribution.build}" description="Install the necessary libraries to build the needed linux distribution runtime.">
+    <target name="prepare-linux-build-system" depends="prepare" description="Install the necessary libraries to build the needed linux distribution runtime.">
 
         <!-- prepare the distribution build system -->
         <antcall target="prepare-${os.distribution}-build-system"/>
@@ -1220,7 +1220,7 @@
     <!-- ==================================================================== -->
     <!-- Install the necessary libraries to build the debian runtime          -->
     <!-- ==================================================================== -->
-    <target name="prepare-debian-build-system" depends="prepare" description="Install the necessary libraries to build the debian runtime.">
+    <target name="prepare-debian-build-system" if="${prepare.distribution.build}" description="Install the necessary libraries to build the debian runtime.">
 	<exec dir="${php-target.dir}" executable="apt-get" inputstring="Y">
             <arg value="install"/>
             <arg value="ant"/>
@@ -1260,7 +1260,7 @@
     <!--                                                                      -->
     <!-- We don't need normal dependencies, as we wrap the debian preparation -->
     <!-- ==================================================================== -->
-    <target name="prepare-raspbian-build-system" depends="prepare-debian-build-system" description="Install the necessary libraries to build the raspbian runtime.">
+    <target name="prepare-raspbian-build-system" if="${prepare.distribution.build}" depends="prepare-debian-build-system" description="Install the necessary libraries to build the raspbian runtime.">
 
         <!-- Only a wrapper, as steps are the same as in the prepare-debian-build-system task -->
 
@@ -1269,7 +1269,7 @@
     <!-- ==================================================================== -->
     <!-- Install the necessary libraries to build the fedora runtime          -->
     <!-- ==================================================================== -->
-    <target name="prepare-fedora-build-system" depends="prepare" description="Install the necessary libraries to build the fedora runtime.">
+    <target name="prepare-fedora-build-system" if="${prepare.distribution.build}" description="Install the necessary libraries to build the fedora runtime.">
         <exec dir="${php-target.dir}" executable="yum" inputstring="Y">
             <arg value="install"/>
             <arg value="ant"/>
