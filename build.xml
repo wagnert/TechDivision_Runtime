@@ -12,8 +12,8 @@
     <property file="${basedir}/build.properties"/>
     <property file="${user.home}/build.properties"/>
     <property file="${basedir}/build.default.properties"/>
-    <property file="${basedir}/build.${os.family}.properties"/>
     <property file="${basedir}/build.${os.family}.${os.distribution}.properties"/>
+    <property file="${basedir}/build.${os.family}.properties"/>
 
     <!-- ==================================================================== -->
     <!-- Cleans the directories with the generated source files				  -->
