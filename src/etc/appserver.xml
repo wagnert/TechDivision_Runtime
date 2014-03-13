@@ -176,10 +176,6 @@
             threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\WebContainer\Container">
             <description><![CDATA[This is an example of a webserver container that handles http requests in common way]]></description>
             <deployment type="TechDivision\WebContainer\Deployment" />
-			<host name="localhost" 
-				  appBase="/webapps" 
-				  serverAdmin="${appserver.admin.email}" 
-				  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
             <servers>
                 <server
                     type="\TechDivision\WebServer\Servers\MultiThreadedServer"
@@ -207,6 +203,12 @@
 		                        <param name="documentRoot" type="string">/opt/appserver/webapps/example</param>
 		                    </params>
                     	</virtualHost>
+                    	<virtualHost name="appserver.local site.local">
+		                    <params>
+		                        <param name="admin" type="string">tw@appserver.io</param>
+		                        <param name="documentRoot" type="string">/opt/appserver/webapps/site</param>
+		                    </params>
+                    	</virtualHost>
                     </virtualHosts>
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\Http\HttpConnectionHandler"/>
@@ -215,7 +217,9 @@
                         <module type="\TechDivision\WebServer\Modules\VirtualHostModule" />
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
                         <module type="\TechDivision\WebServer\Modules\CoreModule" />
-                        <!-- module type="\TechDivision\WebServer\Modules\DeflateModule" / -->
+                        <!-- 
+                        <module type="\TechDivision\WebServer\Modules\DeflateModule" />
+                        -->
                         <module type="\TechDivision\WebServer\Modules\PhpModule" />
                         <module type="\TechDivision\ServletModule\ServletModule" />
                     </modules>
@@ -236,8 +240,8 @@
                         <param name="transport" type="string">ssl</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">9443</param>
-                        <param name="certPath" type="string">etc/webserver.pem</param>
-                        <param name="passphrase" type="string">passphrase</param>
+                        <param name="certPath" type="string">etc/server.pem</param>
+                        <param name="passphrase" type="string"></param>
                         <param name="documentRoot" type="string">/opt/appserver/webapps</param>
                     </params>
                     <virtualHosts>
@@ -253,6 +257,12 @@
 		                        <param name="documentRoot" type="string">/opt/appserver/webapps/example</param>
 		                    </params>
                     	</virtualHost>
+                    	<virtualHost name="appserver.local site.local">
+		                    <params>
+		                        <param name="admin" type="string">tw@appserver.io</param>
+		                        <param name="documentRoot" type="string">/opt/appserver/webapps/site</param>
+		                    </params>
+                    	</virtualHost>
                     </virtualHosts>
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\Http\HttpConnectionHandler"/>
@@ -261,7 +271,9 @@
                         <module type="\TechDivision\WebServer\Modules\VirtualHostModule" />
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
                         <module type="\TechDivision\WebServer\Modules\CoreModule" />
-                        <!-- module type="\TechDivision\WebServer\Modules\DeflateModule" / -->
+                        <!-- 
+                        <module type="\TechDivision\WebServer\Modules\DeflateModule" />
+                        -->
                         <module type="\TechDivision\WebServer\Modules\PhpModule" />
                         <module type="\TechDivision\ServletModule\ServletModule" />
                     </modules>
