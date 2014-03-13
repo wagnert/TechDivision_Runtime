@@ -19,10 +19,10 @@
         "techdivision/messagequeue": "dev-master",
         "techdivision/messagequeueclient": "dev-master",
         "techdivision/websocketcontainer": "dev-master",
-        "techdivision/lemcachecontainer": "dev-master"
+        "techdivision/lemcachecontainer": "dev-master",
         "techdivision/http": "dev-master",
         "techdivision/webserver": "dev-master",
-        "techdivision/webcontainer": "dev-master",,
+        "techdivision/webcontainer": "dev-master",
         "techdivision/context": "dev-master",
         "techdivision/storage": "dev-master",
         "techdivision/servlet": "dev-master",
