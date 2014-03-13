@@ -61,6 +61,7 @@
             <xs:attribute name="uuid" type="xs:string" />
         </xs:complexType>
     </xs:element>
+    
     <xs:element name="servers">
         <xs:complexType>
             <xs:choice maxOccurs="unbounded">
@@ -82,6 +83,7 @@
         <xs:complexType>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="appserver:params" />
+                <xs:element ref="appserver:virtualHosts" />
                 <xs:element ref="appserver:connectionHandlers" />
                 <xs:element ref="appserver:modules" />
                 <xs:element ref="appserver:fileHandlers" />
@@ -90,6 +92,26 @@
             <xs:attribute name="worker" type="xs:string" />
             <xs:attribute name="socket" type="xs:string" />
             <xs:attribute name="serverContext" type="xs:string" />
+            <xs:attribute name="uuid" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="virtualHosts">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element ref="appserver:virtualHost" />
+            </xs:choice>
+            <xs:attribute name="uuid" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="virtualHost">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="appserver:params" />
+            </xs:choice>
+            <xs:attribute name="name" type="xs:string" />
+            <xs:attribute name="uuid" type="xs:string" />
         </xs:complexType>
     </xs:element>
 

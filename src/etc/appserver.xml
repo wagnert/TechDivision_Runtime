@@ -4,8 +4,7 @@
 	<initialContext type="TechDivision\ApplicationServer\InitialContext">
 		<description><![CDATA[The initial context configuration.]]></description>
 		<classLoader type="TechDivision\ApplicationServer\SplClassLoader" />
-		<storage type="TechDivision\ApplicationServer\InitialContext\StackableStorage">
-		</storage>
+		<storage type="TechDivision\Storage\StackableStorage" />
 	</initialContext>
 
 	<systemLogger type="Monolog\Logger" channelName="system">
@@ -67,6 +66,7 @@
 
 		</container>
 
+		<!--
 		<container name="http"
 			threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\ServletContainer\Container">
 			<description><![CDATA[This is an example of a servlet container that uses a socket for sending and receiving HTML requests/responses. This solution can be used for running a web server.]]></description>
@@ -123,7 +123,8 @@
 				</vhosts>
 			</host>
 		</container>
-
+ 		-->
+ 		
 		<container name="web-socket"
 			threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\WebSocketContainer\Container">
 			<description><![CDATA[This is an example of a web socket container that handles web socket requests/responses.]]></description>
@@ -188,15 +189,40 @@
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">9080</param>
                         <param name="workerNumber" type="integer">32</param>
-                        <param name="documentRoot" type="string">/var/www</param>
+                        <param name="documentRoot" type="string">/opt/appserver/webapps</param>
                     </params>
+                    <virtualHosts>
+                    	<virtualHost name="magento.dev magento.local">
+		                    <params>
+		                        <param name="admin" type="string">tw@appserver.io</param>
+		                        <param name="documentRoot" type="string">/opt/appserver/webapps/magento-1.8.1.0</param>
+		                    </params>
+                    	</virtualHost>
+                    	<virtualHost name="example.local">
+		                    <params>
+		                        <param name="admin" type="string">tw@appserver.io</param>
+		                        <param name="documentRoot" type="string">/opt/appserver/webapps/example</param>
+		                    </params>
+                    	</virtualHost>
+                    	<virtualHost name="appserver.local site.local">
+		                    <params>
+		                        <param name="admin" type="string">tw@appserver.io</param>
+		                        <param name="documentRoot" type="string">/opt/appserver/webapps/site</param>
+		                    </params>
+                    	</virtualHost>
+                    </virtualHosts>
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\Http\HttpConnectionHandler"/>
                     </connectionHandlers>
                     <modules>
+                        <module type="\TechDivision\WebServer\Modules\VirtualHostModule" />
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
                         <module type="\TechDivision\WebServer\Modules\CoreModule" />
+                        <!-- 
                         <module type="\TechDivision\WebServer\Modules\DeflateModule" />
+                        -->
+                        <module type="\TechDivision\WebServer\Modules\PhpModule" />
+                        <module type="\TechDivision\ServletModule\ServletModule" />
                     </modules>
                     <fileHandlers>
                         <fileHandler name="php" extension=".php" />
@@ -216,17 +242,42 @@
                         <param name="transport" type="string">ssl</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">9443</param>
-                        <param name="certPath" type="string">etc/webserver.pem</param>
-                        <param name="passphrase" type="string">passphrase</param>
-                        <param name="documentRoot" type="string">/var/www</param>
+                        <param name="certPath" type="string">etc/server.pem</param>
+                        <param name="passphrase" type="string"></param>
+                        <param name="documentRoot" type="string">/opt/appserver/webapps</param>
                     </params>
+                    <virtualHosts>
+                    	<virtualHost name="magento.dev magento.local">
+		                    <params>
+		                        <param name="admin" type="string">tw@appserver.io</param>
+		                        <param name="documentRoot" type="string">/opt/appserver/webapps/magento-1.8.1.0</param>
+		                    </params>
+                    	</virtualHost>
+                    	<virtualHost name="example.local">
+		                    <params>
+		                        <param name="admin" type="string">tw@appserver.io</param>
+		                        <param name="documentRoot" type="string">/opt/appserver/webapps/example</param>
+		                    </params>
+                    	</virtualHost>
+                    	<virtualHost name="appserver.local site.local">
+		                    <params>
+		                        <param name="admin" type="string">tw@appserver.io</param>
+		                        <param name="documentRoot" type="string">/opt/appserver/webapps/site</param>
+		                    </params>
+                    	</virtualHost>
+                    </virtualHosts>
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\Http\HttpConnectionHandler"/>
                     </connectionHandlers>
                     <modules>
+                        <module type="\TechDivision\WebServer\Modules\VirtualHostModule" />
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
                         <module type="\TechDivision\WebServer\Modules\CoreModule" />
+                        <!-- 
                         <module type="\TechDivision\WebServer\Modules\DeflateModule" />
+                        -->
+                        <module type="\TechDivision\WebServer\Modules\PhpModule" />
+                        <module type="\TechDivision\ServletModule\ServletModule" />
                     </modules>
                     <fileHandlers>
                         <fileHandler name="php" extension=".php" />
