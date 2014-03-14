@@ -29,7 +29,7 @@
     </systemLogger>
 
     <containers>
-<!--
+
         <container name="persistence"
             threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\PersistenceContainer\Container">
             <description><![CDATA[This is an example of a container that uses a socket for sending and receiving messages. This solution can be used for clients connecting over a network.]]></description>
@@ -66,6 +66,7 @@
 
         </container>
 
+        <!--
         <container name="http"
             threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\ServletContainer\Container">
             <description><![CDATA[This is an example of a servlet container that uses a socket for sending and receiving HTML requests/responses. This solution can be used for running a web server.]]></description>
@@ -122,6 +123,7 @@
                 </vhosts>
             </host>
         </container>
+        -->
 
         <container name="web-socket"
             threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\WebSocketContainer\Container">
@@ -168,7 +170,7 @@
                 serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
             </host>
         </container>
--->
+
         <container
             name="webserver"
             threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\WebContainer\Container">
@@ -182,13 +184,14 @@
                     serverContext="\TechDivision\WebServer\ServerContext">
                     <params>
                         <param name="admin" type="string">admin@appserver.io</param>
-                        <param name="software" type="string">phpWebServer/0.1.0</param>
+                        <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
                         <param name="transport" type="string">tcp</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">9080</param>
                         <param name="workerNumber" type="integer">32</param>
                         <param name="documentRoot" type="string">/opt/appserver/webapps</param>
                     </params>
+
                     <authentications>
                         <authentication type="\TechDivision\WebServer\Authentication\BasicAuthentication">
                             <params>
@@ -199,38 +202,48 @@
                             </params>
                         </authentication>
                     </authentications>
+
                     <virtualHosts>
                         <virtualHost name="magento.dev magento.local">
                             <params>
-                                <param name="admin" type="string">tw@appserver.io</param>
+                                <param name="admin" type="string">admin@appserver.io</param>
                                 <param name="documentRoot" type="string">/opt/appserver/webapps/magento-1.8.1.0</param>
                             </params>
                         </virtualHost>
                         <virtualHost name="example.local">
                             <params>
-                                <param name="admin" type="string">tw@appserver.io</param>
+                                <param name="admin" type="string">admin@appserver.io</param>
                                 <param name="documentRoot" type="string">/opt/appserver/webapps/example</param>
                             </params>
                         </virtualHost>
                         <virtualHost name="appserver.local site.local">
                             <params>
-                                <param name="admin" type="string">tw@appserver.io</param>
+                                <param name="admin" type="string">admin@appserver.io</param>
                                 <param name="documentRoot" type="string">/opt/appserver/webapps/site</param>
                             </params>
                         </virtualHost>
                     </virtualHosts>
+
+                    <!--
+                    <rewrites>
+                        <rewrite condition="(.+)([/\?].+)" target="$1.do$2" flag="L"/>
+                        <rewrite condition="(.+)" target="$1.do" flag=""/>
+                    </rewrites>
+                    -->
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\Http\HttpConnectionHandler"/>
                     </connectionHandlers>
                     <modules>
                         <module type="\TechDivision\WebServer\Modules\AuthenticationModule" />
-                        <!-- <module type="\TechDivision\WebServer\Modules\RewriteModule" /> -->
                         <module type="\TechDivision\WebServer\Modules\VirtualHostModule" />
+                        <module type="\TechDivision\WebServer\Modules\RewriteModule\Module"/>
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
                         <module type="\TechDivision\WebServer\Modules\CoreModule" />
+                        <!--
+                        <module type="\TechDivision\WebServer\Modules\DeflateModule" />
+                        -->
                         <module type="\TechDivision\WebServer\Modules\PhpModule" />
-                        <!-- <module type="\TechDivision\WebServer\Modules\DeflateModule" /> -->
-                        <!-- <module type="\TechDivision\ServletModule\ServletModule" /> -->
+                        <module type="\TechDivision\ServletModule\ServletModule" />
                     </modules>
                     <fileHandlers>
                         <fileHandler name="php" extension=".php" />
@@ -245,7 +258,7 @@
                     serverContext="\TechDivision\WebServer\ServerContext">
                     <params>
                         <param name="admin" type="string">admin@appserver.io</param>
-                        <param name="software" type="string">phpWebServer/0.1.0</param>
+                        <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
                         <param name="workerNumber" type="integer">32</param>
                         <param name="transport" type="string">ssl</param>
                         <param name="address" type="string">0.0.0.0</param>
@@ -254,6 +267,7 @@
                         <param name="passphrase" type="string"></param>
                         <param name="documentRoot" type="string">/opt/appserver/webapps</param>
                     </params>
+
                     <authentications>
                         <authentication type="\TechDivision\WebServer\Authentication\BasicAuthentication">
                             <params>
@@ -264,38 +278,47 @@
                             </params>
                         </authentication>
                     </authentications>
+
                     <virtualHosts>
                         <virtualHost name="magento.dev magento.local">
                             <params>
-                                <param name="admin" type="string">tw@appserver.io</param>
+                                <param name="admin" type="string">admin@appserver.io</param>
                                 <param name="documentRoot" type="string">/opt/appserver/webapps/magento-1.8.1.0</param>
                             </params>
                         </virtualHost>
                         <virtualHost name="example.local">
                             <params>
-                                <param name="admin" type="string">tw@appserver.io</param>
+                                <param name="admin" type="string">admin@appserver.io</param>
                                 <param name="documentRoot" type="string">/opt/appserver/webapps/example</param>
                             </params>
                         </virtualHost>
                         <virtualHost name="appserver.local site.local">
                             <params>
-                                <param name="admin" type="string">tw@appserver.io</param>
+                                <param name="admin" type="string">admin@appserver.io</param>
                                 <param name="documentRoot" type="string">/opt/appserver/webapps/site</param>
                             </params>
                         </virtualHost>
                     </virtualHosts>
+                    <!--
+                    <rewrites>
+                        <rewrite condition="(.+)([/\?].+)" target="$1.do$2" flag="L"/>
+                        <rewrite condition="(.+)" target="$1.do" flag=""/>
+                    </rewrites>
+                    -->
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\Http\HttpConnectionHandler"/>
                     </connectionHandlers>
                     <modules>
                         <module type="\TechDivision\WebServer\Modules\AuthenticationModule" />
-                        <!-- <module type="\TechDivision\WebServer\Modules\RewriteModule" /> -->
                         <module type="\TechDivision\WebServer\Modules\VirtualHostModule" />
+                        <module type="\TechDivision\WebServer\Modules\RewriteModule\Module"/>
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
                         <module type="\TechDivision\WebServer\Modules\CoreModule" />
+                        <!--
+                        <module type="\TechDivision\WebServer\Modules\DeflateModule" />
+                        -->
                         <module type="\TechDivision\WebServer\Modules\PhpModule" />
-                        <!-- <module type="\TechDivision\WebServer\Modules\DeflateModule" /> -->
-                        <!-- <module type="\TechDivision\ServletModule\ServletModule" /> -->
+                        <module type="\TechDivision\ServletModule\ServletModule" />
                     </modules>
                     <fileHandlers>
                         <fileHandler name="php" extension=".php" />
