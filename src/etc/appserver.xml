@@ -183,8 +183,8 @@
                     socket="\TechDivision\WebServer\Sockets\StreamSocket"
                     serverContext="\TechDivision\WebServer\ServerContext">
                     <params>
-                        <param name="admin" type="string">tw@appserver.io</param>
-                        <param name="software" type="string">phpWebServer/0.1.0</param>
+                        <param name="admin" type="string">admin@appserver.io</param>
+                        <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
                         <param name="transport" type="string">tcp</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">9080</param>
@@ -194,19 +194,19 @@
                     <virtualHosts>
                     	<virtualHost name="magento.dev magento.local">
 		                    <params>
-		                        <param name="admin" type="string">tw@appserver.io</param>
+		                        <param name="admin" type="string">admin@appserver.io</param>
 		                        <param name="documentRoot" type="string">/opt/appserver/webapps/magento-1.8.1.0</param>
 		                    </params>
                     	</virtualHost>
                     	<virtualHost name="example.local">
 		                    <params>
-		                        <param name="admin" type="string">tw@appserver.io</param>
+		                        <param name="admin" type="string">admin@appserver.io</param>
 		                        <param name="documentRoot" type="string">/opt/appserver/webapps/example</param>
 		                    </params>
                     	</virtualHost>
                     	<virtualHost name="appserver.local site.local">
 		                    <params>
-		                        <param name="admin" type="string">tw@appserver.io</param>
+		                        <param name="admin" type="string">admin@appserver.io</param>
 		                        <param name="documentRoot" type="string">/opt/appserver/webapps/site</param>
 		                    </params>
                     	</virtualHost>
@@ -246,8 +246,8 @@
                     socket="\TechDivision\WebServer\Sockets\StreamSocket"
                     serverContext="\TechDivision\WebServer\ServerContext">
                     <params>
-                        <param name="admin" type="string">tw@appserver.io</param>
-                        <param name="software" type="string">phpWebServer/0.1.0</param>
+                        <param name="admin" type="string">admin@appserver.io</param>
+                        <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
                         <param name="workerNumber" type="integer">32</param>
                         <param name="transport" type="string">ssl</param>
                         <param name="address" type="string">0.0.0.0</param>
@@ -259,23 +259,29 @@
                     <virtualHosts>
                     	<virtualHost name="magento.dev magento.local">
 		                    <params>
-		                        <param name="admin" type="string">tw@appserver.io</param>
+		                        <param name="admin" type="string">admin@appserver.io</param>
 		                        <param name="documentRoot" type="string">/opt/appserver/webapps/magento-1.8.1.0</param>
 		                    </params>
                     	</virtualHost>
                     	<virtualHost name="example.local">
 		                    <params>
-		                        <param name="admin" type="string">tw@appserver.io</param>
+		                        <param name="admin" type="string">admin@appserver.io</param>
 		                        <param name="documentRoot" type="string">/opt/appserver/webapps/example</param>
 		                    </params>
                     	</virtualHost>
                     	<virtualHost name="appserver.local site.local">
 		                    <params>
-		                        <param name="admin" type="string">tw@appserver.io</param>
+		                        <param name="admin" type="string">admin@appserver.io</param>
 		                        <param name="documentRoot" type="string">/opt/appserver/webapps/site</param>
 		                    </params>
                     	</virtualHost>
                     </virtualHosts>
+                    <!--
+                    <rewrites>
+	                    <rewrite condition="(.+)([/\?].+)" target="$1.do$2" flag="L"/>
+	            		<rewrite condition="(.+)" target="$1.do" flag=""/>
+                    </rewrites>
+                    -->
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\Http\HttpConnectionHandler"/>
                     </connectionHandlers>
