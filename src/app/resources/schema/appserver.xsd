@@ -84,6 +84,7 @@
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="appserver:params" />
                 <xs:element ref="appserver:virtualHosts" />
+                <xs:element ref="appserver:rewrites" />
                 <xs:element ref="appserver:connectionHandlers" />
                 <xs:element ref="appserver:modules" />
                 <xs:element ref="appserver:fileHandlers" />
@@ -111,6 +112,24 @@
                 <xs:element ref="appserver:params" />
             </xs:choice>
             <xs:attribute name="name" type="xs:string" />
+            <xs:attribute name="uuid" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="rewrites">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element ref="appserver:rewrite" />
+            </xs:choice>
+            <xs:attribute name="uuid" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="rewrite">
+        <xs:complexType>
+            <xs:attribute name="condition" type="xs:string" />
+            <xs:attribute name="target" type="xs:string" />
+            <xs:attribute name="flag" type="xs:string" />
             <xs:attribute name="uuid" type="xs:string" />
         </xs:complexType>
     </xs:element>
