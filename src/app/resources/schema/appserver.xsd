@@ -83,6 +83,7 @@
         <xs:complexType>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="appserver:params" />
+                <xs:element ref="appserver:authentications" />
                 <xs:element ref="appserver:virtualHosts" />
                 <xs:element ref="appserver:connectionHandlers" />
                 <xs:element ref="appserver:modules" />
@@ -95,7 +96,26 @@
             <xs:attribute name="uuid" type="xs:string" />
         </xs:complexType>
     </xs:element>
-    
+
+    <xs:element name="authentications">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element ref="appserver:authentication" />
+            </xs:choice>
+            <xs:attribute name="uuid" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="authentication">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="appserver:params" />
+            </xs:choice>
+            <xs:attribute name="type" type="xs:string" />
+            <xs:attribute name="uuid" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="virtualHosts">
         <xs:complexType>
             <xs:choice maxOccurs="unbounded">
