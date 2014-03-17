@@ -175,7 +175,12 @@
             name="webserver"
             threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\WebContainer\Container">
             <description><![CDATA[This is an example of a webserver container that handles http requests in common way]]></description>
-            <deployment type="TechDivision\WebContainer\Deployment" />
+            <deployment type="TechDivision\WebContainer\WebContainerDeployment" />
+            <host 
+            	name="localhost" 
+            	appBase="/webapps" 
+            	serverAdmin="${appserver.admin.email}"
+                serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
             <servers>
                 <server
                     type="\TechDivision\WebServer\Servers\MultiThreadedServer"
@@ -223,7 +228,6 @@
                             </params>
                         </virtualHost>
                     </virtualHosts>
-
                     <!--
                     <rewrites>
                         <rewrite condition="(.+)([/\?].+)" target="$1.do$2" flag="L"/>
