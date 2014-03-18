@@ -76,15 +76,15 @@
             threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\ServletContainer\Container">
             <description><![CDATA[This is an example of a servlet container that uses a socket for sending and receiving HTML requests/responses. This solution can be used for running a web server.]]></description>
             <receiver type="TechDivision\ApplicationServer\Socket\Receiver">
-                <worker type="TechDivision\ServletContainer\Socket\Worker"  />
-                <thread type="TechDivision\ServletContainer\RequestHandler"  />
+                <worker type="TechDivision\ServletContainer\Socket\Worker" />
+                <thread type="TechDivision\ServletContainer\RequestHandler" />
                 <params>
                     <param name="workerNumber" type="integer">16</param>
                     <param name="address" type="string">0.0.0.0</param>
                     <param name="port" type="integer">8586</param>
                 </params>
             </receiver>
-            <deployment type="TechDivision\ServletContainer\Deployment"  />
+            <deployment type="TechDivision\ServletContainer\Deployment" />
             <host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
                 serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
                 <vhosts>
@@ -94,8 +94,8 @@
                             <alias>appserver.local</alias>
                         </aliases>
                     </vhost>
-                    <vhost name="neos.local" appBase="/neos"  />
-                    <vhost name="neos.appserver.io" appBase="/neos"  />
+                    <vhost name="neos.local" appBase="/neos" />
+                    <vhost name="neos.appserver.io" appBase="/neos" />
                 </vhosts>
             </host>
         </container>
@@ -104,8 +104,8 @@
             threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\ServletContainer\Container">
             <description><![CDATA[This is an example of a servlet container that uses a socket for sending and receiving HTML requests/responses. This solution can be used for running a web server.]]></description>
             <receiver type="TechDivision\ApplicationServer\Stream\SecureReceiver">
-                <worker type="TechDivision\ServletContainer\Stream\SecureWorker"  />
-                <thread type="TechDivision\ServletContainer\RequestHandler"  />
+                <worker type="TechDivision\ServletContainer\Stream\SecureWorker" />
+                <thread type="TechDivision\ServletContainer\RequestHandler" />
                 <params>
                     <param name="workerNumber" type="integer">16</param>
                     <param name="address" type="string">0.0.0.0</param>
@@ -113,7 +113,7 @@
                     <param name="certPath" type="string">etc/server.pem</param>
                 </params>
             </receiver>
-            <deployment type="TechDivision\ServletContainer\Deployment"  />
+            <deployment type="TechDivision\ServletContainer\Deployment" />
             <host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
                 serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
                 <vhosts>
@@ -123,8 +123,8 @@
                             <alias>appserver.local</alias>
                         </aliases>
                     </vhost>
-                    <vhost name="neos.local" appBase="/neos"  />
-                    <vhost name="neos.appserver.io" appBase="/neos"  />
+                    <vhost name="neos.local" appBase="/neos" />
+                    <vhost name="neos.appserver.io" appBase="/neos" />
                 </vhosts>
             </host>
         </container>
@@ -266,7 +266,7 @@
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
                         <module type="\TechDivision\WebServer\Modules\CoreModule" />
                         <!--
-                        <module type="\TechDivision\WebServer\Modules\DeflateModule"  />
+                        <module type="\TechDivision\WebServer\Modules\DeflateModule" />
                         -->
                         <module type="\TechDivision\WebServer\Modules\PhpModule" />
                         <module type="\TechDivision\ServletModule\ServletModule" />
@@ -350,7 +350,7 @@
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
                         <module type="\TechDivision\WebServer\Modules\CoreModule" />
                         <!--
-                        <module type="\TechDivision\WebServer\Modules\DeflateModule"  />
+                        <module type="\TechDivision\WebServer\Modules\DeflateModule" />
                         -->
                         <module type="\TechDivision\WebServer\Modules\PhpModule" />
                         <module type="\TechDivision\ServletModule\ServletModule" />
