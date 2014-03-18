@@ -15,7 +15,8 @@
             <handler type="Monolog\Handler\ErrorLogHandler">
                 <formatter type="Monolog\Formatter\LineFormatter">
                     <params>
-                        <param name="output" type="string"><![CDATA[[%datetime%] %channel%.%level_name%: %message% %context% %extra%]]></param>
+                        <param name="output" type="string">
+                            <![CDATA[[%datetime%] %channel%.%level_name%: %message% %context% %extra%]]></param>
                         <param name="dateFormat" type="string"><![CDATA[Y-m-d H:i:s]]></param>
                     </params>
                 </formatter>
@@ -31,8 +32,10 @@
     <containers>
 
         <container name="persistence"
-            threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\PersistenceContainer\Container">
-            <description><![CDATA[This is an example of a container that uses a socket for sending and receiving messages. This solution can be used for clients connecting over a network.]]></description>
+                   threadType="TechDivision\ApplicationServer\ContainerThread"
+                   type="TechDivision\PersistenceContainer\Container">
+            <description>
+                <![CDATA[This is an example of a container that uses a socket for sending and receiving messages. This solution can be used for clients connecting over a network.]]></description>
             <receiver type="TechDivision\ApplicationServer\Socket\Receiver">
                 <worker type="TechDivision\ApplicationServer\Socket\Worker" />
                 <thread type="TechDivision\PersistenceContainer\ThreadRequest" />
@@ -44,13 +47,15 @@
             </receiver>
             <deployment type="TechDivision\PersistenceContainer\Deployment" />
             <host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
-                serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
+                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
 
         </container>
 
         <container name="message-queue"
-            threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\MessageQueue\Container">
-            <description><![CDATA[This is an example of a message queue that uses a socket to receive messages. This solution can be used for clients connecting over a network.]]></description>
+                   threadType="TechDivision\ApplicationServer\ContainerThread"
+                   type="TechDivision\MessageQueue\Container">
+            <description>
+                <![CDATA[This is an example of a message queue that uses a socket to receive messages. This solution can be used for clients connecting over a network.]]></description>
             <receiver type="TechDivision\ApplicationServer\Socket\Receiver">
                 <worker type="TechDivision\ApplicationServer\Socket\Worker" />
                 <thread type="TechDivision\MessageQueue\ThreadRequest" />
@@ -62,7 +67,7 @@
             </receiver>
             <deployment type="TechDivision\MessageQueue\Deployment" />
             <host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
-                serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
+                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
 
         </container>
 
@@ -71,15 +76,15 @@
             threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\ServletContainer\Container">
             <description><![CDATA[This is an example of a servlet container that uses a socket for sending and receiving HTML requests/responses. This solution can be used for running a web server.]]></description>
             <receiver type="TechDivision\ApplicationServer\Socket\Receiver">
-                <worker type="TechDivision\ServletContainer\Socket\Worker" />
-                <thread type="TechDivision\ServletContainer\RequestHandler" />
+                <worker type="TechDivision\ServletContainer\Socket\Worker"  />
+                <thread type="TechDivision\ServletContainer\RequestHandler"  />
                 <params>
                     <param name="workerNumber" type="integer">16</param>
                     <param name="address" type="string">0.0.0.0</param>
                     <param name="port" type="integer">8586</param>
                 </params>
             </receiver>
-            <deployment type="TechDivision\ServletContainer\Deployment" />
+            <deployment type="TechDivision\ServletContainer\Deployment"  />
             <host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
                 serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
                 <vhosts>
@@ -89,8 +94,8 @@
                             <alias>appserver.local</alias>
                         </aliases>
                     </vhost>
-                    <vhost name="neos.local" appBase="/neos" />
-                    <vhost name="neos.appserver.io" appBase="/neos" />
+                    <vhost name="neos.local" appBase="/neos"  />
+                    <vhost name="neos.appserver.io" appBase="/neos"  />
                 </vhosts>
             </host>
         </container>
@@ -99,8 +104,8 @@
             threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\ServletContainer\Container">
             <description><![CDATA[This is an example of a servlet container that uses a socket for sending and receiving HTML requests/responses. This solution can be used for running a web server.]]></description>
             <receiver type="TechDivision\ApplicationServer\Stream\SecureReceiver">
-                <worker type="TechDivision\ServletContainer\Stream\SecureWorker" />
-                <thread type="TechDivision\ServletContainer\RequestHandler" />
+                <worker type="TechDivision\ServletContainer\Stream\SecureWorker"  />
+                <thread type="TechDivision\ServletContainer\RequestHandler"  />
                 <params>
                     <param name="workerNumber" type="integer">16</param>
                     <param name="address" type="string">0.0.0.0</param>
@@ -108,7 +113,7 @@
                     <param name="certPath" type="string">etc/server.pem</param>
                 </params>
             </receiver>
-            <deployment type="TechDivision\ServletContainer\Deployment" />
+            <deployment type="TechDivision\ServletContainer\Deployment"  />
             <host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
                 serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
                 <vhosts>
@@ -118,16 +123,18 @@
                             <alias>appserver.local</alias>
                         </aliases>
                     </vhost>
-                    <vhost name="neos.local" appBase="/neos" />
-                    <vhost name="neos.appserver.io" appBase="/neos" />
+                    <vhost name="neos.local" appBase="/neos"  />
+                    <vhost name="neos.appserver.io" appBase="/neos"  />
                 </vhosts>
             </host>
         </container>
         -->
 
         <container name="web-socket"
-            threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\WebSocketContainer\Container">
-            <description><![CDATA[This is an example of a web socket container that handles web socket requests/responses.]]></description>
+                   threadType="TechDivision\ApplicationServer\ContainerThread"
+                   type="TechDivision\WebSocketContainer\Container">
+            <description>
+                <![CDATA[This is an example of a web socket container that handles web socket requests/responses.]]></description>
             <receiver type="TechDivision\WebSocketContainer\RatchetReceiver">
                 <worker type="TechDivision\WebSocketContainer\RatchetWorker" />
                 <thread type="TechDivision\WebSocketContainer\RatchetRequest" />
@@ -139,7 +146,7 @@
             </receiver>
             <deployment type="TechDivision\WebSocketContainer\Deployment" />
             <host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
-                serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
+                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
                 <vhosts>
                     <vhost name="www.appserver.io" appBase="/site">
                         <aliases>
@@ -154,8 +161,10 @@
         </container>
 
         <container name="lemcache"
-            threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\LemCacheContainer\Container">
-            <description><![CDATA[A memcache API compatible PHP implementation of a key value storage server.]]></description>
+                   threadType="TechDivision\ApplicationServer\ContainerThread"
+                   type="TechDivision\LemCacheContainer\Container">
+            <description>
+                <![CDATA[A memcache API compatible PHP implementation of a key value storage server.]]></description>
             <receiver type="TechDivision\LemCacheContainer\Receiver">
                 <worker type="TechDivision\LemCacheContainer\Worker" />
                 <thread type="TechDivision\LemCacheContainer\ThreadRequest" />
@@ -167,26 +176,27 @@
             </receiver>
             <deployment type="TechDivision\LemCacheContainer\Deployment" />
             <host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
-                serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
+                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
             </host>
         </container>
 
         <container
-            name="webserver"
-            threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\WebContainer\Container">
-            <description><![CDATA[This is an example of a webserver container that handles http requests in common way]]></description>
+                name="webserver"
+                threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\WebContainer\Container">
+            <description>
+                <![CDATA[This is an example of a webserver container that handles http requests in common way]]></description>
             <deployment type="TechDivision\WebContainer\WebContainerDeployment" />
-            <host 
-            	name="localhost" 
-            	appBase="/webapps" 
-            	serverAdmin="${appserver.admin.email}"
-                serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
+            <host
+                    name="localhost"
+                    appBase="/webapps"
+                    serverAdmin="${appserver.admin.email}"
+                    serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
             <servers>
                 <server
-                    type="\TechDivision\WebServer\Servers\MultiThreadedServer"
-                    worker="\TechDivision\WebServer\Workers\ThreadWorker"
-                    socket="\TechDivision\WebServer\Sockets\StreamSocket"
-                    serverContext="\TechDivision\WebServer\ServerContext">
+                        type="\TechDivision\WebServer\Servers\MultiThreadedServer"
+                        worker="\TechDivision\WebServer\Workers\ThreadWorker"
+                        socket="\TechDivision\WebServer\Sockets\StreamSocket"
+                        serverContext="\TechDivision\WebServer\ServerContext">
                     <params>
                         <param name="admin" type="string">admin@appserver.io</param>
                         <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
@@ -201,7 +211,9 @@
                     <authentications>
                         <authentication uri="^\/admin.*">
                             <params>
-                                <param name="type" type="string">\TechDivision\WebServer\Authentication\BasicAuthentication</param>
+                                <param name="type" type="string">
+                                    \TechDivision\WebServer\Authentication\BasicAuthentication
+                                </param>
                                 <param name="realm" type="string">appserver.io Basic Authentication System</param>
                                 <param name="hash" type="string">YXBwc2VydmVyOmFwcHNlcnZlci5pMA==</param>
                                 <!-- <param name="file" type="string">var/www/auth/basic/appserver</param> -->
@@ -231,23 +243,27 @@
                             </params>
                         </virtualHost>
                     </virtualHosts>
-                    <!--
+
                     <rewrites>
-                        <rewrite condition="(.+)([/\?].+)" target="$1.do$2" flag="L"/>
-                        <rewrite condition="(.+)" target="$1.do" flag=""/>
+                        <rewrite condition="-d|-f|-l" target="" flag="L" />
+                        <rewrite condition="magento.*?index\.php" target="" flag="L" />
+                        <rewrite condition="(magento.*?)/(.*)" target="/$1/index.php/$2" flag="L" />
+                        <rewrite condition="\.do" target="" flag="L" />
+                        <rewrite condition="example/(.+)([/\?].+)" target="/example/$1.do$2" flag="L" />
+                        <rewrite condition="example/(.+)" target="/example/$1.do" flag="" />
                     </rewrites>
-                    -->
+
                     <connectionHandlers>
-                        <connectionHandler type="\TechDivision\Http\HttpConnectionHandler"/>
+                        <connectionHandler type="\TechDivision\Http\HttpConnectionHandler" />
                     </connectionHandlers>
                     <modules>
                         <module type="\TechDivision\WebServer\Modules\AuthenticationModule" />
                         <module type="\TechDivision\WebServer\Modules\VirtualHostModule" />
-                        <module type="\TechDivision\WebServer\Modules\RewriteModule\Module"/>
+                        <module type="\TechDivision\WebServer\Modules\RewriteModule\Module" />
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
                         <module type="\TechDivision\WebServer\Modules\CoreModule" />
                         <!--
-                        <module type="\TechDivision\WebServer\Modules\DeflateModule" />
+                        <module type="\TechDivision\WebServer\Modules\DeflateModule"  />
                         -->
                         <module type="\TechDivision\WebServer\Modules\PhpModule" />
                         <module type="\TechDivision\ServletModule\ServletModule" />
@@ -259,10 +275,10 @@
                     </fileHandlers>
                 </server>
                 <server
-                    type="\TechDivision\WebServer\Servers\MultiThreadedServer"
-                    worker="\TechDivision\WebServer\Workers\ThreadWorker"
-                    socket="\TechDivision\WebServer\Sockets\StreamSocket"
-                    serverContext="\TechDivision\WebServer\ServerContext">
+                        type="\TechDivision\WebServer\Servers\MultiThreadedServer"
+                        worker="\TechDivision\WebServer\Workers\ThreadWorker"
+                        socket="\TechDivision\WebServer\Sockets\StreamSocket"
+                        serverContext="\TechDivision\WebServer\ServerContext">
                     <params>
                         <param name="admin" type="string">admin@appserver.io</param>
                         <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
@@ -279,7 +295,9 @@
                     <authentications>
                         <authentication uri="^\/admin.*">
                             <params>
-                                <param name="type" type="string">\TechDivision\WebServer\Authentication\BasicAuthentication</param>
+                                <param name="type" type="string">
+                                    \TechDivision\WebServer\Authentication\BasicAuthentication
+                                </param>
                                 <param name="realm" type="string">appserver.io Basic Authentication System</param>
                                 <param name="hash" type="string">YXBwc2VydmVyOmFwcHNlcnZlci5pMA==</param>
                                 <!-- <param name="file" type="string">var/www/auth/basic/appserver</param> -->
@@ -309,23 +327,27 @@
                             </params>
                         </virtualHost>
                     </virtualHosts>
-                    <!--
+
                     <rewrites>
-                        <rewrite condition="(.+)([/\?].+)" target="$1.do$2" flag="L"/>
-                        <rewrite condition="(.+)" target="$1.do" flag=""/>
+                        <rewrite condition="-d|-f|-l" target="" flag="L" />
+                        <rewrite condition="magento.*?index\.php" target="" flag="L" />
+                        <rewrite condition="(magento.*?)/(.*)" target="/$1/index.php/$2" flag="L" />
+                        <rewrite condition="\.do" target="" flag="L" />
+                        <rewrite condition="example/(.+)([/\?].+)" target="/example/$1.do$2" flag="L" />
+                        <rewrite condition="example/(.+)" target="/example/$1.do" flag="" />
                     </rewrites>
-                    -->
+
                     <connectionHandlers>
-                        <connectionHandler type="\TechDivision\Http\HttpConnectionHandler"/>
+                        <connectionHandler type="\TechDivision\Http\HttpConnectionHandler" />
                     </connectionHandlers>
                     <modules>
                         <module type="\TechDivision\WebServer\Modules\AuthenticationModule" />
                         <module type="\TechDivision\WebServer\Modules\VirtualHostModule" />
-                        <module type="\TechDivision\WebServer\Modules\RewriteModule\Module"/>
+                        <module type="\TechDivision\WebServer\Modules\RewriteModule\Module" />
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
                         <module type="\TechDivision\WebServer\Modules\CoreModule" />
                         <!--
-                        <module type="\TechDivision\WebServer\Modules\DeflateModule" />
+                        <module type="\TechDivision\WebServer\Modules\DeflateModule"  />
                         -->
                         <module type="\TechDivision\WebServer\Modules\PhpModule" />
                         <module type="\TechDivision\ServletModule\ServletModule" />
