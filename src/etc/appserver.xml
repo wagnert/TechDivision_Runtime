@@ -245,10 +245,13 @@
                     </virtualHosts>
 
                     <rewrites>
-                        <rewrite condition="-d|-f|-l" target="" flag="L" />
+                        <rewrite condition="-d|-f|-l,!site$" target="" flag="L" />
+                        <rewrite condition="\.do" target="" flag="L" />
+                        <rewrite condition="site/index([/\?]*.*)|site([/\?]*.*)" target="/site/index.do$1" flag="L" />
+                        <rewrite condition="site/downloads([/\?]*.*)" target="/site/downloads.do/downloads$1" flag="L" />
+                        <rewrite condition="site/documentation([/\?]*.*)" target="/site/index.do/documentation$1" flag="L" />
                         <rewrite condition="magento.*?index\.php" target="" flag="L" />
                         <rewrite condition="(magento.*?)/(.*)" target="/$1/index.php/$2" flag="L" />
-                        <rewrite condition="\.do" target="" flag="L" />
                         <rewrite condition="example/(.+)([/\?].+)" target="/example/$1.do$2" flag="L" />
                         <rewrite condition="example/(.+)" target="/example/$1.do" flag="" />
                     </rewrites>
