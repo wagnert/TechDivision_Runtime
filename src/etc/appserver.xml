@@ -198,16 +198,18 @@
                         <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
                     </params>
 
-                    <authentications>
-                        <authentication type="\TechDivision\WebServer\Authentication\BasicAuthentication">
-                            <params>
-                                <param name="pattern" type="string">^\/authtest.*</param>
-                                <!-- <param name="file" type="string"></param> -->
-                                <param name="username" type="string">appserver</param>
-                                <param name="password" type="string">wURpZpgIT.w1I</param>
-                            </params>
-                        </authentication>
-                    </authentications>
+			        <authentications>
+			            <authentication uri="^\/admin.*">
+			                <params>
+			                    <param name="type" type="string">\TechDivision\WebServer\Authentication\BasicAuthentication</param>
+			                    <param name="realm" type="string">appserver.io Basic Authentication System</param>
+			                    <param name="hash" type="string">YXBwc2VydmVyOmFwcHNlcnZlci5pMA==</param>
+			                    <!-- <param name="file" type="string">var/www/auth/basic/appserver</param> -->
+			                    <!-- <param name="username" type="string">appserver</param> -->
+			                    <!-- <param name="password" type="string">wURpZpgIT.w1I</param> -->
+			                </params>
+			            </authentication>
+			        </authentications>
 
                     <virtualHosts>
                         <virtualHost name="magento.dev magento.local">
@@ -274,16 +276,18 @@
                         <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
                     </params>
 
-                    <authentications>
-                        <authentication type="\TechDivision\WebServer\Authentication\BasicAuthentication">
-                            <params>
-                                <param name="pattern" type="string">^\/authtest.*</param>
-                                <!-- <param name="file" type="string"></param> -->
-                                <param name="username" type="string">appserver</param>
-                                <param name="password" type="string">wURpZpgIT.w1I</param>
-                            </params>
-                        </authentication>
-                    </authentications>
+			        <authentications>
+			            <authentication uri="^\/admin.*">
+			                <params>
+			                    <param name="type" type="string">\TechDivision\WebServer\Authentication\BasicAuthentication</param>
+			                    <param name="realm" type="string">appserver.io Basic Authentication System</param>
+			                    <param name="hash" type="string">YXBwc2VydmVyOmFwcHNlcnZlci5pMA==</param>
+			                    <!-- <param name="file" type="string">var/www/auth/basic/appserver</param> -->
+			                    <!-- <param name="username" type="string">appserver</param> -->
+			                    <!-- <param name="password" type="string">wURpZpgIT.w1I</param> -->
+			                </params>
+			            </authentication>
+			        </authentications>
 
                     <virtualHosts>
                         <virtualHost name="magento.dev magento.local">
