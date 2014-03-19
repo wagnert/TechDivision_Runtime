@@ -1,8 +1,34 @@
 <?php
 
+/**
+ * server.php
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * PHP version 5
+ *
+ * @category   Appserver
+ * @package    TechDivision_Runtime
+ * @author     Tim Wagner <tw@techdivision.com>
+ * @copyright  2014 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       http://www.appserver.io
+ */
+
 namespace TechDivision\ApplicationServer;
 
 declare (ticks = 1);
+
+/**
+ * Rewrite the SAPI to avoid invalid CLI SAPI detection for TYPO3 Flow for example
+ * 
+ * @see https://github.com/techdivision/php-ext-appserver#ini-settings
+ */
+define('PHP_SAPI', 'appserver');
 
 error_reporting(~E_NOTICE);
 set_time_limit (0);
