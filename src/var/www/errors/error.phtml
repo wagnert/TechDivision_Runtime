@@ -17,7 +17,7 @@
 
     <div class="container main">
         <div class="row-fluid ">
-            <?php echo $errorMessage ?>
+            <pre><?php echo $errorMessage ?></pre>
         </div>
 
         <div class="footer">
@@ -6841,6 +6841,23 @@ body {
     padding: 0 0 60px 0;
     font-family: 'Open Sans', Arial, Verdana, Helvetica, sans-serif;
     min-height: 100%
+}
+
+pre {
+    display: block;
+    padding: 0;
+    margin: 0;
+    font-size: 10px;
+    line-height: normal;
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: pre;
+    white-space: pre-wrap;
+    background-color: white!important;
+    border: 0!important;
+    -webkit-border-radius: 0!important;
+    -moz-border-radius: 0!important;
+    border-radius: 0!important;
 }
 
 p {
