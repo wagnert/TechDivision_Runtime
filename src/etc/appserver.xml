@@ -229,12 +229,21 @@
                                 <param name="admin" type="string">admin@appserver.io</param>
                                 <param name="documentRoot" type="string">/opt/appserver/webapps/magento-1.8.1.0</param>
                             </params>
+                            <rewrites>
+                                <rewrite condition="-d|-f|-l" target="" flag="L" />
+                                <rewrite condition="(.*),!^/index\.php" target="/index.php/$1" flag="L" />
+                            </rewrites>
                         </virtualHost>
                         <virtualHost name="example.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
                                 <param name="documentRoot" type="string">/opt/appserver/webapps/example</param>
                             </params>
+                            <rewrites>
+                                <rewrite condition="-d|-f|-l" target="" flag="L" />
+                                <rewrite condition="(.+)([/\?].+),!\.do" target="/$1.do$2" flag="L" />
+                                <rewrite condition="(.+),!\.do" target="/$1.do" flag="L" />
+                            </rewrites>
                         </virtualHost>
                         <virtualHost name="appserver.local site.local">
                             <params>

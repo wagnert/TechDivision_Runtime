@@ -61,7 +61,7 @@
             <xs:attribute name="uuid" type="xs:string" />
         </xs:complexType>
     </xs:element>
-    
+
     <xs:element name="servers">
         <xs:complexType>
             <xs:choice maxOccurs="unbounded">
@@ -130,12 +130,13 @@
         <xs:complexType>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="appserver:params" />
+                <xs:element ref="appserver:rewrites" />
             </xs:choice>
             <xs:attribute name="name" type="xs:string" />
             <xs:attribute name="uuid" type="xs:string" />
         </xs:complexType>
     </xs:element>
-    
+
     <xs:element name="rewrites">
         <xs:complexType>
             <xs:choice maxOccurs="unbounded">
