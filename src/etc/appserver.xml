@@ -255,6 +255,7 @@
                                 <rewrite condition="^/index([/\?]*.*)" target="/index.do$1" flag="L" />
                                 <rewrite condition="downloads([/\?]*.*)" target="/downloads.do/downloads$1" flag="L" />
                                 <rewrite condition="documentation([/\?]*.*)" target="/index.do/documentation$1" flag="L" />
+                                <rewrite condition="^/dl([/\?]*.*)" target="/dl.do$1" flag="L" />
                                 <rewrite condition="^/(\?*.*)" target="/index.do$1" flag="L" />
                             </rewrites>
                         </virtualHost>
@@ -346,6 +347,7 @@
                                 <rewrite condition="^/index([/\?]*.*)" target="/index.do$1" flag="L" />
                                 <rewrite condition="downloads([/\?]*.*)" target="/downloads.do/downloads$1" flag="L" />
                                 <rewrite condition="documentation([/\?]*.*)" target="/index.do/documentation$1" flag="L" />
+                                <rewrite condition="^/dl([/\?]*.*)" target="/dl.do$1" flag="L" />
                                 <rewrite condition="^/(\?*.*)" target="/index.do$1" flag="L" />
                             </rewrites>
                         </virtualHost>
