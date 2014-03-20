@@ -320,32 +320,36 @@
                                 <param name="admin" type="string">admin@appserver.io</param>
                                 <param name="documentRoot" type="string">/opt/appserver/webapps/magento-1.8.1.0</param>
                             </params>
+                            <rewrites>
+                                <rewrite condition="-d|-f|-l" target="" flag="L" />
+                                <rewrite condition="(.*),!^/index\.php" target="/index.php/$1" flag="L" />
+                            </rewrites>
                         </virtualHost>
                         <virtualHost name="example.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
                                 <param name="documentRoot" type="string">/opt/appserver/webapps/example</param>
                             </params>
+                            <rewrites>
+                                <rewrite condition="-d|-f|-l" target="" flag="L" />
+                                <rewrite condition="(.+)([/\?].+),!\.do" target="/$1.do$2" flag="L" />
+                                <rewrite condition="(.+),!\.do" target="/$1.do" flag="L" />
+                            </rewrites>
                         </virtualHost>
-                        <virtualHost name="appserver.local site.local">
+                        <virtualHost name="appserver.io www.appserver.io appserver.local site.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
                                 <param name="documentRoot" type="string">/opt/appserver/webapps/site</param>
                             </params>
+                            <rewrites>
+                                <rewrite condition="-d|-f|-l,!^/$" target="" flag="L" />
+                                <rewrite condition="^/index([/\?]*.*)" target="/index.do$1" flag="L" />
+                                <rewrite condition="downloads([/\?]*.*)" target="/downloads.do/downloads$1" flag="L" />
+                                <rewrite condition="documentation([/\?]*.*)" target="/index.do/documentation$1" flag="L" />
+                                <rewrite condition="^/(\?*.*)" target="/index.do$1" flag="L" />
+                            </rewrites>
                         </virtualHost>
                     </virtualHosts>
-
-                    <rewrites>
-                        <rewrite condition="-d|-f|-l,!site$" target="" flag="L" />
-                        <rewrite condition="\.do" target="" flag="L" />
-                        <rewrite condition="site/index([/\?]*.*)|site([/\?]*.*)" target="/site/index.do$1" flag="L" />
-                        <rewrite condition="site/downloads([/\?]*.*)" target="/site/downloads.do/downloads$1" flag="L" />
-                        <rewrite condition="site/documentation([/\?]*.*)" target="/site/index.do/documentation$1" flag="L" />
-                        <rewrite condition="magento.*?index\.php" target="" flag="L" />
-                        <rewrite condition="(magento.*?)/(.*)" target="/$1/index.php/$2" flag="L" />
-                        <rewrite condition="example/(.+)([/\?].+)" target="/example/$1.do$2" flag="L" />
-                        <rewrite condition="example/(.+)" target="/example/$1.do" flag="" />
-                    </rewrites>
 
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\Http\HttpConnectionHandler" />
