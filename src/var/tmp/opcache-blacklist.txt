@@ -1,0 +1,2 @@
+; Blacklists all PHP files in the webapps/demo directory and all subdirectories
+;/opt/appserver/webapps**/*.php
