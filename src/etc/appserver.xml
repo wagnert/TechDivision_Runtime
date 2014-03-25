@@ -269,6 +269,7 @@
                     <modules>
                         <module type="\TechDivision\WebServer\Modules\AuthenticationModule" />
                         <module type="\TechDivision\WebServer\Modules\VirtualHostModule" />
+                        <module type="\TechDivision\WebServer\Modules\EnvironmentVariableModule" />
                         <module type="\TechDivision\RewriteModule\RewriteModule" />
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
                         <module type="\TechDivision\WebServer\Modules\CoreModule" />
@@ -363,6 +364,7 @@
                     <modules>
                         <module type="\TechDivision\WebServer\Modules\AuthenticationModule" />
                         <module type="\TechDivision\WebServer\Modules\VirtualHostModule" />
+                        <module type="\TechDivision\WebServer\Modules\EnvironmentVariableModule" />
                         <module type="\TechDivision\RewriteModule\RewriteModule" />
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
                         <module type="\TechDivision\WebServer\Modules\CoreModule" />

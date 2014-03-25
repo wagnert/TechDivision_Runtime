@@ -86,6 +86,7 @@
                 <xs:element ref="appserver:authentications" />
                 <xs:element ref="appserver:virtualHosts" />
                 <xs:element ref="appserver:rewrites" />
+                <xs:element ref="appserver:environmentVariables" />
                 <xs:element ref="appserver:connectionHandlers" />
                 <xs:element ref="appserver:modules" />
                 <xs:element ref="appserver:fileHandlers" />
@@ -131,6 +132,7 @@
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="appserver:params" />
                 <xs:element ref="appserver:rewrites" />
+                <xs:element ref="appserver:environmentVariables" />
             </xs:choice>
             <xs:attribute name="name" type="xs:string" />
             <xs:attribute name="uuid" type="xs:string" />
@@ -151,6 +153,23 @@
             <xs:attribute name="condition" type="xs:string" />
             <xs:attribute name="target" type="xs:string" />
             <xs:attribute name="flag" type="xs:string" />
+            <xs:attribute name="uuid" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="environmentVariables">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element ref="appserver:environmentVariable" />
+            </xs:choice>
+            <xs:attribute name="uuid" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="environmentVariable">
+        <xs:complexType>
+            <xs:attribute name="condition" type="xs:string" />
+            <xs:attribute name="definition" type="xs:string" />
             <xs:attribute name="uuid" type="xs:string" />
         </xs:complexType>
     </xs:element>
