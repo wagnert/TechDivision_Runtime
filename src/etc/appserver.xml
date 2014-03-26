@@ -276,7 +276,7 @@
                         <!--
                         <module type="\TechDivision\WebServer\Modules\DeflateModule" />
                         -->
-                        <module type="\TechDivision\WebServer\Modules\PhpModule" />
+                        <module type="\TechDivision\PhpModule\PhpModule" />
                         <module type="\TechDivision\ServletModule\ServletModule" />
                     </modules>
                     <fileHandlers>
@@ -371,7 +371,7 @@
                         <!--
                         <module type="\TechDivision\WebServer\Modules\DeflateModule" />
                         -->
-                        <module type="\TechDivision\WebServer\Modules\PhpModule" />
+                        <module type="\TechDivision\PhpModule\PhpModule" />
                         <module type="\TechDivision\ServletModule\ServletModule" />
                     </modules>
                     <fileHandlers>
