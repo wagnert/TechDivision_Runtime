@@ -205,6 +205,7 @@
                         <param name="port" type="integer">9080</param>
                         <param name="workerNumber" type="integer">128</param>
                         <param name="documentRoot" type="string">/opt/appserver/webapps</param>
+                        <param name="directoryIndex" type="string">index.do index.php index.html index.htm</param>
                         <param name="keepAliveMax" type="integer">64</param>
                         <param name="keepAliveTimeout" type="integer">16</param>
                         <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
@@ -333,6 +334,7 @@
                         <param name="certPath" type="string">etc/server.pem</param>
                         <param name="passphrase" type="string"></param>
                         <param name="documentRoot" type="string">/opt/appserver/webapps</param>
+                        <param name="directoryIndex" type="string">index.do index.php index.html index.htm</param>
                         <param name="keepAliveMax" type="integer">64</param>
                         <param name="keepAliveTimeout" type="integer">16</param>
                         <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
