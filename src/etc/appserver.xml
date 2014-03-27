@@ -203,7 +203,7 @@
                         <param name="transport" type="string">tcp</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">9080</param>
-                        <param name="workerNumber" type="integer">32</param>
+                        <param name="workerNumber" type="integer">128</param>
                         <param name="documentRoot" type="string">/opt/appserver/webapps</param>
                         <param name="keepAliveMax" type="integer">64</param>
                         <param name="keepAliveTimeout" type="integer">16</param>
@@ -225,6 +225,15 @@
                         </authentication>
                     </authentications>
 
+                    <accesses>
+                        <!-- per default allow everything -->
+                        <access type="allow">
+                            <params>
+                                <param name="REQUEST_URI" type="string">.*</param>
+                            </params>
+                        </access>
+                    </accesses>
+
                     <virtualHosts>
                         <virtualHost name="magento.dev magento.local">
                             <params>
@@ -235,6 +244,13 @@
                                 <rewrite condition="-d|-f|-l" target="" flag="L" />
                                 <rewrite condition="(.*),!^/index\.php" target="/index.php/$1" flag="L" />
                             </rewrites>
+                            <accesses>
+                                <access type="allow">
+                                    <params>
+                                        <param name="REQUEST_URI" type="string">^\/(media|skin|js|index\.php).*</param>
+                                    </params>
+                                </access>
+                            </accesses>
                         </virtualHost>
                         <virtualHost name="example.local">
                             <params>
@@ -246,6 +262,14 @@
                                 <rewrite condition="(.+)([/\?].+),!\.do" target="/$1.do$2" flag="L" />
                                 <rewrite condition="(.+),!\.do" target="/$1.do" flag="L" />
                             </rewrites>
+                            <accesses>
+                                <!-- per default allow everything -->
+                                <access type="allow">
+                                    <params>
+                                        <param name="REQUEST_URI" type="string">.*</param>
+                                    </params>
+                                </access>
+                            </accesses>
                         </virtualHost>
                         <virtualHost name="appserver.io www.appserver.io appserver.local site.local">
                             <params>
@@ -260,6 +284,14 @@
                                 <rewrite condition="^/dl([/\?]*.*)" target="/dl.do$1" flag="L" />
                                 <rewrite condition="^(/\?*.*)" target="/index.do$1" flag="L" />
                             </rewrites>
+                            <accesses>
+                                <!-- per default allow everything -->
+                                <access type="allow">
+                                    <params>
+                                        <param name="REQUEST_URI" type="string">.*</param>
+                                    </params>
+                                </access>
+                            </accesses>
                         </virtualHost>
                     </virtualHosts>
 
@@ -272,6 +304,7 @@
                         <module type="\TechDivision\WebServer\Modules\EnvironmentVariableModule" />
                         <module type="\TechDivision\RewriteModule\RewriteModule" />
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
+                        <module type="\TechDivision\WebServer\Modules\AccessModule"/>
                         <module type="\TechDivision\WebServer\Modules\CoreModule" />
                         <!--
                         <module type="\TechDivision\WebServer\Modules\DeflateModule" />
@@ -293,7 +326,7 @@
                     <params>
                         <param name="admin" type="string">admin@appserver.io</param>
                         <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
-                        <param name="workerNumber" type="integer">32</param>
+                        <param name="workerNumber" type="integer">128</param>
                         <param name="transport" type="string">ssl</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">9443</param>
@@ -330,6 +363,13 @@
                                 <rewrite condition="-d|-f|-l" target="" flag="L" />
                                 <rewrite condition="(.*),!^/index\.php" target="/index.php/$1" flag="L" />
                             </rewrites>
+                            <accesses>
+                                <access type="allow">
+                                    <params>
+                                        <param name="REQUEST_URI" type="string">^\/(media|skin|js|index\.php).*</param>
+                                    </params>
+                                </access>
+                            </accesses>
                         </virtualHost>
                         <virtualHost name="example.local">
                             <params>
@@ -341,6 +381,14 @@
                                 <rewrite condition="(.+)([/\?].+),!\.do" target="/$1.do$2" flag="L" />
                                 <rewrite condition="(.+),!\.do" target="/$1.do" flag="L" />
                             </rewrites>
+                            <accesses>
+                                <!-- per default allow everything -->
+                                <access type="allow">
+                                    <params>
+                                        <param name="REQUEST_URI" type="string">.*</param>
+                                    </params>
+                                </access>
+                            </accesses>
                         </virtualHost>
                         <virtualHost name="appserver.io www.appserver.io appserver.local site.local">
                             <params>
@@ -355,6 +403,14 @@
                                 <rewrite condition="^/dl([/\?]*.*)" target="/dl.do$1" flag="L" />
                                 <rewrite condition="^(/\?*.*)" target="/index.do$1" flag="L" />
                             </rewrites>
+                            <accesses>
+                                <!-- per default allow everything -->
+                                <access type="allow">
+                                    <params>
+                                        <param name="REQUEST_URI" type="string">.*</param>
+                                    </params>
+                                </access>
+                            </accesses>
                         </virtualHost>
                     </virtualHosts>
 
@@ -367,6 +423,7 @@
                         <module type="\TechDivision\WebServer\Modules\EnvironmentVariableModule" />
                         <module type="\TechDivision\RewriteModule\RewriteModule" />
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
+                        <module type="\TechDivision\WebServer\Modules\AccessModule"/>
                         <module type="\TechDivision\WebServer\Modules\CoreModule" />
                         <!--
                         <module type="\TechDivision\WebServer\Modules\DeflateModule" />
