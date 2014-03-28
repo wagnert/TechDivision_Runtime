@@ -307,8 +307,6 @@
                                 <rewrite condition="(.*)" target="index.php" flag="L" />
                             </rewrites>
                             <environmentVariables>
-                                <environmentVariable condition="" definition="FLOW_CONTEXT=Production" />
-                                <environmentVariable condition="" definition="FLOW_ROOTPATH=/opt/appserver/webapps/neos-1.0.2" />
                                 <environmentVariable condition="" definition="FLOW_REWRITEURLS=1" />
                                 <environmentVariable condition="Basic ([a-zA-Z0-9\+/=]+)@$Authorization" definition="REMOTE_AUTHORIZATION=$1" />
                             </environmentVariables>
@@ -446,8 +444,6 @@
                                 <rewrite condition="(.*)" target="index.php" flag="L" />
                             </rewrites>
                             <environmentVariables>
-                                <environmentVariable condition="" definition="FLOW_CONTEXT=Production" />
-                                <environmentVariable condition="" definition="FLOW_ROOTPATH=/opt/appserver/webapps/neos-1.0.2" />
                                 <environmentVariable condition="" definition="FLOW_REWRITEURLS=1" />
                                 <environmentVariable condition="Basic ([a-zA-Z0-9\+/=]+)@$Authorization" definition="REMOTE_AUTHORIZATION=$1" />
                             </environmentVariables>
