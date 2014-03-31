@@ -181,6 +181,41 @@
             </host>
         </container>
 		-->
+        
+        <container
+                name="lemcache"
+                threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\LemCacheContainer\CacheContainer">
+            <description>
+                <![CDATA[A memcache API compatible PHP implementation of a key value storage server.]]>
+            </description>
+            
+            <deployment type="TechDivision\LemCacheContainer\Deployment" />
+            
+            <servers>  		
+                
+                <server
+                        type="\TechDivision\LemCacheContainer\Servers\MultiThreadedServer"
+                        worker="\TechDivision\WebServer\Workers\ThreadWorker"
+                        socket="\TechDivision\WebServer\Sockets\StreamSocket"
+                        serverContext="\TechDivision\WebServer\ServerContext">
+                    <params>
+                        <param name="admin" type="string">admin@appserver.io</param>
+                        <param name="software" type="string">appserver/0.6.0beta1 (mac)</param>
+                        <param name="transport" type="string">tcp</param>
+                        <param name="address" type="string">0.0.0.0</param>
+                        <param name="port" type="integer">11210</param>
+                        <param name="workerNumber" type="integer">8</param>
+                        <param name="keepAliveMax" type="integer">64</param>
+                        <param name="keepAliveTimeout" type="integer">16</param>
+                    </params>
+
+                    <connectionHandlers>
+                        <connectionHandler type="\TechDivision\MemcacheProtocol\MemcacheConnectionHandler" />
+                    </connectionHandlers>
+                    
+                </server>
+            </servers>
+        </container>
 		
         <container
                 name="webserver"
@@ -474,41 +509,6 @@
                         <fileHandler name="php" extension=".phtml" />
                         <fileHandler name="servlet" extension=".do" />
                     </fileHandlers>
-                </server>
-            </servers>
-        </container>
-        
-        <container
-                name="lemcache"
-                threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\LemCacheContainer\CacheContainer">
-            <description>
-                <![CDATA[A memcache API compatible PHP implementation of a key value storage server.]]>
-            </description>
-            
-            <deployment type="TechDivision\LemCacheContainer\Deployment" />
-            
-            <servers>  		
-                
-                <server
-                        type="\TechDivision\LemCacheContainer\Servers\MultiThreadedServer"
-                        worker="\TechDivision\WebServer\Workers\ThreadWorker"
-                        socket="\TechDivision\WebServer\Sockets\StreamSocket"
-                        serverContext="\TechDivision\WebServer\ServerContext">
-                    <params>
-                        <param name="admin" type="string">admin@appserver.io</param>
-                        <param name="software" type="string">appserver/0.6.0beta1 (mac)</param>
-                        <param name="transport" type="string">tcp</param>
-                        <param name="address" type="string">0.0.0.0</param>
-                        <param name="port" type="integer">11210</param>
-                        <param name="workerNumber" type="integer">8</param>
-                        <param name="keepAliveMax" type="integer">64</param>
-                        <param name="keepAliveTimeout" type="integer">16</param>
-                    </params>
-
-                    <connectionHandlers>
-                        <connectionHandler type="\TechDivision\MemcacheProtocol\MemcacheConnectionHandler" />
-                    </connectionHandlers>
-                    
                 </server>
             </servers>
         </container>
