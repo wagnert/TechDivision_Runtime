@@ -182,6 +182,13 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Check if PECL memcache sources has been downloaded yet  		 	  -->
+    <!-- ==================================================================== -->
+    <target name="check-memcache-src-present" description="Check if PECL memcache sources has been downloaded yet.">
+        <available file="${lib.dir}/memcache-${appserver.memcache.version}.tgz" property="memcache-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Check if PECL pthreads sources has been downloaded yet  		 	  -->
     <!-- ==================================================================== -->
     <target name="check-pthreads-src-present" description="Check if PECL pthreads sources has been downloaded yet.">
@@ -347,6 +354,13 @@
     <!-- ==================================================================== -->
     <target name="get-memcached-src" depends="check-memcached-src-present" unless="${memcached-src.present}" description="Get PECL memcached source package by given version number">
         <get src="http://pecl.php.net/get/memcached-${appserver.memcached.version}.tgz" dest="${lib.dir}/memcached-${appserver.memcached.version}.tgz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get PECL memcache source package by given version number		      -->
+    <!-- ==================================================================== -->
+    <target name="get-memcache-src" depends="check-memcache-src-present" unless="${memcache-src.present}" description="Get PECL memcache source package by given version number">
+        <get src="http://pecl.php.net/get/memcache-${appserver.memcache.version}.tgz" dest="${lib.dir}/memcache-${appserver.memcache.version}.tgz"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -549,6 +563,12 @@
         <untar src="${lib.dir}/memcached-${appserver.memcached.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <move todir="${php-target.dir}/php-${appserver.php.version}/ext/memcached">
             <fileset dir="${php-target.dir}/memcached-${appserver.memcached.version}"/>
+        </move>
+        <!-- prepare PECL memcache sources sources for static compilation -->
+        <antcall target="get-memcache-src"/>
+        <untar src="${lib.dir}/memcache-${appserver.memcache.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <move todir="${php-target.dir}/php-${appserver.php.version}/ext/memcache">
+            <fileset dir="${php-target.dir}/memcache-${appserver.memcache.version}"/>
         </move>
         <!-- prepare PECL pthread sources for static compilation -->
         <antcall target="get-pthreads-src"/>
@@ -917,6 +937,7 @@
         <!-- build the PECL package's as shared library -->
         <antcall target="pecl-build-pthreads"/>
         <antcall target="pecl-build-memcached"/>
+        <antcall target="pecl-build-memcache"/>
         <antcall target="pecl-build-redis"/>
         <antcall target="pecl-build-appserver"/>
         <antcall target="pecl-build-apcu"/>
@@ -976,6 +997,27 @@
         </exec>
         <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="make"/>
         <exec dir="${php-target.dir}/memcached-${appserver.memcached.version}" executable="make">
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Builds the PECL memcache as shared extension                         -->
+    <!-- ==================================================================== -->
+    <target name="pecl-build-memcache" description="Builds the PECL memcache as shared extension.">
+        <antcall target="get-memcache-src"/>
+        <untar src="${lib.dir}/memcache-${appserver.memcache.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <exec dir="${php-target.dir}/memcache-${appserver.memcache.version}" executable="${appserver.compile.prefix}/bin/phpize"/>
+        <exec dir="${php-target.dir}/memcache-${appserver.memcache.version}" executable="sh">
+        	<!--
+        	<env value="MACOSX_DEPLOYMENT_TARGET=10.8 CFLAGS='-fgnu89-inline' LDFLAGS='-fgnu89-inline' CXXFLAGS='-fgnu89-inline'"/>
+            -->
+            <arg value=""/>
+            <arg value="--with-php-config=${appserver.compile.prefix}/bin/php-config"/>
+            <arg value="--with-libmemcached-dir=${libmemcached.dir}"/>
+        </exec>
+        <exec dir="${php-target.dir}/memcache-${appserver.memcache.version}" executable="make"/>
+        <exec dir="${php-target.dir}/memcache-${appserver.memcache.version}" executable="make">
             <arg value="install"/>
         </exec>
     </target>
