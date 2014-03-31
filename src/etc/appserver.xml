@@ -205,10 +205,11 @@
                         <param name="transport" type="string">tcp</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">9080</param>
-                        <param name="workerNumber" type="integer">32</param>
+                        <param name="workerNumber" type="integer">128</param>
                         <param name="documentRoot" type="string">/opt/appserver/webapps</param>
+                        <param name="directoryIndex" type="string">index.do index.php index.html index.htm</param>
                         <param name="keepAliveMax" type="integer">64</param>
-                        <param name="keepAliveTimeout" type="integer">16</param>
+                        <param name="keepAliveTimeout" type="integer">5</param>
                         <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
                     </params>
 
@@ -227,6 +228,15 @@
                         </authentication>
                     </authentications>
 
+                    <accesses>
+                        <!-- per default allow everything -->
+                        <access type="allow">
+                            <params>
+                                <param name="REQUEST_URI" type="string">.*</param>
+                            </params>
+                        </access>
+                    </accesses>
+
                     <virtualHosts>
                         <virtualHost name="magento.dev magento.local">
                             <params>
@@ -234,9 +244,16 @@
                                 <param name="documentRoot" type="string">/opt/appserver/webapps/magento-1.8.1.0</param>
                             </params>
                             <rewrites>
-                                <rewrite condition="-d|-f|-l" target="" flag="L" />
-                                <rewrite condition="(.*),!^/index\.php" target="/index.php/$1" flag="L" />
+                                <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
+                                <rewrite condition="(.*){AND}!^/index\.php" target="/index.php/$1" flag="L" />
                             </rewrites>
+                            <accesses>
+                                <access type="allow">
+                                    <params>
+                                        <param name="REQUEST_URI" type="string">^\/(media|skin|js|index\.php).*</param>
+                                    </params>
+                                </access>
+                            </accesses>
                         </virtualHost>
                         <virtualHost name="example.local">
                             <params>
@@ -244,10 +261,18 @@
                                 <param name="documentRoot" type="string">/opt/appserver/webapps/example</param>
                             </params>
                             <rewrites>
-                                <rewrite condition="-d|-f|-l" target="" flag="L" />
-                                <rewrite condition="(.+)([/\?].+),!\.do" target="/$1.do$2" flag="L" />
-                                <rewrite condition="(.+),!\.do" target="/$1.do" flag="L" />
+                                <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
+                                <rewrite condition="(.+)([/\?].+){AND}!\.do" target="/$1.do$2" flag="L" />
+                                <rewrite condition="(.+){AND}!\.do" target="/$1.do" flag="L" />
                             </rewrites>
+                            <accesses>
+                                <!-- per default allow everything -->
+                                <access type="allow">
+                                    <params>
+                                        <param name="REQUEST_URI" type="string">.*</param>
+                                    </params>
+                                </access>
+                            </accesses>
                         </virtualHost>
                         <virtualHost name="appserver.io www.appserver.io appserver.local site.local">
                             <params>
@@ -255,13 +280,38 @@
                                 <param name="documentRoot" type="string">/opt/appserver/webapps/site</param>
                             </params>
                             <rewrites>
-                                <rewrite condition="-d|-f|-l,!^/$" target="" flag="L" />
+                                <rewrite condition="-d{OR}-f{OR}-l{AND}!^/$" target="" flag="L" />
                                 <rewrite condition="^/index([/\?]*.*)" target="/index.do$1" flag="L" />
                                 <rewrite condition="downloads([/\?]*.*)" target="/downloads.do/downloads$1" flag="L" />
                                 <rewrite condition="documentation([/\?]*.*)" target="/index.do/documentation$1" flag="L" />
                                 <rewrite condition="^/dl([/\?]*.*)" target="/dl.do$1" flag="L" />
                                 <rewrite condition="^(/\?*.*)" target="/index.do$1" flag="L" />
                             </rewrites>
+                            <accesses>
+                                <!-- per default allow everything -->
+                                <access type="allow">
+                                    <params>
+                                        <param name="REQUEST_URI" type="string">.*</param>
+                                    </params>
+                                </access>
+                            </accesses>
+                        </virtualHost>
+                        <virtualHost name="neos.local">
+                            <params>
+                                <param name="admin" type="string">admin@appserver.io</param>
+                                <param name="documentRoot" type="string">/opt/appserver/webapps/neos-1.0.2/Web</param>
+                            </params>
+                            <rewrites>
+                                <rewrite condition="/^(_Resources/Packages/|robots\.txt|favicon\.ico){OR}-d{OR}-f{OR}-l" target="" flag="L" />
+                                <rewrite condition="/^(_Resources/Persistent/[a-z0-9]+/(.+/)?[a-f0-9]{40})/.+(\..+)" target="$1$3" flag="L" />
+                                <rewrite condition="/^(_Resources/Persistent/.{40})/.+(\..+)" target="$1$2" flag="L" />
+                                <rewrite condition="/^_Resources/.*" target="" flag="L" />
+                                <rewrite condition="(.*)" target="index.php" flag="L" />
+                            </rewrites>
+                            <environmentVariables>
+                                <environmentVariable condition="" definition="FLOW_REWRITEURLS=1" />
+                                <environmentVariable condition="Basic ([a-zA-Z0-9\+/=]+)@$Authorization" definition="REMOTE_AUTHORIZATION=$1" />
+                            </environmentVariables>
                         </virtualHost>
                     </virtualHosts>
 
@@ -271,13 +321,15 @@
                     <modules>
                         <module type="\TechDivision\WebServer\Modules\AuthenticationModule" />
                         <module type="\TechDivision\WebServer\Modules\VirtualHostModule" />
+                        <module type="\TechDivision\WebServer\Modules\EnvironmentVariableModule" />
                         <module type="\TechDivision\RewriteModule\RewriteModule" />
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
+                        <module type="\TechDivision\WebServer\Modules\AccessModule"/>
                         <module type="\TechDivision\WebServer\Modules\CoreModule" />
                         <!--
                         <module type="\TechDivision\WebServer\Modules\DeflateModule" />
                         -->
-                        <module type="\TechDivision\WebServer\Modules\PhpModule" />
+                        <module type="\TechDivision\PhpModule\PhpModule" />
                         <module type="\TechDivision\ServletModule\ServletModule" />
                     </modules>
                     <fileHandlers>
@@ -294,15 +346,16 @@
                     <params>
                         <param name="admin" type="string">admin@appserver.io</param>
                         <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
-                        <param name="workerNumber" type="integer">32</param>
+                        <param name="workerNumber" type="integer">128</param>
                         <param name="transport" type="string">ssl</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">9443</param>
                         <param name="certPath" type="string">etc/server.pem</param>
                         <param name="passphrase" type="string"></param>
                         <param name="documentRoot" type="string">/opt/appserver/webapps</param>
+                        <param name="directoryIndex" type="string">index.do index.php index.html index.htm</param>
                         <param name="keepAliveMax" type="integer">64</param>
-                        <param name="keepAliveTimeout" type="integer">16</param>
+                        <param name="keepAliveTimeout" type="integer">5</param>
                         <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
                     </params>
 
@@ -328,9 +381,16 @@
                                 <param name="documentRoot" type="string">/opt/appserver/webapps/magento-1.8.1.0</param>
                             </params>
                             <rewrites>
-                                <rewrite condition="-d|-f|-l" target="" flag="L" />
-                                <rewrite condition="(.*),!^/index\.php" target="/index.php/$1" flag="L" />
+                                <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
+                                <rewrite condition="(.*){AND}!^/index\.php" target="/index.php/$1" flag="L" />
                             </rewrites>
+                            <accesses>
+                                <access type="allow">
+                                    <params>
+                                        <param name="REQUEST_URI" type="string">^\/(media|skin|js|index\.php).*</param>
+                                    </params>
+                                </access>
+                            </accesses>
                         </virtualHost>
                         <virtualHost name="example.local">
                             <params>
@@ -338,10 +398,18 @@
                                 <param name="documentRoot" type="string">/opt/appserver/webapps/example</param>
                             </params>
                             <rewrites>
-                                <rewrite condition="-d|-f|-l" target="" flag="L" />
-                                <rewrite condition="(.+)([/\?].+),!\.do" target="/$1.do$2" flag="L" />
-                                <rewrite condition="(.+),!\.do" target="/$1.do" flag="L" />
+                                <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
+                                <rewrite condition="(.+)([/\?].+){AND}!\.do" target="/$1.do$2" flag="L" />
+                                <rewrite condition="(.+){AND}!\.do" target="/$1.do" flag="L" />
                             </rewrites>
+                            <accesses>
+                                <!-- per default allow everything -->
+                                <access type="allow">
+                                    <params>
+                                        <param name="REQUEST_URI" type="string">.*</param>
+                                    </params>
+                                </access>
+                            </accesses>
                         </virtualHost>
                         <virtualHost name="appserver.io www.appserver.io appserver.local site.local">
                             <params>
@@ -349,13 +417,38 @@
                                 <param name="documentRoot" type="string">/opt/appserver/webapps/site</param>
                             </params>
                             <rewrites>
-                                <rewrite condition="-d|-f|-l,!^/$" target="" flag="L" />
+                                <rewrite condition="-d{OR}-f{OR}-l{AND}!^/$" target="" flag="L" />
                                 <rewrite condition="^/index([/\?]*.*)" target="/index.do$1" flag="L" />
                                 <rewrite condition="downloads([/\?]*.*)" target="/downloads.do/downloads$1" flag="L" />
                                 <rewrite condition="documentation([/\?]*.*)" target="/index.do/documentation$1" flag="L" />
                                 <rewrite condition="^/dl([/\?]*.*)" target="/dl.do$1" flag="L" />
                                 <rewrite condition="^(/\?*.*)" target="/index.do$1" flag="L" />
                             </rewrites>
+                            <accesses>
+                                <!-- per default allow everything -->
+                                <access type="allow">
+                                    <params>
+                                        <param name="REQUEST_URI" type="string">.*</param>
+                                    </params>
+                                </access>
+                            </accesses>
+                        </virtualHost>
+                        <virtualHost name="neos.local">
+                            <params>
+                                <param name="admin" type="string">admin@appserver.io</param>
+                                <param name="documentRoot" type="string">/opt/appserver/webapps/neos-1.0.2</param>
+                            </params>
+                            <rewrites>
+                                <rewrite condition="/^(_Resources/Packages/|robots\.txt|favicon\.ico){OR}-d{OR}-f{OR}-l" target="" flag="L" />
+                                <rewrite condition="/^(_Resources/Persistent/[a-z0-9]+/(.+/)?[a-f0-9]{40})/.+(\..+)" target="$1$3" flag="L" />
+                                <rewrite condition="/^(_Resources/Persistent/.{40})/.+(\..+)" target="$1$2" flag="L" />
+                                <rewrite condition="/^_Resources/.*" target="" flag="L" />
+                                <rewrite condition="(.*)" target="index.php" flag="L" />
+                            </rewrites>
+                            <environmentVariables>
+                                <environmentVariable condition="" definition="FLOW_REWRITEURLS=1" />
+                                <environmentVariable condition="Basic ([a-zA-Z0-9\+/=]+)@$Authorization" definition="REMOTE_AUTHORIZATION=$1" />
+                            </environmentVariables>
                         </virtualHost>
                     </virtualHosts>
 
@@ -365,13 +458,15 @@
                     <modules>
                         <module type="\TechDivision\WebServer\Modules\AuthenticationModule" />
                         <module type="\TechDivision\WebServer\Modules\VirtualHostModule" />
+                        <module type="\TechDivision\WebServer\Modules\EnvironmentVariableModule" />
                         <module type="\TechDivision\RewriteModule\RewriteModule" />
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
+                        <module type="\TechDivision\WebServer\Modules\AccessModule"/>
                         <module type="\TechDivision\WebServer\Modules\CoreModule" />
                         <!--
                         <module type="\TechDivision\WebServer\Modules\DeflateModule" />
                         -->
-                        <module type="\TechDivision\WebServer\Modules\PhpModule" />
+                        <module type="\TechDivision\PhpModule\PhpModule" />
                         <module type="\TechDivision\ServletModule\ServletModule" />
                     </modules>
                     <fileHandlers>
