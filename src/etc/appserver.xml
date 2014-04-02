@@ -267,7 +267,7 @@
                         <!-- per default allow everything -->
                         <access type="allow">
                             <params>
-                                <param name="REQUEST_URI" type="string">.*</param>
+                                <param name="X_REQUEST_URI" type="string">.*</param>
                             </params>
                         </access>
                     </accesses>
@@ -285,7 +285,7 @@
                             <accesses>
                                 <access type="allow">
                                     <params>
-                                        <param name="REQUEST_URI" type="string">^\/(media|skin|js|index\.php).*</param>
+                                        <param name="X_REQUEST_URI" type="string">^\/(media|skin|js|index\.php).*</param>
                                     </params>
                                 </access>
                             </accesses>
@@ -304,7 +304,7 @@
                                 <!-- per default allow everything -->
                                 <access type="allow">
                                     <params>
-                                        <param name="REQUEST_URI" type="string">.*</param>
+                                        <param name="X_REQUEST_URI" type="string">.*</param>
                                     </params>
                                 </access>
                             </accesses>
@@ -326,7 +326,7 @@
                                 <!-- per default allow everything -->
                                 <access type="allow">
                                     <params>
-                                        <param name="REQUEST_URI" type="string">.*</param>
+                                        <param name="X_REQUEST_URI" type="string">.*</param>
                                     </params>
                                 </access>
                             </accesses>
@@ -422,7 +422,7 @@
                             <accesses>
                                 <access type="allow">
                                     <params>
-                                        <param name="REQUEST_URI" type="string">^\/(media|skin|js|index\.php).*</param>
+                                        <param name="X_REQUEST_URI" type="string">^\/(media|skin|js|index\.php).*</param>
                                     </params>
                                 </access>
                             </accesses>
@@ -441,7 +441,7 @@
                                 <!-- per default allow everything -->
                                 <access type="allow">
                                     <params>
-                                        <param name="REQUEST_URI" type="string">.*</param>
+                                        <param name="X_REQUEST_URI" type="string">.*</param>
                                     </params>
                                 </access>
                             </accesses>
@@ -463,7 +463,7 @@
                                 <!-- per default allow everything -->
                                 <access type="allow">
                                     <params>
-                                        <param name="REQUEST_URI" type="string">.*</param>
+                                        <param name="X_REQUEST_URI" type="string">.*</param>
                                     </params>
                                 </access>
                             </accesses>

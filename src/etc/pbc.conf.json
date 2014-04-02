@@ -3,6 +3,11 @@
 
     "autoloader": {
 
+        "dirs": [
+            "/opt/appserver/app/code",
+            "/opt/appserver/webapps"
+        ],
+
         "omit": [
             "TechDivision\\PBC",
             "Doctrine",
@@ -16,7 +21,10 @@
         "dir": "/opt/appserver/var/tmp/pbc/cache"
     },
 
-    "project-dirs": [
-        "/opt/appserver/app/code/vendor/techdivision"
-    ]
+    "enforcement": {
+
+        "dirs": [
+            "/opt/appserver/app/code/vendor/techdivision"
+        ]
+    }
 }
