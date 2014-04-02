@@ -181,18 +181,18 @@
             </host>
         </container>
 		-->
-        
+
         <container
                 name="lemcache"
                 threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\LemCacheContainer\CacheContainer">
             <description>
                 <![CDATA[A memcache API compatible PHP implementation of a key value storage server.]]>
             </description>
-            
+
             <deployment type="TechDivision\LemCacheContainer\Deployment" />
-            
-            <servers>  		
-                
+
+            <servers>
+
                 <server
                         type="\TechDivision\LemCacheContainer\Servers\MultiThreadedServer"
                         worker="\TechDivision\WebServer\Workers\ThreadWorker"
@@ -212,11 +212,11 @@
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\MemcacheProtocol\MemcacheConnectionHandler" />
                     </connectionHandlers>
-                    
+
                 </server>
             </servers>
         </container>
-		
+
         <container
                 name="webserver"
                 threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\WebContainer\Container">
@@ -267,7 +267,7 @@
                         <!-- per default allow everything -->
                         <access type="allow">
                             <params>
-                                <param name="REQUEST_URI" type="string">.*</param>
+                                <param name="X_REQUEST_URI" type="string">.*</param>
                             </params>
                         </access>
                     </accesses>
@@ -285,7 +285,7 @@
                             <accesses>
                                 <access type="allow">
                                     <params>
-                                        <param name="REQUEST_URI" type="string">^\/(media|skin|js|index\.php).*</param>
+                                        <param name="X_REQUEST_URI" type="string">^\/(media|skin|js|index\.php).*</param>
                                     </params>
                                 </access>
                             </accesses>
@@ -304,7 +304,7 @@
                                 <!-- per default allow everything -->
                                 <access type="allow">
                                     <params>
-                                        <param name="REQUEST_URI" type="string">.*</param>
+                                        <param name="X_REQUEST_URI" type="string">.*</param>
                                     </params>
                                 </access>
                             </accesses>
@@ -326,7 +326,7 @@
                                 <!-- per default allow everything -->
                                 <access type="allow">
                                     <params>
-                                        <param name="REQUEST_URI" type="string">.*</param>
+                                        <param name="X_REQUEST_URI" type="string">.*</param>
                                     </params>
                                 </access>
                             </accesses>
@@ -422,7 +422,7 @@
                             <accesses>
                                 <access type="allow">
                                     <params>
-                                        <param name="REQUEST_URI" type="string">^\/(media|skin|js|index\.php).*</param>
+                                        <param name="X_REQUEST_URI" type="string">^\/(media|skin|js|index\.php).*</param>
                                     </params>
                                 </access>
                             </accesses>
@@ -441,7 +441,7 @@
                                 <!-- per default allow everything -->
                                 <access type="allow">
                                     <params>
-                                        <param name="REQUEST_URI" type="string">.*</param>
+                                        <param name="X_REQUEST_URI" type="string">.*</param>
                                     </params>
                                 </access>
                             </accesses>
@@ -463,7 +463,7 @@
                                 <!-- per default allow everything -->
                                 <access type="allow">
                                     <params>
-                                        <param name="REQUEST_URI" type="string">.*</param>
+                                        <param name="X_REQUEST_URI" type="string">.*</param>
                                     </params>
                                 </access>
                             </accesses>
@@ -471,7 +471,7 @@
                         <virtualHost name="neos.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">/opt/appserver/webapps/neos-1.0.2</param>
+                                <param name="documentRoot" type="string">/opt/appserver/webapps/neos-1.0.2/Web</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="^/(_Resources/Packages/|robots\.txt|favicon\.ico){OR}-d{OR}-f{OR}-l" target="" flag="L" />
