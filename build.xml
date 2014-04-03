@@ -50,6 +50,14 @@
             </filterchain>
         </copy>
     </target>
+
+    <!-- ==================================================================== -->
+    <!-- Copies any built package to the snapshot hosting server.             -->
+    <!-- ==================================================================== -->
+    <target name="copy-to-hub" description="Copies any built package to the snapshot hosting server.">
+
+    </target>
+
     <!-- ==================================================================== -->
     <!-- Copies the sources to the deploy directory     					  -->
     <!-- ==================================================================== -->

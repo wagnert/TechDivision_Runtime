@@ -19,6 +19,7 @@ Provides:   appserver
 %prep
 
 %build
+cd $RPM_BUILD_ROOT
 
 %clean
 
