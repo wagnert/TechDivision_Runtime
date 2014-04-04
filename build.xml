@@ -23,9 +23,9 @@
     <!-- ==================================================================== -->
     <property file="${basedir}/build.properties"/>
     <property file="${user.home}/build.properties"/>
-    <property file="${basedir}/build.default.properties"/>
     <property file="${basedir}/build.${os.family}.${os.distribution}.properties"/>
     <property file="${basedir}/build.${os.family}.properties"/>
+    <property file="${basedir}/build.default.properties"/>
 
     <!-- ==================================================================== -->
     <!-- Create properties which need other properties coming from different  -->
@@ -74,9 +74,10 @@
     <!-- Copies any built package to the snapshot hosting server.             -->
     <!-- ==================================================================== -->
     <target name="copy-to-hub" description="Copies any built package to the snapshot hosting server.">
-        <exec executable="scp" failonerror="true">
-            <arg line="${package.name} ${hub.scp-user}@${hub.address}:${hub.snapshot-path}"/>
-        </exec>
+        <scp file="${package.name}"
+             todir="${hub.scp-user}@${hub.address}:${hub.snapshot-path}"
+             keyfile="${user.home}/.ssh/id_dsa"
+                />
     </target>
 
     <!-- ==================================================================== -->
