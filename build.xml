@@ -7,6 +7,15 @@
     <property environment="env" />
 
     <!-- ==================================================================== -->
+    <!-- Load all property files in the right order                           -->
+    <!-- ==================================================================== -->
+    <property file="${basedir}/build.properties"/>
+    <property file="${user.home}/build.properties"/>
+    <property file="${basedir}/build.${os.family}.${os.distribution}.properties"/>
+    <property file="${basedir}/build.${os.family}.properties"/>
+    <property file="${basedir}/build.default.properties"/>
+
+    <!-- ==================================================================== -->
     <!-- Create some basic properties which we need for further processing    -->
     <!-- ==================================================================== -->
     <property name="lib.dir" value="${basedir}/lib" />
@@ -17,15 +26,6 @@
     <property name="hub.scp-user" value="build"/>
     <property name="hub.address" value="appserver.io"/>
     <property name="hub.snapshot-path" value="/var/www/builds.appserver.io/${os.qualified.path}"/>
-
-    <!-- ==================================================================== -->
-    <!-- Load all property files in the right order                           -->
-    <!-- ==================================================================== -->
-    <property file="${basedir}/build.properties"/>
-    <property file="${user.home}/build.properties"/>
-    <property file="${basedir}/build.${os.family}.${os.distribution}.properties"/>
-    <property file="${basedir}/build.${os.family}.properties"/>
-    <property file="${basedir}/build.default.properties"/>
 
     <!-- ==================================================================== -->
     <!-- Create properties which need other properties coming from different  -->
