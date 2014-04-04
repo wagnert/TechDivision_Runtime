@@ -1334,8 +1334,8 @@
             </filterchain>
         </copy>
         <chmod perm="755" file="${php-target.dir}/re/DEBIAN/postinst" />
-        <exec dir="${php-target.dir}" executable="dpkg-deb">
-            <arg line="--build ${php-target.dir}/re appserver_${appserver.version}_${appserver.architecture}.deb"/>
+        <exec dir="${php-target.dir}" executable="dpkg-deb" failonerror="true">
+            <arg line="--build ${php-target.dir}/re ${package.name}.deb"/>
         </exec>
     </target>
 
