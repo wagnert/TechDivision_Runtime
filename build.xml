@@ -27,6 +27,7 @@
     <!-- ==================================================================== -->
     <!-- Create properties which need other properties coming from different  -->
     <!-- files as we had problems defining it within properties files         -->
+    <!-- CAUTION, THIS SYNTAX IS DOUBLED IN THE rpmbuild SPECS FILE!          -->
     <!-- ==================================================================== -->
     <property name="package.name" value="appserver-${appserver.version}-${env.BUILD_NUMBER}.${os.qualified.name}.${os.architecture}"/>
 

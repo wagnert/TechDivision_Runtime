@@ -5,10 +5,10 @@
 
 Name:		appserver
 Version:	${appserver.version}
-Release:	1%{?dist}
+Release:	${env.BUILD_NUMBER}.${os.qualified.name}
 Summary:	Multithreaded Application Server für PHP, geschrieben in PHP
 Group:		System Environment/Base
-License:	OSS
+License:	OSL 3.0
 URL:		www.appserver.io
 requires:   git, libmcrypt
 Provides:   appserver
@@ -17,9 +17,9 @@ Provides:   appserver
 %{summary}
 
 %prep
+%setup -c
 
 %build
-cd $RPM_BUILD_ROOT
 
 %clean
 
