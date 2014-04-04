@@ -1354,9 +1354,11 @@
                 <expandproperties/>
             </filterchain>
         </copy>
-        <exec dir="${php-target.dir}" executable="rpmbuild" failonerror="true">
-            <arg line="--buildroot ${php-target.dir}/re -bb ${php-target.dir}/re/rpmbuild/SPECS/appserver.spec"/>
-        </exec>
+        <rpm
+            specFile="${php-target.dir}/re/rpmbuild/SPECS/appserver.spec"
+            topDir="${php-target.dir}/re/rpmbuild"
+            cleanBuildDir="true"
+            failOnError="true"/>
     </target>
 
     <!-- ==================================================================== -->
