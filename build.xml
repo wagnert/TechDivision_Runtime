@@ -74,9 +74,9 @@
     <!-- Copies any built package to the snapshot hosting server.             -->
     <!-- ==================================================================== -->
     <target name="copy-to-hub" description="Copies any built package to the snapshot hosting server.">
-        <scp file="${package.name}"
-             todir="${hub.scp-user}@${hub.address}:${hub.snapshot-path}"
-                />
+        <exec executable="scp" failonerror="true">
+            <arg line="${package.name} ${hub.scp-user}@${hub.address}:${hub.snapshot-path}"/>
+        </exec>
     </target>
 
     <!-- ==================================================================== -->
