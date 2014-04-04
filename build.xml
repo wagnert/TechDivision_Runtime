@@ -1370,7 +1370,7 @@
             </filterchain>
         </copy>
         <rpm
-            specFile="${php-target.dir}/re/rpmbuild/SPECS/appserver.spec"
+            specFile="appserver.spec"
             topDir="${php-target.dir}/re/rpmbuild"
             cleanBuildDir="true"
             failOnError="true"/>
