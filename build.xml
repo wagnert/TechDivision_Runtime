@@ -33,6 +33,7 @@
     <!-- CAUTION, THIS SYNTAX IS DOUBLED IN THE rpmbuild SPECS FILE!          -->
     <!-- ==================================================================== -->
     <property name="package.name" value="appserver-${appserver.version}-${env.BUILD_NUMBER}.${os.qualified.name}.${os.architecture}"/>
+    <property name="package.specific-dir" value="./"/>
 
     <!-- ==================================================================== -->
     <!-- Cleans the directories with the generated source files				  -->
@@ -74,9 +75,10 @@
     <!-- Copies any built package to the snapshot hosting server.             -->
     <!-- ==================================================================== -->
     <target name="copy-to-hub" description="Copies any built package to the snapshot hosting server.">
-        <scp file="${package.name}"
+        <scp file="${package.specific-dir}${package.name}"
              todir="${hub.scp-user}@${hub.address}:${hub.snapshot-path}"
-             keyfile="${user.home}/.ssh/id_rsa.pub"
+             keyfile="${user.home}/.ssh/id_rsa"
+             trust="true"
                 />
     </target>
 
@@ -1376,11 +1378,9 @@
                 <expandproperties/>
             </filterchain>
         </copy>
-        <rpm
-            specFile="appserver.spec"
-            topDir="${php-target.dir}/re/rpmbuild"
-            cleanBuildDir="true"
-            failOnError="true"/>
+        <exec dir="${php-target.dir}" executable="rpmbuild" failonerror="true">
+            <arg line="--buildroot ${php-target.dir}/re -bb ${php-target.dir}/re/rpmbuild/SPECS/appserver.spec"/>
+        </exec>
     </target>
 
     <!-- ==================================================================== -->
