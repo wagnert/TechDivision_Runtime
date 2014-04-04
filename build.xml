@@ -1,19 +1,34 @@
 <?xml version="1.0"?>
 <project name="TechDivision_Runtime" default="deploy" basedir=".">
 
+    <!-- ==================================================================== -->
+    <!-- Load the environment variables into our properties                   -->
+    <!-- ==================================================================== -->
     <property environment="env" />
 
+    <!-- ==================================================================== -->
+    <!-- Create some basic properties which we need for further processing    -->
+    <!-- ==================================================================== -->
     <property name="lib.dir" value="${basedir}/lib" />
     <property name="custom-lib.dir" value="${basedir}/custom-lib" />
     <property name="php-src.dir" value="${basedir}/src" />
     <property name="php-test.dir" value="${basedir}/tests" />
     <property name="php-target.dir" value="${basedir}/target"/>
 
+    <!-- ==================================================================== -->
+    <!-- Load all property files in the right order                           -->
+    <!-- ==================================================================== -->
     <property file="${basedir}/build.properties"/>
     <property file="${user.home}/build.properties"/>
     <property file="${basedir}/build.default.properties"/>
     <property file="${basedir}/build.${os.family}.${os.distribution}.properties"/>
     <property file="${basedir}/build.${os.family}.properties"/>
+
+    <!-- ==================================================================== -->
+    <!-- Create properties which need other properties coming from different  -->
+    <!-- files as we had problems defining it within properties files         -->
+    <!-- ==================================================================== -->
+    <property name="package.name" value="appserver-${appserver.version}-${env.BUILD_NUMBER}.${os.qualified.name}.${os.architecture}"/>
 
     <!-- ==================================================================== -->
     <!-- Cleans the directories with the generated source files				  -->
