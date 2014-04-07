@@ -33,7 +33,7 @@
     <!-- CAUTION, THIS SYNTAX IS DOUBLED IN THE rpmbuild SPECS FILE!          -->
     <!-- ==================================================================== -->
     <property name="package.name" value="appserver-${appserver.version}-${env.BUILD_NUMBER}.${os.qualified.name}.${os.architecture}"/>
-    <property name="package.specific-dir" value="${php-target.dir}"/>
+    <property name="package.specific-dir" value="${php-target.dir}/"/>
 
     <!-- ==================================================================== -->
     <!-- Cleans the directories with the generated source files				  -->
