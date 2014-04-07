@@ -17,13 +17,14 @@
 
     <!-- ==================================================================== -->
     <!-- Create some basic properties which we need for further processing    -->
+    <!-- The property hub.scp-user is missing on purpose and has to be        -->
+    <!-- provided within the build environment                                -->
     <!-- ==================================================================== -->
     <property name="lib.dir" value="${basedir}/lib" />
     <property name="custom-lib.dir" value="${basedir}/custom-lib" />
     <property name="php-src.dir" value="${basedir}/src" />
     <property name="php-test.dir" value="${basedir}/tests" />
     <property name="php-target.dir" value="${basedir}/target"/>
-    <property name="hub.scp-user" value="build"/>
     <property name="hub.address" value="appserver.io"/>
     <property name="hub.snapshot-path" value="/var/www/builds.appserver.io/${os.qualified.path}"/>
 
