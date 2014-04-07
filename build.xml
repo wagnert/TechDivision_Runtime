@@ -32,7 +32,7 @@
     <!-- files as we had problems defining it within properties files         -->
     <!-- CAUTION, THIS SYNTAX IS DOUBLED IN THE rpmbuild SPECS FILE!          -->
     <!-- ==================================================================== -->
-    <property name="package.name" value="appserver-${appserver.version}-${env.BUILD_NUMBER}.${os.qualified.name}.${os.architecture}"/>
+    <property name="package.name" value="appserver-${appserver.version}-${env.BUILD_NUMBER}.${os.qualified.name}.${os.architecture}.${os.package-extension}"/>
     <property name="package.specific-dir" value="${php-target.dir}/"/>
 
     <!-- ==================================================================== -->
@@ -75,7 +75,7 @@
     <!-- Copies any built package to the snapshot hosting server.             -->
     <!-- ==================================================================== -->
     <target name="copy-to-hub" description="Copies any built package to the snapshot hosting server.">
-        <scp file="${package.specific-dir}${package.name}*"
+        <scp file="${package.specific-dir}${package.name}"
              todir="${hub.scp-user}@${hub.address}:${hub.snapshot-path}"
              keyfile="${user.home}/.ssh/id_rsa"
              trust="true"
