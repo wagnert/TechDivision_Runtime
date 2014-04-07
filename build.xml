@@ -1,19 +1,40 @@
 <?xml version="1.0"?>
 <project name="TechDivision_Runtime" default="deploy" basedir=".">
 
+    <!-- ==================================================================== -->
+    <!-- Load the environment variables into our properties                   -->
+    <!-- ==================================================================== -->
     <property environment="env" />
 
-    <property name="lib.dir" value="${basedir}/lib" />
-    <property name="custom-lib.dir" value="${basedir}/custom-lib" />
-    <property name="php-src.dir" value="${basedir}/src" />
-    <property name="php-test.dir" value="${basedir}/tests" />
-    <property name="php-target.dir" value="${basedir}/target"/>
-
+    <!-- ==================================================================== -->
+    <!-- Load all property files in the right order                           -->
+    <!-- ==================================================================== -->
     <property file="${basedir}/build.properties"/>
     <property file="${user.home}/build.properties"/>
     <property file="${basedir}/build.default.properties"/>
     <property file="${basedir}/build.${os.family}.${os.distribution}.properties"/>
     <property file="${basedir}/build.${os.family}.properties"/>
+
+    <!-- ==================================================================== -->
+    <!-- Create some basic properties which we need for further processing    -->
+    <!-- The property hub.scp-user is missing on purpose and has to be        -->
+    <!-- provided within the build environment                                -->
+    <!-- ==================================================================== -->
+    <property name="lib.dir" value="${basedir}/lib" />
+    <property name="custom-lib.dir" value="${basedir}/custom-lib" />
+    <property name="php-src.dir" value="${basedir}/src" />
+    <property name="php-test.dir" value="${basedir}/tests" />
+    <property name="php-target.dir" value="${basedir}/target"/>
+    <property name="hub.address" value="appserver.io"/>
+    <property name="hub.snapshot-path" value="/var/www/builds.appserver.io/${os.qualified.path}"/>
+
+    <!-- ==================================================================== -->
+    <!-- Create properties which need other properties coming from different  -->
+    <!-- files as we had problems defining it within properties files         -->
+    <!-- CAUTION, THIS SYNTAX IS DOUBLED IN THE rpmbuild SPECS FILE!          -->
+    <!-- ==================================================================== -->
+    <property name="package.name" value="appserver-${appserver.version}-${env.BUILD_NUMBER}.${os.qualified.name}.${os.architecture}.${os.package-extension}"/>
+    <property name="package.specific-dir" value="${php-target.dir}/"/>
 
     <!-- ==================================================================== -->
     <!-- Cleans the directories with the generated source files				  -->
@@ -50,6 +71,16 @@
             </filterchain>
         </copy>
     </target>
+
+    <!-- ==================================================================== -->
+    <!-- Copies any built package to the snapshot hosting server.             -->
+    <!-- ==================================================================== -->
+    <target name="copy-to-hub" description="Copies any built package to the snapshot hosting server.">
+        <exec executable="scp" failonerror="true">
+            <arg line="-o StrictHostKeyChecking=no -i ${user.home}/.ssh/id_rsa ${package.specific-dir}${package.name} ${hub.scp-user}@${hub.address}:${hub.snapshot-path}"/>
+        </exec>
+    </target>
+
     <!-- ==================================================================== -->
     <!-- Copies the sources to the deploy directory     					  -->
     <!-- ==================================================================== -->
@@ -1326,8 +1357,8 @@
             </filterchain>
         </copy>
         <chmod perm="755" file="${php-target.dir}/re/DEBIAN/postinst" />
-        <exec dir="${php-target.dir}" executable="dpkg-deb">
-            <arg line="--build ${php-target.dir}/re appserver_${appserver.version}_${appserver.architecture}.deb"/>
+        <exec dir="${php-target.dir}" executable="dpkg-deb" failonerror="true">
+            <arg line="--build ${php-target.dir}/re ${package.name}" />
         </exec>
     </target>
 
