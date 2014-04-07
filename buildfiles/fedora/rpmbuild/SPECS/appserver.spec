@@ -17,7 +17,6 @@ Provides:   appserver
 %{summary}
 
 %prep
-%setup -c
 
 %build
 
