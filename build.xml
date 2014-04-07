@@ -75,11 +75,9 @@
     <!-- Copies any built package to the snapshot hosting server.             -->
     <!-- ==================================================================== -->
     <target name="copy-to-hub" description="Copies any built package to the snapshot hosting server.">
-        <scp file="${package.specific-dir}${package.name}"
-             todir="${hub.scp-user}@${hub.address}:${hub.snapshot-path}"
-             keyfile="${user.home}/.ssh/id_rsa"
-             trust="true"
-                />
+        <exec executable="scp">
+            <arg line="-o StrictHostKeyChecking=no -i ${user.home}/.ssh/id_rsa ${package.specific-dir}${package.name} ${hub.scp-user}@${hub.address}:${hub.snapshot-path}"/>
+        </exec>
     </target>
 
     <!-- ==================================================================== -->
@@ -1359,7 +1357,7 @@
         </copy>
         <chmod perm="755" file="${php-target.dir}/re/DEBIAN/postinst" />
         <exec dir="${php-target.dir}" executable="dpkg-deb" failonerror="true">
-            <arg line="--build ${php-target.dir}/re ${package.name}.deb"/>
+            <arg line="--build ${php-target.dir}/re ${package.name}" />
         </exec>
     </target>
 
