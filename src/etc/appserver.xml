@@ -379,18 +379,18 @@
                         <connectionHandler type="\TechDivision\Http\HttpConnectionHandler" />
                     </connectionHandlers>
                     <modules>
-                        <module type="\TechDivision\WebServer\Modules\AuthenticationModule" />
-                        <module type="\TechDivision\WebServer\Modules\VirtualHostModule" />
+                        <!-- REQUEST_POST hook -->
+                        <module type="\TechDivision\WebServer\Modules\AuthenticationModule"/>
+                        <module type="\TechDivision\WebServer\Modules\VirtualHostModule"/>
                         <module type="\TechDivision\WebServer\Modules\EnvironmentVariableModule" />
-                        <module type="\TechDivision\RewriteModule\RewriteModule" />
-                        <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
+                        <module type="\TechDivision\RewriteModule\RewriteModule"/>
+                        <module type="\TechDivision\WebServer\Modules\DirectoryModule"/>
                         <module type="\TechDivision\WebServer\Modules\AccessModule"/>
-                        <module type="\TechDivision\WebServer\Modules\CoreModule" />
-                        <!--
-                        <module type="\TechDivision\WebServer\Modules\DeflateModule" />
-                        -->
-                        <module type="\TechDivision\PhpModule\PhpModule" />
+                        <module type="\TechDivision\WebServer\Modules\CoreModule"/>
+                        <module type="\TechDivision\PhpModule\PhpModule"/>
                         <module type="\TechDivision\ServletModule\ServletModule" />
+                        <!-- RESPONSE_PRE hook -->
+                        <module type="\TechDivision\WebServer\Modules\DeflateModule"/>
                     </modules>
                     <fileHandlers>
                         <fileHandler name="php" extension=".php" />
@@ -521,18 +521,18 @@
                         <connectionHandler type="\TechDivision\Http\HttpConnectionHandler" />
                     </connectionHandlers>
                     <modules>
-                        <module type="\TechDivision\WebServer\Modules\AuthenticationModule" />
-                        <module type="\TechDivision\WebServer\Modules\VirtualHostModule" />
+                        <!-- REQUEST_POST hook -->
+                        <module type="\TechDivision\WebServer\Modules\AuthenticationModule"/>
+                        <module type="\TechDivision\WebServer\Modules\VirtualHostModule"/>
                         <module type="\TechDivision\WebServer\Modules\EnvironmentVariableModule" />
-                        <module type="\TechDivision\RewriteModule\RewriteModule" />
-                        <module type="\TechDivision\WebServer\Modules\DirectoryModule" />
+                        <module type="\TechDivision\RewriteModule\RewriteModule"/>
+                        <module type="\TechDivision\WebServer\Modules\DirectoryModule"/>
                         <module type="\TechDivision\WebServer\Modules\AccessModule"/>
-                        <module type="\TechDivision\WebServer\Modules\CoreModule" />
-                        <!--
-                        <module type="\TechDivision\WebServer\Modules\DeflateModule" />
-                        -->
-                        <module type="\TechDivision\PhpModule\PhpModule" />
+                        <module type="\TechDivision\WebServer\Modules\CoreModule"/>
+                        <module type="\TechDivision\PhpModule\PhpModule"/>
                         <module type="\TechDivision\ServletModule\ServletModule" />
+                        <!-- RESPONSE_PRE hook -->
+                        <module type="\TechDivision\WebServer\Modules\DeflateModule"/>
                     </modules>
                     <fileHandlers>
                         <fileHandler name="php" extension=".php" />
