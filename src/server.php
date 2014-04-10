@@ -28,8 +28,6 @@ declare (ticks = 1);
  * 
  * @see https://github.com/techdivision/php-ext-appserver#ini-settings
  */
-define('PHP_SAPI', 'appserver');
-
 error_reporting(~E_NOTICE);
 set_time_limit (0);
 
