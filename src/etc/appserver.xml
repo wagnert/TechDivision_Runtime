@@ -302,16 +302,16 @@
                         <virtualHost name="magento.dev magento.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">/opt/appserver/webapps/magento-1.8.1.0</param>
+                                <param name="documentRoot" type="string">/opt/appserver/webapps</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
-                                <rewrite condition="(.*){AND}!^/index\.php" target="/index.php/$1" flag="L" />
+                                <rewrite condition="^/([^/]+/)?(.*){AND}!index\.php" target="/$1index.php/$2" flag="L" />
                             </rewrites>
                             <accesses>
                                 <access type="allow">
                                     <params>
-                                        <param name="X_REQUEST_URI" type="string">^\/(media|skin|js|index\.php).*</param>
+                                        <param name="X_REQUEST_URI" type="string">^\/([^\/]+\/)?(media|skin|js|index\.php).*</param>
                                     </params>
                                 </access>
                             </accesses>
@@ -444,16 +444,16 @@
                         <virtualHost name="magento.dev magento.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">/opt/appserver/webapps/magento-1.8.1.0</param>
+                                <param name="documentRoot" type="string">/opt/appserver/webapps</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
-                                <rewrite condition="(.*){AND}!^/index\.php" target="/index.php/$1" flag="L" />
+                                <rewrite condition="^/([^/]+/)?(.*){AND}!index\.php" target="/$1index.php/$2" flag="L" />
                             </rewrites>
                             <accesses>
                                 <access type="allow">
                                     <params>
-                                        <param name="X_REQUEST_URI" type="string">^\/(media|skin|js|index\.php).*</param>
+                                        <param name="X_REQUEST_URI" type="string">^\/([^\/]+\/)?(media|skin|js|index\.php).*</param>
                                     </params>
                                 </access>
                             </accesses>
