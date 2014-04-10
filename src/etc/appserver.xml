@@ -214,10 +214,11 @@
             <servers>
 
                 <server
-                        type="\TechDivision\LemCacheContainer\Servers\MultiThreadedServer"
+                        type="\TechDivision\WebServer\Servers\MultiThreadedServer"
                         worker="\TechDivision\WebServer\Workers\ThreadWorker"
                         socket="\TechDivision\WebServer\Sockets\StreamSocket"
-                        serverContext="\TechDivision\WebServer\ServerContext">
+                        serverContext="\TechDivision\WebServer\ServerContext"
+                        loggerName="System">
                     <params>
                         <param name="admin" type="string">admin@appserver.io</param>
                         <param name="software" type="string">appserver/0.6.0beta1 (mac)</param>
