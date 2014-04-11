@@ -371,6 +371,7 @@
                             </rewrites>
                             <environmentVariables>
                                 <environmentVariable condition="" definition="FLOW_REWRITEURLS=1" />
+                                <environmentVariable condition="" definition="FLOW_CONTEXT=Production" />
                                 <environmentVariable condition="Basic ([a-zA-Z0-9\+/=]+)@$Authorization" definition="REMOTE_AUTHORIZATION=$1" />
                             </environmentVariables>
                         </virtualHost>
@@ -513,6 +514,7 @@
                             </rewrites>
                             <environmentVariables>
                                 <environmentVariable condition="" definition="FLOW_REWRITEURLS=1" />
+                                <environmentVariable condition="" definition="FLOW_CONTEXT=Production" />
                                 <environmentVariable condition="Basic ([a-zA-Z0-9\+/=]+)@$Authorization" definition="REMOTE_AUTHORIZATION=$1" />
                             </environmentVariables>
                         </virtualHost>
