@@ -1,2 +1,5 @@
 ; Blacklists all PHP files in the webapps/demo directory and all subdirectories
 ;/opt/appserver/webapps**/*.php
+
+; Override core functions removed
+/opt/appserver/var/scripts/core_functions.php

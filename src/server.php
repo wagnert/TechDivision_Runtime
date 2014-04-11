@@ -36,6 +36,12 @@ ini_set('session.gc_maxlifetime', 0);
 ini_set('zend.enable_gc', 0);
 ini_set('max_execution_time', 0);
 
+// set environmental variables in $_ENV globals per default
+$_ENV = appserver_get_envs();
+
+// load core functions to override in runtime environment
+require __DIR__ . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'scripts' . DIRECTORY_SEPARATOR . 'core_functions.php';
+
 // bootstrap the application
 require __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
