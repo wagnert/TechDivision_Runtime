@@ -1,2 +1,2 @@
 @echo off
-php\php -f server.php
+php\php -dappserver.php_sapi=appserver -dappserver.remove_functions=getenv,putenv server.php

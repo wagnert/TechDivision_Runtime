@@ -1490,20 +1490,22 @@
 		<!-- download the PHP/PECL binaries if not already available -->
 		<antcall target="WIN-get-php-binaries"/>
         <antcall target="WIN-get-apcu-binaries"/>
-        <antcall target="WIN-get-pthreads-binaries"/>
+        <!-- antcall target="WIN-get-pthreads-binaries"/ -->
         <antcall target="WIN-get-event-binaries"/>
 		<!-- extract the PHP/PECL binaries into the target folder -->
         <unzip src="${lib.dir}/php-${appserver.php.version}-Win32-VC11-x86.zip" dest="${php-target.dir}/appserver/php"/>
         <unzip src="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/apcu"/>
-        <unzip src="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/pthreads"/>
+        <!-- unzip src="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/pthreads"/ -->
         <unzip src="${lib.dir}/php_event-${appserver.event.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/event"/>
 		<!-- copy the DLL's to the PHP ext directory -->
 		<copy file="${php-target.dir}/apcu/php_apcu.dll" todir="${php-target.dir}/appserver/php/ext"/>
-		<copy file="${php-target.dir}/pthreads/php_pthreads.dll" todir="${php-target.dir}/appserver/php/ext"/>
-		<copy file="${php-target.dir}/pthreads/pthreadVC2.dll" todir="${php-target.dir}/appserver/php"/>
+		<!-- copy file="${php-target.dir}/pthreads/php_pthreads.dll" todir="${php-target.dir}/appserver/php/ext"/ -->
+		<!-- copy file="${php-target.dir}/pthreads/pthreadVC2.dll" todir="${php-target.dir}/appserver/php"/ -->
 		<copy file="${php-target.dir}/event/php_event.dll" todir="${php-target.dir}/appserver/php/ext"/>
 		<!-- copy the appserver DLL to the PHP ext directory -->
 		<copy file="${custom-lib.dir}/php_appserver-${appserver.ext-appserver.version}.dll" tofile="${php-target.dir}/appserver/php/ext/php_appserver.dll"/>
+		<copy file="${custom-lib.dir}/php_pthreads-${appserver.pthreads.version}.dll" tofile="${php-target.dir}/appserver/php/ext/php_pthreads.dll"/>
+		<copy file="${custom-lib.dir}/pthreadVC2.dll" tofile="${php-target.dir}/appserver/php/pthreadVC2.dll"/>
 		<!-- copy runtime sources to target directory -->
         <copy todir="${php-target.dir}/appserver" preservelastmodified="true" overwrite="true">
             <fileset dir="${php-src.dir}">
