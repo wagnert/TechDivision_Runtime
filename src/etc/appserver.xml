@@ -262,8 +262,8 @@
                         <param name="transport" type="string">tcp</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">9080</param>
-                        <param name="workerNumber" type="integer">128</param>
-                        <param name="documentRoot" type="string">/opt/appserver/webapps</param>
+                        <param name="workerNumber" type="integer">${container.server.worker.number}</param>
+                        <param name="documentRoot" type="string">${container.server.document.root}</param>
                         <param name="directoryIndex" type="string">index.do index.php index.html index.htm</param>
                         <param name="keepAliveMax" type="integer">64</param>
                         <param name="keepAliveTimeout" type="integer">5</param>
@@ -409,13 +409,13 @@
                     <params>
                         <param name="admin" type="string">admin@appserver.io</param>
                         <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
-                        <param name="workerNumber" type="integer">128</param>
+                        <param name="workerNumber" type="integer">${container.server.worker.number}</param>
                         <param name="transport" type="string">ssl</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">9443</param>
                         <param name="certPath" type="string">etc/server.pem</param>
                         <param name="passphrase" type="string"></param>
-                        <param name="documentRoot" type="string">/opt/appserver/webapps</param>
+                        <param name="documentRoot" type="string">${container.server.document.root}</param>
                         <param name="directoryIndex" type="string">index.do index.php index.html index.htm</param>
                         <param name="keepAliveMax" type="integer">64</param>
                         <param name="keepAliveTimeout" type="integer">5</param>
