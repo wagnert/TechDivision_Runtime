@@ -1592,4 +1592,140 @@
                 izPackDir=" ${izpack.installation.dir}" />
     </target>
 
+    <!-- ==================================================================== -->
+    <!-- Backup of all github repositories   					      		  -->
+    <!-- ==================================================================== -->
+    <target name="github-backup" description="Backs up all appserver github repositories">
+        <!-- get current timestamp -->
+        <tstamp>
+            <format property="date" pattern="dd-MM-yyyy"/>
+        </tstamp>
+
+        <!-- create backup folder -->
+        <mkdir dir="${github.backup.dir}/backup-${date}"/>
+
+        <!-- checkout all appserver repositories -->
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_Runtime.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_ServletModule.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_WebServer.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_ApplicationServerNeos.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_Http.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_PhpModule.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_MemcacheServer.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_LemCacheContainer.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/php-ext-appserver.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_ApplicationServerApi.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_ApplicationServer.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_MemcacheProtocol.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_RewriteModule.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_WebContainer.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_ServletEngine.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_Phar.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_ServletContainer.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_ApplicationServerProject.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_Lang.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_ApplicationServerWebsite.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_ApplicationServerMagento.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_AppserverAdmin.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_ApplicationServerExample.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_Context.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_Servlet.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_Storage.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_PersistenceContainerClient.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_PersistenceContainer.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_Stream.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_MessageQueueClient.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_Socket.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_MessageQueue.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_WebSocketContainer.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_AppserverIo.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/TechDivision_ApplicationServerExampleSymfony.git"/>
+        </exec>
+        <exec executable="${git.bin}" dir="${github.backup.dir}/backup-${date}">
+            <arg line="clone https://github.com/techdivision/php-sapi-appserver.git"/>
+        </exec>
+
+        <!-- compress current backup -->
+        <exec executable="${bin.extract}" dir="${github.backup.dir}">
+            <arg line="czvf backup-${date}.tgz backup-${date}"/>
+        </exec>
+
+        <!-- delete backup folder -->
+        <delete dir="${github.backup.dir}/backup-${date}" includeEmptyDirs="true"/>
+
+        <!-- delete old backups -->
+        <delete includeEmptyDirs="true">
+            <fileset dir="${github.backup.dir}" includes="**/*" excludes="backup-${date}.tgz"/>
+        </delete>
+    </target>
+
 </project>
