@@ -267,7 +267,7 @@
                         <param name="directoryIndex" type="string">index.do index.php index.html index.htm</param>
                         <param name="keepAliveMax" type="integer">64</param>
                         <param name="keepAliveTimeout" type="integer">5</param>
-                        <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
+                        <param name="errorsPageTemplatePath" type="string">var${file.separator}www${file.separator}errors${file.separator}error.phtml</param>
                     </params>
 
                     <environmentVariables>
@@ -319,7 +319,7 @@
                         <virtualHost name="example.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">${container.server.document.root}/example</param>
+                                <param name="documentRoot" type="string">${container.server.document.root}${file.separator}example</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
@@ -338,7 +338,7 @@
                         <virtualHost name="appserver.io www.appserver.io appserver.local site.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">${container.server.document.root}/site</param>
+                                <param name="documentRoot" type="string">${container.server.document.root}${file.separator}site</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l{AND}!^/$" target="" flag="L" />
@@ -360,7 +360,7 @@
                         <virtualHost name="neos.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">${container.server.document.root}/neos-1.0.2/Web</param>
+                                <param name="documentRoot" type="string">${container.server.document.root}${file.separator}neos-1.0.2${file.separator}Web</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="^/(_Resources/Packages/|robots\.txt|favicon\.ico){OR}-d{OR}-f{OR}-l" target="" flag="L" />
@@ -419,7 +419,7 @@
                         <param name="directoryIndex" type="string">index.do index.php index.html index.htm</param>
                         <param name="keepAliveMax" type="integer">64</param>
                         <param name="keepAliveTimeout" type="integer">5</param>
-                        <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
+                        <param name="errorsPageTemplatePath" type="string">var${file.separator}www${file.separator}errors${file.separator}error.phtml</param>
                     </params>
 
                     <environmentVariables>
@@ -462,7 +462,7 @@
                         <virtualHost name="example.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">${container.server.document.root}/example</param>
+                                <param name="documentRoot" type="string">${container.server.document.root}${file.separator}example</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
@@ -481,7 +481,7 @@
                         <virtualHost name="appserver.io www.appserver.io appserver.local site.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">${container.server.document.root}/site</param>
+                                <param name="documentRoot" type="string">${container.server.document.root}${file.separator}site</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l{AND}!^/$" target="" flag="L" />
@@ -503,7 +503,7 @@
                         <virtualHost name="neos.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">${container.server.document.root}/neos-1.0.2/Web</param>
+                                <param name="documentRoot" type="string">${container.server.document.root}${file.separator}neos-1.0.2${file.separator}Web</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="^/(_Resources/Packages/|robots\.txt|favicon\.ico){OR}-d{OR}-f{OR}-l" target="" flag="L" />
