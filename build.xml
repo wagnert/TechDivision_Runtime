@@ -1346,7 +1346,6 @@
     <target name="create-deb" depends="install-demo-project" description="Creates a DEB package with the local ApplicationServer runtime.">
         <!-- copy build files to target directory -->
         <antcall target="move-build-to-target"/>
-
         <!-- copy init scripts to required directory -->
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/debian">
@@ -1357,6 +1356,7 @@
             </filterchain>
         </copy>
         <chmod perm="755" file="${php-target.dir}/re/DEBIAN/postinst" />
+        <!-- create the .deb file -->
         <exec dir="${php-target.dir}" executable="dpkg-deb" failonerror="true">
             <arg line="--build ${php-target.dir}/re ${package.name}" />
         </exec>
@@ -1368,7 +1368,7 @@
     <target name="create-rpm" depends="install-demo-project" description="Creates a RPM package with the local ApplicationServer runtime.">
         <!-- copy build files to target directory -->
         <antcall target="move-build-to-target"/>
-
+		<!-- copy fedora build files -->
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/fedora">
                 <include name="**/*"/>
@@ -1377,6 +1377,7 @@
                 <expandproperties/>
             </filterchain>
         </copy>
+        <!-- create the .rpm file -->
         <exec dir="${php-target.dir}" executable="rpmbuild" failonerror="true">
             <arg line="--buildroot ${php-target.dir}/re -bb ${php-target.dir}/re/rpmbuild/SPECS/appserver.spec"/>
         </exec>
@@ -1388,10 +1389,11 @@
     <target name="create-pkg" depends="install-demo-project" description="Creates a .pkg package with the local ApplicationServer runtime.">
         <!-- copy build files to target directory -->
         <antcall target="move-build-to-target"/>
-        <!-- copy plist files to required directory -->
+        <!-- copy ioncube files to required directory -->
         <copy todir="${php-target.dir}/re">
-            <fileset dir="${basedir}/buildfiles/macosx/plist">
+            <fileset dir="${basedir}/buildfiles/macosx">
                 <include name="**/*"/>
+            	<exclude name="scripts"/>
             </fileset>
         </copy>
         <!-- create the .pkg file -->
@@ -1490,20 +1492,22 @@
 		<!-- download the PHP/PECL binaries if not already available -->
 		<antcall target="WIN-get-php-binaries"/>
         <antcall target="WIN-get-apcu-binaries"/>
-        <antcall target="WIN-get-pthreads-binaries"/>
+        <!-- antcall target="WIN-get-pthreads-binaries"/ -->
         <antcall target="WIN-get-event-binaries"/>
 		<!-- extract the PHP/PECL binaries into the target folder -->
         <unzip src="${lib.dir}/php-${appserver.php.version}-Win32-VC11-x86.zip" dest="${php-target.dir}/appserver/php"/>
         <unzip src="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/apcu"/>
-        <unzip src="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/pthreads"/>
+        <!-- unzip src="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/pthreads"/ -->
         <unzip src="${lib.dir}/php_event-${appserver.event.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/event"/>
 		<!-- copy the DLL's to the PHP ext directory -->
 		<copy file="${php-target.dir}/apcu/php_apcu.dll" todir="${php-target.dir}/appserver/php/ext"/>
-		<copy file="${php-target.dir}/pthreads/php_pthreads.dll" todir="${php-target.dir}/appserver/php/ext"/>
-		<copy file="${php-target.dir}/pthreads/pthreadVC2.dll" todir="${php-target.dir}/appserver/php"/>
+		<!-- copy file="${php-target.dir}/pthreads/php_pthreads.dll" todir="${php-target.dir}/appserver/php/ext"/ -->
+		<!-- copy file="${php-target.dir}/pthreads/pthreadVC2.dll" todir="${php-target.dir}/appserver/php"/ -->
 		<copy file="${php-target.dir}/event/php_event.dll" todir="${php-target.dir}/appserver/php/ext"/>
 		<!-- copy the appserver DLL to the PHP ext directory -->
 		<copy file="${custom-lib.dir}/php_appserver-${appserver.ext-appserver.version}.dll" tofile="${php-target.dir}/appserver/php/ext/php_appserver.dll"/>
+		<copy file="${custom-lib.dir}/php_pthreads-${appserver.pthreads.version}.dll" tofile="${php-target.dir}/appserver/php/ext/php_pthreads.dll"/>
+		<copy file="${custom-lib.dir}/pthreadVC2.dll" tofile="${php-target.dir}/appserver/php/pthreadVC2.dll"/>
 		<!-- copy runtime sources to target directory -->
         <copy todir="${php-target.dir}/appserver" preservelastmodified="true" overwrite="true">
             <fileset dir="${php-src.dir}">
@@ -1577,7 +1581,7 @@
 	    <taskdef name="izpack" classpathref="build.classpath" classname="com.izforge.izpack.ant.IzPackTask" />
 		<!-- create the IzPack installer JAR file -->
         <izpack input="${php-target.dir}\appserver-izpack.xml"
-                output="${php-target.dir}\appserver-${appserver.version}.jar"
+                output="${php-target.dir}\appserver-${appserver.version}-${env.BUILD_NUMBER}.${os.qualified.name}.${os.architecture}.${os.package-extension}"
                 installerType="standard"
                 inheritAll="true"
                 basedir="${php-target.dir}"
