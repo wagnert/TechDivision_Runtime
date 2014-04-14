@@ -77,9 +77,12 @@
     <!-- ==================================================================== -->
     <target name="copy-to-hub" description="Copies any built package to the snapshot hosting server.">
     	<echo message="Now try to upload ${package.specific-dir}${package.name} to snapshot server"/>
-        <exec executable="scp" failonerror="true">
+    	<scp file="${package.specific-dir}${package.name}" todir="${hub.scp-user}@${hub.address}:${hub.snapshot-path}" keyfile="${user.home}/.ssh/id_rsa" />
+    	<!--
+    	<exec executable="scp" failonerror="true">
             <arg line="-o StrictHostKeyChecking=no -i ${user.home}/.ssh/id_rsa ${package.specific-dir}${package.name} ${hub.scp-user}@${hub.address}:${hub.snapshot-path}"/>
         </exec>
+        -->
     </target>
 
     <!-- ==================================================================== -->
