@@ -1581,7 +1581,7 @@
 	    <taskdef name="izpack" classpathref="build.classpath" classname="com.izforge.izpack.ant.IzPackTask" />
 		<!-- create the IzPack installer JAR file -->
         <izpack input="${php-target.dir}\appserver-izpack.xml"
-                output="${php-target.dir}\appserver-${appserver.version}.jar"
+                output="${php-target.dir}\appserver-${appserver.version}-${env.BUILD_NUMBER}.${os.qualified.name}.${os.architecture}.${os.package-extension}"
                 installerType="standard"
                 inheritAll="true"
                 basedir="${php-target.dir}"
