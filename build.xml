@@ -1407,6 +1407,7 @@
         </copy>
         <!-- create the .pkg file -->
         <exec dir="${basedir}" executable="pkgbuild">
+        	<env key="BUILD_NUMBER" value="1"/>
             <arg value="--root"/>
             <arg value="${php-target.dir}/re"/>
             <arg value="--scripts"/>
@@ -1417,7 +1418,7 @@
             <arg value="${appserver.version}"/>
             <arg value="--identifier"/>
             <arg value="com.techdivision.appserver"/>
-            <arg value="${php-target.dir}/ApplicationServer-${appserver.version}.pkg"/>
+            <arg value="${package.specific-dir}/${package.name}"/>
         </exec>
     </target>
 
