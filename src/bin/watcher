@@ -3,4 +3,4 @@
 APPSERVER_ROOT="/opt/appserver"
 
 cd $APPSERVER_ROOT
-$APPSERVER_ROOT/bin/php server.php -- -w
+$APPSERVER_ROOT/bin/php -f server.php -- -w
