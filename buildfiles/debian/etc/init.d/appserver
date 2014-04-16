@@ -12,8 +12,8 @@
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 BASE_PATH='/opt/appserver'
-DAEMON="${BASE_PATH}/bin/appserver"
-DAEMON_OPTS=""
+DAEMON="${BASE_PATH}/bin/php"
+DAEMON_OPTS="${BASE_PATH}/server.php"
 NAME="appserver"
 DESC="appserver"
 PIDFILE="/var/run/${NAME}.pid"
