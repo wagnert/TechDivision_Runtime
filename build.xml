@@ -1359,11 +1359,19 @@
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/debian">
                 <include name="**/*"/>
+            	<exclude name="DEBIAN"/>
             </fileset>
+        </copy>
+    	<!-- copy the configuration file to build the .deb -->
+    	<copy todir="${php-target.dir}/re">
+    		<fileset dir="${basedir}/buildfiles/debian">
+    			<include name="DEBIAN"/>
+    		</fileset>
             <filterchain>
                 <expandproperties/>
             </filterchain>
-        </copy>
+    	</copy>
+    	<!-- set the permissions of the postinstall script -->
         <chmod perm="755" file="${php-target.dir}/re/DEBIAN/postinst" />
         <!-- create the .deb file -->
         <exec dir="${php-target.dir}" executable="dpkg-deb" failonerror="true">
@@ -1381,14 +1389,18 @@
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/fedora">
                 <include name="**/*"/>
+            	<exclude name="rpmbuild"/>
             </fileset>
+        </copy>
+    	<!-- copy the configuration file to build the .rpm -->
+    	<copy file="${basedir}/buildfiles/fedora/rpmbuild/SPECS/appserver.spec" todir="${php-target.dir}">
             <filterchain>
                 <expandproperties/>
             </filterchain>
-        </copy>
+    	</copy>
         <!-- create the .rpm file -->
         <exec dir="${php-target.dir}" executable="rpmbuild" failonerror="true">
-            <arg line="--buildroot ${php-target.dir}/re -bb ${php-target.dir}/re/rpmbuild/SPECS/appserver.spec"/>
+            <arg line="--buildroot ${php-target.dir}/re -bb ${php-target.dir}/appserver.spec"/>
         </exec>
     </target>
 
