@@ -13,12 +13,12 @@
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 BASE_PATH='/opt/appserver'
 DAEMON="${BASE_PATH}/bin/php"
-DAEMON_OPTS="${BASE_PATH}/server.php -- -w"
+DAEMON_OPTS="-dappserver.php_sapi=appserver -dappserver.remove_functions=getenv,putenv ${BASE_PATH}/server.php -w"
 NAME="watcher"
 DESC="Deployment Scanner"
 PIDFILE="/var/run/${NAME}.pid"
 QUIET="--quiet"
-START_OPTS="--start ${QUIET} --background --chdir ${BASE_PATH} --make-pidfile --pidfile ${PIDFILE} --exec ${DAEMON} ${DAEMON_OPTS}"
+START_OPTS="--start ${QUIET} --background --chdir ${BASE_PATH} --make-pidfile --pidfile ${PIDFILE} --exec ${DAEMON} -- ${DAEMON_OPTS}"
 STOP_OPTS="--stop --pidfile ${PIDFILE}"
 
 test -x $DAEMON || exit 0

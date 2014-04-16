@@ -49,7 +49,7 @@ function getenv($key) {
  */
 function putenv($keyvalue) {
     // split up keyvalue combination
-    list($key, $value) = explode('=', $keyvalue);
+    @list ($key, $value) = explode('=', $keyvalue);
     // check if key was not null
     if (!is_null($key)) {
         // check if value is not null
