@@ -55,7 +55,8 @@
                    threadType="TechDivision\ApplicationServer\ContainerThread"
                    type="TechDivision\PersistenceContainer\Container">
             <description>
-                <![CDATA[This is an example of a container that uses a socket for sending and receiving messages. This solution can be used for clients connecting over a network.]]></description>
+                <![CDATA[This is an example of a container that uses a socket for sending and receiving messages. This solution can be used for clients connecting over a network.]]>
+            </description>
             <receiver type="TechDivision\ApplicationServer\Socket\Receiver">
                 <worker type="TechDivision\ApplicationServer\Socket\Worker" />
                 <thread type="TechDivision\PersistenceContainer\ThreadRequest" />
@@ -75,7 +76,8 @@
                    threadType="TechDivision\ApplicationServer\ContainerThread"
                    type="TechDivision\MessageQueue\Container">
             <description>
-                <![CDATA[This is an example of a message queue that uses a socket to receive messages. This solution can be used for clients connecting over a network.]]></description>
+            	<![CDATA[This is an example of a message queue that uses a socket to receive messages. This solution can be used for clients connecting over a network.]]>
+           	</description>
             <receiver type="TechDivision\ApplicationServer\Socket\Receiver">
                 <worker type="TechDivision\ApplicationServer\Socket\Worker" />
                 <thread type="TechDivision\MessageQueue\ThreadRequest" />
@@ -91,70 +93,12 @@
 
         </container>
 
-        <!--
-        <container name="http"
-            threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\ServletContainer\Container">
-            <description><![CDATA[This is an example of a servlet container that uses a socket for sending and receiving HTML requests/responses. This solution can be used for running a web server.]]></description>
-            <receiver type="TechDivision\ApplicationServer\Socket\Receiver">
-                <worker type="TechDivision\ServletContainer\Socket\Worker" />
-                <thread type="TechDivision\ServletContainer\RequestHandler" />
-                <params>
-                    <param name="workerNumber" type="integer">16</param>
-                    <param name="address" type="string">0.0.0.0</param>
-                    <param name="port" type="integer">8586</param>
-                </params>
-            </receiver>
-            <deployment type="TechDivision\ServletContainer\Deployment" />
-            <host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
-                serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
-                <vhosts>
-                    <vhost name="www.appserver.io" appBase="/site">
-                        <aliases>
-                            <alias>appserver.io</alias>
-                            <alias>appserver.local</alias>
-                        </aliases>
-                    </vhost>
-                    <vhost name="neos.local" appBase="/neos" />
-                    <vhost name="neos.appserver.io" appBase="/neos" />
-                </vhosts>
-            </host>
-        </container>
-
-        <container name="http-ssl"
-            threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\ServletContainer\Container">
-            <description><![CDATA[This is an example of a servlet container that uses a socket for sending and receiving HTML requests/responses. This solution can be used for running a web server.]]></description>
-            <receiver type="TechDivision\ApplicationServer\Stream\SecureReceiver">
-                <worker type="TechDivision\ServletContainer\Stream\SecureWorker" />
-                <thread type="TechDivision\ServletContainer\RequestHandler" />
-                <params>
-                    <param name="workerNumber" type="integer">16</param>
-                    <param name="address" type="string">0.0.0.0</param>
-                    <param name="port" type="integer">8588</param>
-                    <param name="certPath" type="string">etc/server.pem</param>
-                </params>
-            </receiver>
-            <deployment type="TechDivision\ServletContainer\Deployment" />
-            <host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
-                serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
-                <vhosts>
-                    <vhost name="www.appserver.io" appBase="/site">
-                        <aliases>
-                            <alias>appserver.io</alias>
-                            <alias>appserver.local</alias>
-                        </aliases>
-                    </vhost>
-                    <vhost name="neos.local" appBase="/neos" />
-                    <vhost name="neos.appserver.io" appBase="/neos" />
-                </vhosts>
-            </host>
-        </container>
-        -->
-
         <container name="web-socket"
                    threadType="TechDivision\ApplicationServer\ContainerThread"
                    type="TechDivision\WebSocketContainer\Container">
             <description>
-                <![CDATA[This is an example of a web socket container that handles web socket requests/responses.]]></description>
+            	<![CDATA[This is an example of a web socket container that handles web socket requests/responses.]]>
+            </description>
             <receiver type="TechDivision\WebSocketContainer\RatchetReceiver">
                 <worker type="TechDivision\WebSocketContainer\RatchetWorker" />
                 <thread type="TechDivision\WebSocketContainer\RatchetRequest" />
@@ -180,39 +124,14 @@
             </host>
         </container>
 
-		<!--
-        <container name="lemcache"
-                   threadType="TechDivision\ApplicationServer\ContainerThread"
-                   type="TechDivision\LemCacheContainer\Container">
-            <description>
-                <![CDATA[A memcache API compatible PHP implementation of a key value storage server.]]></description>
-            <receiver type="TechDivision\LemCacheContainer\Receiver">
-                <worker type="TechDivision\LemCacheContainer\Worker" />
-                <thread type="TechDivision\LemCacheContainer\ThreadRequest" />
-                <params>
-                    <param name="workerNumber" type="integer">8</param>
-                    <param name="address" type="string">0.0.0.0</param>
-                    <param name="port" type="integer">11210</param>
-                </params>
-            </receiver>
-            <deployment type="TechDivision\LemCacheContainer\Deployment" />
-            <host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
-                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
-            </host>
-        </container>
-		-->
-
         <container
                 name="lemcache"
                 threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\LemCacheContainer\CacheContainer">
             <description>
-                <![CDATA[A memcache API compatible PHP implementation of a key value storage server.]]>
+            	<![CDATA[A memcache API compatible PHP implementation of a key value storage server.]]>
             </description>
-
             <deployment type="TechDivision\LemCacheContainer\Deployment" />
-
             <servers>
-
                 <server
                         type="\TechDivision\WebServer\Servers\MultiThreadedServer"
                         worker="\TechDivision\WebServer\Workers\ThreadWorker"
@@ -242,7 +161,8 @@
                 name="webserver"
                 threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\WebContainer\Container">
             <description>
-                <![CDATA[This is an example of a webserver container that handles http requests in common way]]></description>
+            	<![CDATA[This is an example of a webserver container that handles http requests in common way]]>
+            </description>
             <deployment type="TechDivision\WebContainer\WebContainerDeployment" />
             <host
                     name="localhost"
@@ -316,6 +236,27 @@
                                 </access>
                             </accesses>
                         </virtualHost>
+                        
+                        <!--
+                        <virtualHost name="magento-real-vhost.dev magento-real-vhost.local">
+                            <params>
+                                <param name="admin" type="string">admin@appserver.io</param>
+                                <param name="documentRoot" type="string">${container.server.document.root}</param>
+                            </params>
+                            <rewrites>
+                                <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
+                                <rewrite condition="(.*)" target="index.php/$1" flag="L" />
+                            </rewrites>
+                            <accesses>
+                                <access type="allow">
+                                    <params>
+                                        <param name="X_REQUEST_URI" type="string">^\/([^\/]+\/)?(media|skin|js|index\.php).*</param>
+                                    </params>
+                                </access>
+                            </accesses>
+                        </virtualHost>
+                        -->
+                        
                         <virtualHost name="example.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
@@ -400,6 +341,7 @@
                         <fileHandler name="servlet" extension=".do" />
                     </fileHandlers>
                 </server>
+                
                 <server
                         type="\TechDivision\WebServer\Servers\MultiThreadedServer"
                         worker="\TechDivision\WebServer\Workers\ThreadWorker"
@@ -441,6 +383,15 @@
                         </authentication>
                     </authentications>
 
+                    <accesses>
+                        <!-- per default allow everything -->
+                        <access type="allow">
+                            <params>
+                                <param name="X_REQUEST_URI" type="string">.*</param>
+                            </params>
+                        </access>
+                    </accesses>
+
                     <virtualHosts>
                         <virtualHost name="magento.dev magento.local">
                             <params>
@@ -459,6 +410,27 @@
                                 </access>
                             </accesses>
                         </virtualHost>
+                        
+                        <!--
+                        <virtualHost name="magento-real-vhost.dev magento-real-vhost.local">
+                            <params>
+                                <param name="admin" type="string">admin@appserver.io</param>
+                                <param name="documentRoot" type="string">${container.server.document.root}</param>
+                            </params>
+                            <rewrites>
+                                <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
+                                <rewrite condition="(.*)" target="index.php/$1" flag="L" />
+                            </rewrites>
+                            <accesses>
+                                <access type="allow">
+                                    <params>
+                                        <param name="X_REQUEST_URI" type="string">^\/([^\/]+\/)?(media|skin|js|index\.php).*</param>
+                                    </params>
+                                </access>
+                            </accesses>
+                        </virtualHost>
+                        -->
+                        
                         <virtualHost name="example.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
