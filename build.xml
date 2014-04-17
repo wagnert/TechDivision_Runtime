@@ -1359,13 +1359,13 @@
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/debian">
                 <include name="**/*"/>
-            	<exclude name="DEBIAN"/>
+            	<exclude name="DEBIAN/**"/>
             </fileset>
         </copy>
     	<!-- copy the configuration file to build the .deb -->
     	<copy todir="${php-target.dir}/re">
     		<fileset dir="${basedir}/buildfiles/debian">
-    			<include name="DEBIAN"/>
+    			<include name="DEBIAN/**"/>
     		</fileset>
             <filterchain>
                 <expandproperties/>
@@ -1389,7 +1389,7 @@
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/fedora">
                 <include name="**/*"/>
-            	<exclude name="rpmbuild"/>
+            	<exclude name="rpmbuild/**"/>
             </fileset>
         </copy>
     	<!-- copy the configuration file to build the .rpm -->
