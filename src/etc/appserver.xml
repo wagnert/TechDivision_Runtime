@@ -316,11 +316,28 @@
                                 <environmentVariable condition="Basic ([a-zA-Z0-9\+/=]+)@$Authorization" definition="REMOTE_AUTHORIZATION=$1" />
                             </environmentVariables>
                         </virtualHost>
+                        <virtualHost name="oro-crm.local">
+                            <params>
+                                <param name="admin" type="string">admin@appserver.io</param>
+                                <param name="documentRoot" type="string">webapps/crm-application/web</param>
+                            </params>
+                            <rewrites>
+                                <rewrite condition="%{REQUEST_FILENAME}" target="!-f" flag="" />
+                                <rewrite condition="^/(.*)$" target="app.php" flag="[QSA,L]" />
+                            </rewrites>
+                        </virtualHost>
+                        <virtualHost name="wordpress.local">
+                            <params>
+                                <param name="admin" type="string">admin@appserver.io</param>
+                                <param name="documentRoot" type="string">webapps/wordpress</param>
+                            </params>
+                        </virtualHost>
                     </virtualHosts>
 
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\Http\HttpConnectionHandler" />
                     </connectionHandlers>
+                    
                     <modules>
                         <!-- REQUEST_POST hook -->
                         <module type="\TechDivision\WebServer\Modules\AuthenticationModule"/>
@@ -330,16 +347,34 @@
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule"/>
                         <module type="\TechDivision\WebServer\Modules\AccessModule"/>
                         <module type="\TechDivision\WebServer\Modules\CoreModule"/>
-                        <module type="\TechDivision\PhpModule\PhpModule"/>
+                        <!-- module type="\TechDivision\PhpModule\PhpModule"/ -->
+                        <module type="\TechDivision\WebServer\Modules\FastCgiModule"/>
                         <module type="\TechDivision\ServletModule\ServletModule" />
                         <!-- RESPONSE_PRE hook -->
                         <module type="\TechDivision\WebServer\Modules\DeflateModule"/>
                     </modules>
+                    
                     <fileHandlers>
+                        <fileHandler name="fastcgi" extension=".php" />
+                        <fileHandler name="fastcgi" extension=".phtml" />
+                        <!--
                         <fileHandler name="php" extension=".php" />
                         <fileHandler name="php" extension=".phtml" />
+                        -->
                         <fileHandler name="servlet" extension=".do" />
                     </fileHandlers>
+
+                    <locations>
+	                    <location condition="~*\.php(\/|\?|$)">
+					        <fileHandler name="fastcgi">
+	                            <params>
+	                                <param name="host" type="string">127.0.0.1</param>
+	                                <param name="port" type="string">9000</param>
+	                            </params>
+					        </fileHandler>
+					    </location>
+                    </locations>
+                    
                 </server>
                 
                 <server
@@ -490,11 +525,28 @@
                                 <environmentVariable condition="Basic ([a-zA-Z0-9\+/=]+)@$Authorization" definition="REMOTE_AUTHORIZATION=$1" />
                             </environmentVariables>
                         </virtualHost>
+                        <virtualHost name="oro-crm.local">
+                            <params>
+                                <param name="admin" type="string">admin@appserver.io</param>
+                                <param name="documentRoot" type="string">webapps/crm-application/web</param>
+                            </params>
+                            <rewrites>
+                                <rewrite condition="%{REQUEST_FILENAME}" target="!-f" flag="" />
+                                <rewrite condition="^/(.*)$" target="app.php" flag="[QSA,L]" />
+                            </rewrites>
+                        </virtualHost>
+                        <virtualHost name="wordpress.local">
+                            <params>
+                                <param name="admin" type="string">admin@appserver.io</param>
+                                <param name="documentRoot" type="string">webapps/wordpress</param>
+                            </params>
+                        </virtualHost>
                     </virtualHosts>
 
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\Http\HttpConnectionHandler" />
                     </connectionHandlers>
+                    
                     <modules>
                         <!-- REQUEST_POST hook -->
                         <module type="\TechDivision\WebServer\Modules\AuthenticationModule"/>
@@ -504,16 +556,34 @@
                         <module type="\TechDivision\WebServer\Modules\DirectoryModule"/>
                         <module type="\TechDivision\WebServer\Modules\AccessModule"/>
                         <module type="\TechDivision\WebServer\Modules\CoreModule"/>
-                        <module type="\TechDivision\PhpModule\PhpModule"/>
+                        <!-- module type="\TechDivision\PhpModule\PhpModule"/ -->
+                        <module type="\TechDivision\WebServer\Modules\FastCgiModule"/>
                         <module type="\TechDivision\ServletModule\ServletModule" />
                         <!-- RESPONSE_PRE hook -->
                         <module type="\TechDivision\WebServer\Modules\DeflateModule"/>
                     </modules>
+                    
                     <fileHandlers>
+                        <fileHandler name="fastcgi" extension=".php" />
+                        <fileHandler name="fastcgi" extension=".phtml" />
+                        <!--
                         <fileHandler name="php" extension=".php" />
                         <fileHandler name="php" extension=".phtml" />
+                        -->
                         <fileHandler name="servlet" extension=".do" />
                     </fileHandlers>
+
+                    <locations>
+	                    <location condition="~*\.php(\/|\?|$)">
+					        <fileHandler name="fastcgi">
+	                            <params>
+	                                <param name="host" type="string">127.0.0.1</param>
+	                                <param name="port" type="string">9000</param>
+	                            </params>
+					        </fileHandler>
+					    </location>
+                    </locations>
+                    
                 </server>
             </servers>
         </container>
