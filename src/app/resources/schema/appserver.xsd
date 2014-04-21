@@ -148,6 +148,7 @@
                 <xs:element ref="appserver:rewrites" />
                 <xs:element ref="appserver:environmentVariables" />
                 <xs:element ref="appserver:accesses" />
+                <xs:element ref="appserver:locations" />
             </xs:choice>
             <xs:attribute name="name" type="xs:string" />
             <xs:attribute name="uuid" type="xs:string" />
