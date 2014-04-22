@@ -13,16 +13,10 @@
                 <processor type="\Monolog\Processor\IntrospectionProcessor" />
             </processors>
             <handlers>
-                <handler type="\Monolog\Handler\ErrorLogHandler">
-                    <formatter type="\Monolog\Formatter\LineFormatter">
-                        <params>
-                            <param name="output" type="string">
-                                <![CDATA[[%datetime%] %channel%.%level_name%: %message% %context% %extra%]]></param>
-                            <param name="dateFormat" type="string"><![CDATA[Y-m-d H:i:s]]></param>
-                        </params>
-                    </formatter>
+                <handler type="\Monolog\Handler\StreamHandler">
+                    <formatter type="\Monolog\Formatter\LineFormatter"/>
                     <params>
-                        <param name="messageType" type="integer">0</param>
+                        <param name="stream" type="string">var/log/appserver-errors.log</param>
                         <param name="level" type="integer">200</param>
                         <param name="bubble" type="boolean">0</param>
                     </params>

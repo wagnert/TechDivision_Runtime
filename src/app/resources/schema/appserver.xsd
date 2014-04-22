@@ -394,7 +394,7 @@
     </xs:element>
     <xs:element name="formatter">
         <xs:complexType>
-            <xs:choice maxOccurs="unbounded">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="appserver:params" />
             </xs:choice>
             <xs:attribute name="type" type="xs:string" />
@@ -428,7 +428,7 @@
     </xs:element>
     <xs:element name="handler">
         <xs:complexType>
-            <xs:choice maxOccurs="unbounded">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="appserver:formatter" />
                 <xs:element ref="appserver:params" />
             </xs:choice>

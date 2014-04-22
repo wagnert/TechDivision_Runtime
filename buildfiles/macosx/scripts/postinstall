@@ -1,10 +1,13 @@
 #!/bin/sh
 
+chown -R nobody:staff /opt/appserver/var
+chown -R nobody:staff /opt/appserver/webapps
+chown -R nobody:staff /opt/appserver/deploy
+
 chmod +x /opt/appserver/bin/composer
 chmod +x /opt/appserver/bin/appserver
 chmod +x /opt/appserver/bin/watcher
 
-chgrp -R staff /opt/appserver
 chmod -R 775 /opt/appserver
 
 /opt/appserver/sbin/appserverctl start
