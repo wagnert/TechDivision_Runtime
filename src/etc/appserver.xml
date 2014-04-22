@@ -13,16 +13,10 @@
                 <processor type="\Monolog\Processor\IntrospectionProcessor" />
             </processors>
             <handlers>
-                <handler type="\Monolog\Handler\ErrorLogHandler">
-                    <formatter type="\Monolog\Formatter\LineFormatter">
-                        <params>
-                            <param name="output" type="string">
-                                <![CDATA[[%datetime%] %channel%.%level_name%: %message% %context% %extra%]]></param>
-                            <param name="dateFormat" type="string"><![CDATA[Y-m-d H:i:s]]></param>
-                        </params>
-                    </formatter>
+                <handler type="\Monolog\Handler\StreamHandler">
+                    <formatter type="\Monolog\Formatter\LineFormatter"/>
                     <params>
-                        <param name="messageType" type="integer">0</param>
+                        <param name="stream" type="string">var/log/appserver-errors.log</param>
                         <param name="level" type="integer">200</param>
                         <param name="bubble" type="boolean">0</param>
                     </params>
@@ -67,8 +61,8 @@
                 </params>
             </receiver>
             <deployment type="TechDivision\PersistenceContainer\Deployment" />
-            <host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
-                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
+            <host name="localhost" appBase="/webapps" serverAdmin="info@appserver.io"
+                  serverSoftware="appserver/0.6.0beta2 (mac) PHP/5.5.10" />
 
         </container>
 
@@ -88,8 +82,8 @@
                 </params>
             </receiver>
             <deployment type="TechDivision\MessageQueue\Deployment" />
-            <host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
-                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
+            <host name="localhost" appBase="/webapps" serverAdmin="info@appserver.io"
+                  serverSoftware="appserver/0.6.0beta2 (mac) PHP/5.5.10" />
 
         </container>
 
@@ -109,8 +103,8 @@
                 </params>
             </receiver>
             <deployment type="TechDivision\WebSocketContainer\Deployment" />
-            <host name="localhost" appBase="/webapps" serverAdmin="${appserver.admin.email}"
-                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
+            <host name="localhost" appBase="/webapps" serverAdmin="info@appserver.io"
+                  serverSoftware="appserver/0.6.0beta2 (mac) PHP/5.5.10">
                 <vhosts>
                     <vhost name="www.appserver.io" appBase="/site">
                         <aliases>
@@ -167,8 +161,8 @@
             <host
                     name="localhost"
                     appBase="/webapps"
-                    serverAdmin="${appserver.admin.email}"
-                    serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
+                    serverAdmin="info@appserver.io"
+                    serverSoftware="appserver/0.6.0beta2 (mac) PHP/5.5.10" />
             <servers>
                 <server
                         type="\TechDivision\WebServer\Servers\MultiThreadedServer"
@@ -178,16 +172,16 @@
                         loggerName="System">
                     <params>
                         <param name="admin" type="string">admin@appserver.io</param>
-                        <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
+                        <param name="software" type="string">appserver/0.6.0beta2 (mac)</param>
                         <param name="transport" type="string">tcp</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">9080</param>
-                        <param name="workerNumber" type="integer">${container.server.worker.number}</param>
-                        <param name="documentRoot" type="string">${container.server.document.root}</param>
+                        <param name="workerNumber" type="integer">64</param>
+                        <param name="documentRoot" type="string">webapps</param>
                         <param name="directoryIndex" type="string">index.do index.php index.html index.htm</param>
                         <param name="keepAliveMax" type="integer">64</param>
                         <param name="keepAliveTimeout" type="integer">5</param>
-                        <param name="errorsPageTemplatePath" type="string">var${file.separator}www${file.separator}errors${file.separator}error.phtml</param>
+                        <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
                     </params>
 
                     <environmentVariables>
@@ -222,7 +216,7 @@
                         <virtualHost name="magento.dev magento.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">${container.server.document.root}</param>
+                                <param name="documentRoot" type="string">webapps</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
@@ -235,13 +229,20 @@
                                     </params>
                                 </access>
                             </accesses>
+		                    <locations>
+			                    <location condition="~*\.php(\/|\?|$)">
+			                    	<fileHandlers>
+								        <fileHandler name="php" extension=".php" />
+			                    	</fileHandlers>
+							    </location>
+		                    </locations>
                         </virtualHost>
                         
                         <!--
                         <virtualHost name="magento-real-vhost.dev magento-real-vhost.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">${container.server.document.root}</param>
+                                <param name="documentRoot" type="string">webapps</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
@@ -254,13 +255,20 @@
                                     </params>
                                 </access>
                             </accesses>
+		                    <locations>
+			                    <location condition="~*\.php(\/|\?|$)">
+			                    	<fileHandlers>
+								        <fileHandler name="php" extension=".php" />
+			                    	</fileHandlers>
+							    </location>
+		                    </locations>
                         </virtualHost>
                         -->
                         
                         <virtualHost name="example.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">${container.server.document.root}${file.separator}example</param>
+                                <param name="documentRoot" type="string">webapps/example</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
@@ -279,7 +287,7 @@
                         <virtualHost name="appserver.io www.appserver.io appserver.local site.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">${container.server.document.root}${file.separator}site</param>
+                                <param name="documentRoot" type="string">webapps/site</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l{AND}!^/$" target="" flag="L" />
@@ -301,7 +309,7 @@
                         <virtualHost name="neos.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">${container.server.document.root}${file.separator}neos-1.0.2${file.separator}Web</param>
+                                <param name="documentRoot" type="string">webapps/neos-1.0.2/Web</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="^/(_Resources/Packages/|robots\.txt|favicon\.ico){OR}-d{OR}-f{OR}-l" target="" flag="L" />
@@ -315,12 +323,43 @@
                                 <environmentVariable condition="" definition="FLOW_CONTEXT=Production" />
                                 <environmentVariable condition="Basic ([a-zA-Z0-9\+/=]+)@$Authorization" definition="REMOTE_AUTHORIZATION=$1" />
                             </environmentVariables>
+		                    <locations>
+			                    <location condition="~*\.php(\/|\?|$)">
+			                    	<fileHandlers>
+								        <fileHandler name="php" extension=".php" />
+			                    	</fileHandlers>
+							    </location>
+		                    </locations>
+                        </virtualHost>
+                        <virtualHost name="oro-crm.local">
+                            <params>
+                                <param name="admin" type="string">admin@appserver.io</param>
+                                <param name="documentRoot" type="string">webapps/crm-application/web</param>
+                            </params>
+                            <rewrites>
+                                <rewrite condition="%{REQUEST_FILENAME}" target="!-f" flag="" />
+                                <rewrite condition="^/(.*)$" target="app.php" flag="[QSA,L]" />
+                            </rewrites>
+		                    <locations>
+			                    <location condition="~*\.php(\/|\?|$)">
+			                    	<fileHandlers>
+								        <fileHandler name="php" extension=".php" />
+			                    	</fileHandlers>
+							    </location>
+		                    </locations>
+                        </virtualHost>
+                        <virtualHost name="wordpress.local">
+                            <params>
+                                <param name="admin" type="string">admin@appserver.io</param>
+                                <param name="documentRoot" type="string">webapps/wordpress</param>
+                            </params>
                         </virtualHost>
                     </virtualHosts>
 
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\Http\HttpConnectionHandler" />
                     </connectionHandlers>
+                    
                     <modules>
                         <!-- REQUEST_POST hook -->
                         <module type="\TechDivision\WebServer\Modules\AuthenticationModule"/>
@@ -331,15 +370,32 @@
                         <module type="\TechDivision\WebServer\Modules\AccessModule"/>
                         <module type="\TechDivision\WebServer\Modules\CoreModule"/>
                         <module type="\TechDivision\PhpModule\PhpModule"/>
+                        <module type="\TechDivision\WebServer\Modules\FastCgiModule"/>
                         <module type="\TechDivision\ServletModule\ServletModule" />
                         <!-- RESPONSE_PRE hook -->
                         <module type="\TechDivision\WebServer\Modules\DeflateModule"/>
                     </modules>
+                    
                     <fileHandlers>
-                        <fileHandler name="php" extension=".php" />
-                        <fileHandler name="php" extension=".phtml" />
+                        <fileHandler name="fastcgi" extension=".php">
+                        	<!--
+                        	<params>
+                        		<param name="host" type="string">127.0.0.1</param>
+                        		<param name="port" type="integer">9000</param>
+                        	</params>
+                        	 -->
+                        </fileHandler>
+                        <fileHandler name="fastcgi" extension=".phtml">
+                        	<!--
+                        	<params>
+                        		<param name="host" type="string">127.0.0.1</param>
+                        		<param name="port" type="integer">9000</param>
+                        	</params>
+                        	 -->
+                        </fileHandler>
                         <fileHandler name="servlet" extension=".do" />
                     </fileHandlers>
+                    
                 </server>
                 
                 <server
@@ -350,18 +406,18 @@
                         loggerName="System">
                     <params>
                         <param name="admin" type="string">admin@appserver.io</param>
-                        <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
-                        <param name="workerNumber" type="integer">${container.server.worker.number}</param>
+                        <param name="software" type="string">appserver/0.6.0beta2 (mac)</param>
+                        <param name="workerNumber" type="integer">64</param>
                         <param name="transport" type="string">ssl</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">9443</param>
                         <param name="certPath" type="string">etc/server.pem</param>
                         <param name="passphrase" type="string"></param>
-                        <param name="documentRoot" type="string">${container.server.document.root}</param>
+                        <param name="documentRoot" type="string">webapps</param>
                         <param name="directoryIndex" type="string">index.do index.php index.html index.htm</param>
                         <param name="keepAliveMax" type="integer">64</param>
                         <param name="keepAliveTimeout" type="integer">5</param>
-                        <param name="errorsPageTemplatePath" type="string">var${file.separator}www${file.separator}errors${file.separator}error.phtml</param>
+                        <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
                     </params>
 
                     <environmentVariables>
@@ -396,7 +452,7 @@
                         <virtualHost name="magento.dev magento.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">${container.server.document.root}</param>
+                                <param name="documentRoot" type="string">webapps</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
@@ -409,13 +465,20 @@
                                     </params>
                                 </access>
                             </accesses>
+		                    <locations>
+			                    <location condition="~*\.php(\/|\?|$)">
+			                    	<fileHandlers>
+								        <fileHandler name="php" extension=".php" />
+			                    	</fileHandlers>
+							    </location>
+		                    </locations>
                         </virtualHost>
                         
                         <!--
                         <virtualHost name="magento-real-vhost.dev magento-real-vhost.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">${container.server.document.root}</param>
+                                <param name="documentRoot" type="string">webapps</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
@@ -428,13 +491,20 @@
                                     </params>
                                 </access>
                             </accesses>
+		                    <locations>
+			                    <location condition="~*\.php(\/|\?|$)">
+			                    	<fileHandlers>
+								        <fileHandler name="php" extension=".php" />
+			                    	</fileHandlers>
+							    </location>
+		                    </locations>
                         </virtualHost>
                         -->
                         
                         <virtualHost name="example.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">${container.server.document.root}${file.separator}example</param>
+                                <param name="documentRoot" type="string">webapps/example</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
@@ -453,7 +523,7 @@
                         <virtualHost name="appserver.io www.appserver.io appserver.local site.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">${container.server.document.root}${file.separator}site</param>
+                                <param name="documentRoot" type="string">webapps/site</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l{AND}!^/$" target="" flag="L" />
@@ -475,7 +545,7 @@
                         <virtualHost name="neos.local">
                             <params>
                                 <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">${container.server.document.root}${file.separator}neos-1.0.2${file.separator}Web</param>
+                                <param name="documentRoot" type="string">webapps/neos-1.0.2/Web</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="^/(_Resources/Packages/|robots\.txt|favicon\.ico){OR}-d{OR}-f{OR}-l" target="" flag="L" />
@@ -489,12 +559,43 @@
                                 <environmentVariable condition="" definition="FLOW_CONTEXT=Production" />
                                 <environmentVariable condition="Basic ([a-zA-Z0-9\+/=]+)@$Authorization" definition="REMOTE_AUTHORIZATION=$1" />
                             </environmentVariables>
+		                    <locations>
+			                    <location condition="~*\.php(\/|\?|$)">
+			                    	<fileHandlers>
+								        <fileHandler name="php" extension=".php" />
+			                    	</fileHandlers>
+							    </location>
+		                    </locations>
+                        </virtualHost>
+                        <virtualHost name="oro-crm.local">
+                            <params>
+                                <param name="admin" type="string">admin@appserver.io</param>
+                                <param name="documentRoot" type="string">webapps/crm-application/web</param>
+                            </params>
+                            <rewrites>
+                                <rewrite condition="%{REQUEST_FILENAME}" target="!-f" flag="" />
+                                <rewrite condition="^/(.*)$" target="app.php" flag="[QSA,L]" />
+                            </rewrites>
+		                    <locations>
+			                    <location condition="~*\.php(\/|\?|$)">
+			                    	<fileHandlers>
+								        <fileHandler name="php" extension=".php" />
+			                    	</fileHandlers>
+							    </location>
+		                    </locations>
+                        </virtualHost>
+                        <virtualHost name="wordpress.local">
+                            <params>
+                                <param name="admin" type="string">admin@appserver.io</param>
+                                <param name="documentRoot" type="string">webapps/wordpress</param>
+                            </params>
                         </virtualHost>
                     </virtualHosts>
 
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\Http\HttpConnectionHandler" />
                     </connectionHandlers>
+                    
                     <modules>
                         <!-- REQUEST_POST hook -->
                         <module type="\TechDivision\WebServer\Modules\AuthenticationModule"/>
@@ -505,15 +606,32 @@
                         <module type="\TechDivision\WebServer\Modules\AccessModule"/>
                         <module type="\TechDivision\WebServer\Modules\CoreModule"/>
                         <module type="\TechDivision\PhpModule\PhpModule"/>
+                        <module type="\TechDivision\WebServer\Modules\FastCgiModule"/>
                         <module type="\TechDivision\ServletModule\ServletModule" />
                         <!-- RESPONSE_PRE hook -->
                         <module type="\TechDivision\WebServer\Modules\DeflateModule"/>
                     </modules>
+                    
                     <fileHandlers>
-                        <fileHandler name="php" extension=".php" />
-                        <fileHandler name="php" extension=".phtml" />
+                        <fileHandler name="fastcgi" extension=".php">
+                        	<!--
+                        	<params>
+                        		<param name="host" type="string">127.0.0.1</param>
+                        		<param name="port" type="integer">9000</param>
+                        	</params>
+                        	 -->
+                        </fileHandler>
+                        <fileHandler name="fastcgi" extension=".phtml">
+                        	<!--
+                        	<params>
+                        		<param name="host" type="string">127.0.0.1</param>
+                        		<param name="port" type="integer">9000</param>
+                        	</params>
+                        	 -->
+                        </fileHandler>
                         <fileHandler name="servlet" extension=".do" />
                     </fileHandlers>
+                    
                 </server>
             </servers>
         </container>

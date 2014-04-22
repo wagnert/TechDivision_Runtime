@@ -75,6 +75,8 @@
     </xs:element>
     <xs:element name="fileHandlers">
     </xs:element>
+    <xs:element name="locations">
+    </xs:element>
     <xs:element name="server">
         <xs:complexType>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -87,6 +89,7 @@
                 <xs:element ref="appserver:connectionHandlers" />
                 <xs:element ref="appserver:modules" />
                 <xs:element ref="appserver:fileHandlers" />
+                <xs:element ref="appserver:locations" />
             </xs:choice>
             <xs:attribute name="type" type="xs:string" />
             <xs:attribute name="worker" type="xs:string" />
@@ -145,6 +148,7 @@
                 <xs:element ref="appserver:rewrites" />
                 <xs:element ref="appserver:environmentVariables" />
                 <xs:element ref="appserver:accesses" />
+                <xs:element ref="appserver:locations" />
             </xs:choice>
             <xs:attribute name="name" type="xs:string" />
             <xs:attribute name="uuid" type="xs:string" />
@@ -390,7 +394,7 @@
     </xs:element>
     <xs:element name="formatter">
         <xs:complexType>
-            <xs:choice maxOccurs="unbounded">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="appserver:params" />
             </xs:choice>
             <xs:attribute name="type" type="xs:string" />
@@ -424,7 +428,7 @@
     </xs:element>
     <xs:element name="handler">
         <xs:complexType>
-            <xs:choice maxOccurs="unbounded">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="appserver:formatter" />
                 <xs:element ref="appserver:params" />
             </xs:choice>

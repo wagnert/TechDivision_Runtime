@@ -1,6 +1,10 @@
 #!/bin/sh
 
-chmod 755 -R /opt/appserver/bin
+chown -R nobody:nobody /opt/appserver/var
+chown -R nobody:nobody /opt/appserver/webapps
+chown -R nobody:nobody /opt/appserver/deploy
+
+chmod -R 755 /opt/appserver/bin
 chmod 755 /etc/init.d/appserver
 chmod 755 /etc/init.d/watcher
 
