@@ -1,0 +1,11 @@
+
+[Unit]
+Description=appserver-fpm
+After=syslog.target network.target
+
+[Service]
+PIDFile=/run/appserver-fpm.pid
+ExecStart=/opt/appserver/sbin/php-fpm --nodaemonize
+#-F -c /opt/appserver/etc/ -y /opt/appserver/etc/php-fpm.conf
+ExecReload=/bin/kill -USR2 $MAINPID
+PrivateTmp=true
