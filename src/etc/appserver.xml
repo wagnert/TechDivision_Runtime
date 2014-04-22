@@ -62,7 +62,7 @@
             </receiver>
             <deployment type="TechDivision\PersistenceContainer\Deployment" />
             <host name="localhost" appBase="/webapps" serverAdmin="info@appserver.io"
-                  serverSoftware="appserver/0.6.0beta2 (mac) PHP/5.5.10" />
+                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
 
         </container>
 
@@ -83,7 +83,7 @@
             </receiver>
             <deployment type="TechDivision\MessageQueue\Deployment" />
             <host name="localhost" appBase="/webapps" serverAdmin="info@appserver.io"
-                  serverSoftware="appserver/0.6.0beta2 (mac) PHP/5.5.10" />
+                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
 
         </container>
 
@@ -104,7 +104,7 @@
             </receiver>
             <deployment type="TechDivision\WebSocketContainer\Deployment" />
             <host name="localhost" appBase="/webapps" serverAdmin="info@appserver.io"
-                  serverSoftware="appserver/0.6.0beta2 (mac) PHP/5.5.10">
+                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
                 <vhosts>
                     <vhost name="www.appserver.io" appBase="/site">
                         <aliases>
@@ -133,8 +133,8 @@
                         serverContext="\TechDivision\WebServer\ServerContext"
                         loggerName="System">
                     <params>
-                        <param name="admin" type="string">admin@appserver.io</param>
-                        <param name="software" type="string">appserver/0.6.0beta1 (mac)</param>
+                        <param name="admin" type="string">${appserver.admin.email}</param>
+                        <param name="software" type="string">${appserver.version} (${os.family})</param>
                         <param name="transport" type="string">tcp</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">11210</param>
@@ -162,7 +162,7 @@
                     name="localhost"
                     appBase="/webapps"
                     serverAdmin="info@appserver.io"
-                    serverSoftware="appserver/0.6.0beta2 (mac) PHP/5.5.10" />
+                    serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
             <servers>
                 <server
                         type="\TechDivision\WebServer\Servers\MultiThreadedServer"
@@ -171,12 +171,12 @@
                         serverContext="\TechDivision\WebServer\ServerContext"
                         loggerName="System">
                     <params>
-                        <param name="admin" type="string">admin@appserver.io</param>
-                        <param name="software" type="string">appserver/0.6.0beta2 (mac)</param>
+                        <param name="admin" type="string">${appserver.admin.email}</param>
+                        <param name="software" type="string">${appserver.version} (${os.family})</param>
                         <param name="transport" type="string">tcp</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">9080</param>
-                        <param name="workerNumber" type="integer">64</param>
+                        <param name="workerNumber" type="integer">${container.server.worker.number}</param>
                         <param name="documentRoot" type="string">webapps</param>
                         <param name="directoryIndex" type="string">index.do index.php index.html index.htm</param>
                         <param name="keepAliveMax" type="integer">64</param>
@@ -215,7 +215,7 @@
                     <virtualHosts>
                         <virtualHost name="magento.dev magento.local">
                             <params>
-                                <param name="admin" type="string">admin@appserver.io</param>
+                                <param name="admin" type="string">${appserver.admin.email}</param>
                                 <param name="documentRoot" type="string">webapps</param>
                             </params>
                             <rewrites>
@@ -241,7 +241,7 @@
                         <!--
                         <virtualHost name="magento-real-vhost.dev magento-real-vhost.local">
                             <params>
-                                <param name="admin" type="string">admin@appserver.io</param>
+                                <param name="admin" type="string">${appserver.admin.email}</param>
                                 <param name="documentRoot" type="string">webapps</param>
                             </params>
                             <rewrites>
@@ -267,8 +267,8 @@
                         
                         <virtualHost name="example.local">
                             <params>
-                                <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">webapps/example</param>
+                                <param name="admin" type="string">${appserver.admin.email}</param>
+                                <param name="documentRoot" type="string">webapps${file.separator}example</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
@@ -286,8 +286,8 @@
                         </virtualHost>
                         <virtualHost name="appserver.io www.appserver.io appserver.local site.local">
                             <params>
-                                <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">webapps/site</param>
+                                <param name="admin" type="string">${appserver.admin.email}</param>
+                                <param name="documentRoot" type="string">webapps${file.separator}site</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l{AND}!^/$" target="" flag="L" />
@@ -308,8 +308,8 @@
                         </virtualHost>
                         <virtualHost name="neos.local">
                             <params>
-                                <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">webapps/neos-1.0.2/Web</param>
+                                <param name="admin" type="string">${appserver.admin.email}</param>
+                                <param name="documentRoot" type="string">webapps${file.separator}neos-1.0.2${file.separator}Web</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="^/(_Resources/Packages/|robots\.txt|favicon\.ico){OR}-d{OR}-f{OR}-l" target="" flag="L" />
@@ -333,8 +333,8 @@
                         </virtualHost>
                         <virtualHost name="oro-crm.local">
                             <params>
-                                <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">webapps/crm-application/web</param>
+                                <param name="admin" type="string">${appserver.admin.email}</param>
+                                <param name="documentRoot" type="string">webapps${file.separator}crm-application${file.separator}web</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="%{REQUEST_FILENAME}" target="!-f" flag="" />
@@ -350,8 +350,8 @@
                         </virtualHost>
                         <virtualHost name="wordpress.local">
                             <params>
-                                <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">webapps/wordpress</param>
+                                <param name="admin" type="string">${appserver.admin.email}</param>
+                                <param name="documentRoot" type="string">webapps${file.separator}wordpress</param>
                             </params>
                         </virtualHost>
                     </virtualHosts>
@@ -405,9 +405,9 @@
                         serverContext="\TechDivision\WebServer\ServerContext"
                         loggerName="System">
                     <params>
-                        <param name="admin" type="string">admin@appserver.io</param>
-                        <param name="software" type="string">appserver/0.6.0beta2 (mac)</param>
-                        <param name="workerNumber" type="integer">64</param>
+                        <param name="admin" type="string">${appserver.admin.email}</param>
+                        <param name="software" type="string">${appserver.version} (${os.family})</param>
+                        <param name="workerNumber" type="integer">${container.server.worker.number}</param>
                         <param name="transport" type="string">ssl</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">9443</param>
@@ -451,7 +451,7 @@
                     <virtualHosts>
                         <virtualHost name="magento.dev magento.local">
                             <params>
-                                <param name="admin" type="string">admin@appserver.io</param>
+                                <param name="admin" type="string">${appserver.admin.email}</param>
                                 <param name="documentRoot" type="string">webapps</param>
                             </params>
                             <rewrites>
@@ -477,7 +477,7 @@
                         <!--
                         <virtualHost name="magento-real-vhost.dev magento-real-vhost.local">
                             <params>
-                                <param name="admin" type="string">admin@appserver.io</param>
+                                <param name="admin" type="string">${appserver.admin.email}</param>
                                 <param name="documentRoot" type="string">webapps</param>
                             </params>
                             <rewrites>
@@ -503,8 +503,8 @@
                         
                         <virtualHost name="example.local">
                             <params>
-                                <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">webapps/example</param>
+                                <param name="admin" type="string">${appserver.admin.email}</param>
+                                <param name="documentRoot" type="string">webapps${file.separator}example</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l" target="" flag="L" />
@@ -522,8 +522,8 @@
                         </virtualHost>
                         <virtualHost name="appserver.io www.appserver.io appserver.local site.local">
                             <params>
-                                <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">webapps/site</param>
+                                <param name="admin" type="string">${appserver.admin.email}</param>
+                                <param name="documentRoot" type="string">webapps${file.separator}site</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="-d{OR}-f{OR}-l{AND}!^/$" target="" flag="L" />
@@ -544,8 +544,8 @@
                         </virtualHost>
                         <virtualHost name="neos.local">
                             <params>
-                                <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">webapps/neos-1.0.2/Web</param>
+                                <param name="admin" type="string">${appserver.admin.email}</param>
+                                <param name="documentRoot" type="string">webapps${file.separator}neos-1.0.2${file.separator}Web</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="^/(_Resources/Packages/|robots\.txt|favicon\.ico){OR}-d{OR}-f{OR}-l" target="" flag="L" />
@@ -569,8 +569,8 @@
                         </virtualHost>
                         <virtualHost name="oro-crm.local">
                             <params>
-                                <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">webapps/crm-application/web</param>
+                                <param name="admin" type="string">${appserver.admin.email}</param>
+                                <param name="documentRoot" type="string">webapps${file.separator}crm-application${file.separator}web</param>
                             </params>
                             <rewrites>
                                 <rewrite condition="%{REQUEST_FILENAME}" target="!-f" flag="" />
@@ -586,8 +586,8 @@
                         </virtualHost>
                         <virtualHost name="wordpress.local">
                             <params>
-                                <param name="admin" type="string">admin@appserver.io</param>
-                                <param name="documentRoot" type="string">webapps/wordpress</param>
+                                <param name="admin" type="string">${appserver.admin.email}</param>
+                                <param name="documentRoot" type="string">webapps${file.separator}wordpress</param>
                             </params>
                         </virtualHost>
                     </virtualHosts>
