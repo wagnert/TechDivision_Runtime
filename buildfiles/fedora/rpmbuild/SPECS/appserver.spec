@@ -38,7 +38,7 @@ chmod -R 755 /opt/appserver
 # Make the link to our system systemd file
 ln -s /lib/systemd/system/appserver.service /etc/systemd/system/appserver.service
 ln -s /lib/systemd/system/watcher.service /etc/systemd/system/watcher.service
-ln -s /lib/systemd/system/watcher.service /etc/systemd/system/appserver-fpm.service
+ln -s /lib/systemd/system/appserver-fpm.service /etc/systemd/system/appserver-fpm.service
 
 # Reload the systemd daemon
 systemctl daemon-reload
