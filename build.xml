@@ -1550,10 +1550,15 @@
             <fileset dir="${basedir}/buildfiles/win">
                 <include name="**/*"/>
             	<exclude name="appserver-izpack.xml"/>
+            	<exclude name="*.bat"/>
             </fileset>
         </copy>
-		<!-- copy IzPack configuration file to the target directory -->
+		<!-- copy IzPack configuration + .bat files to the target directory -->
         <copy todir="${php-target.dir}" file="${basedir}/buildfiles/win/appserver-izpack.xml">
+        	<fileset dir="${basedir}/buildfiles/win">
+            	<include name="appserver-izpack.xml"/>
+            	<include name="*.bat"/>
+        	</fileset>
             <filterchain>
                 <expandproperties/>
             </filterchain>
