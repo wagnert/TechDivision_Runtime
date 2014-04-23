@@ -7,8 +7,10 @@ chown -R nobody:nobody /opt/appserver/deploy
 chmod -R 755 /opt/appserver/bin
 chmod 755 /etc/init.d/appserver
 chmod 755 /etc/init.d/watcher
+chmod 755 /etc/init.d/appserver-fpm
 
 /etc/init.d/appserver start
 /etc/init.d/watcher start
+/etc/init.d/appserver-fpm start
 
 exit 0

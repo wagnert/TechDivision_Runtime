@@ -1,21 +1,21 @@
 #!/bin/bash
 
 ### BEGIN INIT INFO
-# Provides:          appserver deployment scanner
+# Provides:          appserver-fpm
 # Required-Start:    $all
 # Required-Stop:     $all
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: starts appserver deployment scanner
-# Description:       starts appserver deployment scanner using start-stop-daemon
+# Short-Description: starts appserver-fpm
+# Description:       starts appserver-fpm using start-stop-daemon
 ### END INIT INFO
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 BASE_PATH='/opt/appserver'
-DAEMON="${BASE_PATH}/bin/php"
-DAEMON_OPTS="-dappserver.php_sapi=appserver -dappserver.remove_functions=getenv,putenv ${BASE_PATH}/server.php -w"
-NAME="watcher"
-DESC="Deployment Scanner"
+DAEMON="${BASE_PATH}/sbin/php-fpm"
+DAEMON_OPTS="-D -c /opt/appserver/etc/ -y /opt/appserver/etc/php-fpm.conf"
+NAME="appserver-fpm"
+DESC="appserver-fpm"
 PIDFILE="/var/run/${NAME}.pid"
 QUIET="--quiet"
 START_OPTS="--start ${QUIET} --background --chdir ${BASE_PATH} --make-pidfile --pidfile ${PIDFILE} --exec ${DAEMON} -- ${DAEMON_OPTS}"

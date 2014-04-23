@@ -33,7 +33,7 @@
     <!-- files as we had problems defining it within properties files         -->
     <!-- CAUTION, THIS SYNTAX IS DOUBLED IN THE rpmbuild SPECS FILE!          -->
     <!-- ==================================================================== -->
-    <property name="package.name" value="appserver-${appserver.version}-${env.BUILD_NUMBER}.${os.qualified.name}.${os.architecture}.${os.package-extension}"/>
+    <property name="package.name" value="appserver-${appserver.version}-${build.number}.${os.qualified.name}.${os.architecture}.${os.package-extension}"/>
     <property name="package.specific-dir" value="${php-target.dir}/"/>
 
     <!-- ==================================================================== -->
@@ -71,7 +71,7 @@
             </filterchain>
         </copy>
     </target>
-	
+
     <!-- ==================================================================== -->
     <!-- Copies any built package to the snapshot hosting server.             -->
     <!-- ==================================================================== -->
@@ -79,7 +79,7 @@
     	<echo message="Now try to upload ${package.specific-dir}${package.name} to snapshot server"/>
     	<scp file="${package.specific-dir}${package.name}" todir="${hub.scp-user}@${hub.address}:${hub.snapshot-path}" keyfile="${user.home}/.ssh/id_rsa" />
     </target>
-	
+
     <!-- ==================================================================== -->
     <!-- Copies any built package to the snapshot hosting server.             -->
     <!-- ==================================================================== -->
@@ -1336,6 +1336,13 @@
             <arg value="gcc-c++"/>
             <arg value="openldap-devel"/>
             <arg value="rpm-build"/>
+            <arg value="systemd-devel"/>
+            <arg value="libicu-devel"/>
+        </exec>
+        <!-- Bugfix for missing symlink -->
+        <exec dir="/usr/${appserver.compile.libdir}" executable="ln">
+            <arg value="-s"/>
+            <arg value="libsystemd-daemon.so.0 libsystemd-daemon.so"/>
         </exec>
     </target>
 

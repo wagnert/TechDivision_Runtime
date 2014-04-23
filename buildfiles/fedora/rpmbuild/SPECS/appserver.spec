@@ -5,7 +5,7 @@
 
 Name:		appserver
 Version:	${appserver.version}
-Release:	${env.BUILD_NUMBER}.${os.qualified.name}
+Release:	${build.number}.${os.qualified.name}
 Summary:	Multithreaded Application Server für PHP, geschrieben in PHP
 Group:		System Environment/Base
 License:	OSL 3.0
@@ -38,6 +38,7 @@ chmod -R 755 /opt/appserver
 # Make the link to our system systemd file
 ln -s /lib/systemd/system/appserver.service /etc/systemd/system/appserver.service
 ln -s /lib/systemd/system/watcher.service /etc/systemd/system/watcher.service
+ln -s /lib/systemd/system/watcher.service /etc/systemd/system/appserver-fpm.service
 
 # Reload the systemd daemon
 systemctl daemon-reload
@@ -45,3 +46,9 @@ systemctl daemon-reload
 # Start the appserver + watcher
 systemctl start appserver.service
 systemctl start watcher.service
+systemctl start appserver-fpm.service
+
+# Make them autostartable for the current runlevel
+systemctl enable appserver.service
+systemctl enable watcher.service
+systemctl enable appserver-fpm.service
