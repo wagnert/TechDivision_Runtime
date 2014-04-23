@@ -1,8 +1,6 @@
 #!/bin/sh
 
-chown -R nobody:nobody /opt/appserver/var
-chown -R nobody:nobody /opt/appserver/webapps
-chown -R nobody:nobody /opt/appserver/deploy
+chown -R ${appserver.user}:${appserver.group} /opt/appserver
 
 chmod -R 755 /opt/appserver/bin
 chmod 755 /etc/init.d/appserver

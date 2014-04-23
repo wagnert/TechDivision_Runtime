@@ -1,6 +1,6 @@
 #!/bin/sh
 
-chown -R nobody:staff /opt/appserver
+chown -R ${appserver.user}:${appserver.group} /opt/appserver
 
 chmod +x /opt/appserver/bin/composer
 chmod +x /opt/appserver/bin/appserver
