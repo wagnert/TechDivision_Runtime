@@ -7,6 +7,20 @@
         <storage type="TechDivision\Storage\StackableStorage" />
     </initialContext>
 
+	<!--
+	<extractors>
+		<extractor type="TechDivision\ApplicationServer\Extractors\PharExtractor">
+			<target dir="webapps">
+				<params>
+		            <param name="user" type="string">${appserver.user}</param>
+		            <param name="group" type="string">${appserver.group}</param>
+		            <param name="umask" type="integer">0775</param>
+				</params>
+			</target>
+		</extractor>
+	</extractors>
+	-->
+
     <loggers>
         <logger channelName="system" name="System" type="\Monolog\Logger">
             <processors>
