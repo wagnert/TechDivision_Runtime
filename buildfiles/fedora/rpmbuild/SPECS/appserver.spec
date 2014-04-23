@@ -36,6 +36,7 @@ ldconfig
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/var
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/webapps
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/deploy
+chmod -R 755 /opt/appserver
 
 # Make the link to our system systemd file
 ln -s /lib/systemd/system/appserver.service /etc/systemd/system/appserver.service
