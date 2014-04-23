@@ -182,6 +182,8 @@
                         <param name="keepAliveMax" type="integer">64</param>
                         <param name="keepAliveTimeout" type="integer">5</param>
                         <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
+                        <param name="user" type="string">${appserver.user}</param>
+                        <param name="group" type="string">${appserver.group}</param>
                     </params>
 
                     <environmentVariables>
@@ -413,7 +415,8 @@
                         <param name="directoryIndex" type="string">index.do index.php index.html index.htm</param>
                         <param name="keepAliveMax" type="integer">64</param>
                         <param name="keepAliveTimeout" type="integer">5</param>
-                        <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
+                        <param name="user" type="string">${appserver.user}</param>
+                        <param name="group" type="string">${appserver.group}</param>
                     </params>
 
                     <environmentVariables>
