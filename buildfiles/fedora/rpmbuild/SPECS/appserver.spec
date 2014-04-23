@@ -32,8 +32,10 @@ Provides:   appserver
 # Reload shared library list
 ldconfig
 
-# Set needed files as executable
-chmod -R 755 /opt/appserver
+# Set needed files as accessable for the configured user
+chown -R ${appserver.user}:${appserver.group} /opt/appserver/var
+chown -R ${appserver.user}:${appserver.group} /opt/appserver/webapps
+chown -R ${appserver.user}:${appserver.group} /opt/appserver/deploy
 
 # Make the link to our system systemd file
 ln -s /lib/systemd/system/appserver.service /etc/systemd/system/appserver.service
