@@ -1419,7 +1419,6 @@
         </copy>
         <!-- create the .pkg file -->
         <exec dir="${basedir}" executable="pkgbuild">
-        	<env key="BUILD_NUMBER" value="1"/>
             <arg value="--root"/>
             <arg value="${php-target.dir}/re"/>
             <arg value="--scripts"/>
