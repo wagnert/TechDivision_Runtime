@@ -239,7 +239,7 @@
 							    </location>
 		                    </locations>
                         </virtualHost>
-                        
+
                         <!--
                         <virtualHost name="magento-real-vhost.dev magento-real-vhost.local">
                             <params>
@@ -266,7 +266,7 @@
 		                    </locations>
                         </virtualHost>
                         -->
-                        
+
                         <virtualHost name="example.local">
                             <params>
                                 <param name="admin" type="string">${appserver.admin.email}</param>
@@ -361,7 +361,7 @@
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\Http\HttpConnectionHandler" />
                     </connectionHandlers>
-                    
+
                     <modules>
                         <!-- REQUEST_POST hook -->
                         <module type="\TechDivision\WebServer\Modules\AuthenticationModule"/>
@@ -377,7 +377,7 @@
                         <!-- RESPONSE_PRE hook -->
                         <module type="\TechDivision\WebServer\Modules\DeflateModule"/>
                     </modules>
-                    
+
                     <fileHandlers>
                         <fileHandler name="fastcgi" extension=".php">
                         	<params>
@@ -393,9 +393,9 @@
                         </fileHandler>
                         <fileHandler name="servlet" extension=".do" />
                     </fileHandlers>
-                    
+
                 </server>
-                
+
                 <server
                         type="\TechDivision\WebServer\Servers\MultiThreadedServer"
                         worker="\TechDivision\WebServer\Workers\ThreadWorker"
@@ -473,7 +473,7 @@
 							    </location>
 		                    </locations>
                         </virtualHost>
-                        
+
                         <!--
                         <virtualHost name="magento-real-vhost.dev magento-real-vhost.local">
                             <params>
@@ -500,7 +500,7 @@
 		                    </locations>
                         </virtualHost>
                         -->
-                        
+
                         <virtualHost name="example.local">
                             <params>
                                 <param name="admin" type="string">${appserver.admin.email}</param>
@@ -595,7 +595,7 @@
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\Http\HttpConnectionHandler" />
                     </connectionHandlers>
-                    
+
                     <modules>
                         <!-- REQUEST_POST hook -->
                         <module type="\TechDivision\WebServer\Modules\AuthenticationModule"/>
@@ -611,7 +611,7 @@
                         <!-- RESPONSE_PRE hook -->
                         <module type="\TechDivision\WebServer\Modules\DeflateModule"/>
                     </modules>
-                    
+
                     <fileHandlers>
                         <fileHandler name="fastcgi" extension=".php">
                         	<params>
@@ -627,7 +627,7 @@
                         </fileHandler>
                         <fileHandler name="servlet" extension=".do" />
                     </fileHandlers>
-                    
+
                 </server>
             </servers>
         </container>
