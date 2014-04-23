@@ -10,6 +10,6 @@ chmod -R 775 /opt/appserver
 
 /opt/appserver/sbin/appserverctl start
 /opt/appserver/sbin/watcherctl start
-/opt/appserver/sbin/php-fpm
+/opt/appserver/sbin/php-fpmctl start
 
 exit 0
