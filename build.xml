@@ -1347,6 +1347,17 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Install the necessary libraries to build the centos runtime          -->
+    <!--                                                                      -->
+    <!-- We don't need normal dependencies, as we wrap the fedora preparation -->
+    <!-- ==================================================================== -->
+    <target name="prepare-centos-build-system" if="${prepare.distribution.build}" depends="prepare-fedora-build-system" description="Install the necessary libraries to build the centos runtime.">
+
+        <!-- Only a wrapper, as steps are the same as in the prepare-fedora-build-system task -->
+
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Copy build files to target directory                                 -->
     <!-- ==================================================================== -->
     <target name="move-build-to-target" description="Copies build files to target directory.">
