@@ -33,22 +33,15 @@ Provides:   appserver
 ldconfig
 
 # Set needed files as executable
-chmod -R 755 /opt/appserver
+chown -R nobody:nobody /opt/appserver/var
+chown -R nobody:nobody /opt/appserver/webapps
+chown -R nobody:nobody /opt/appserver/deploy
 
-# Make the link to our system systemd file
-ln -s /lib/systemd/system/appserver.service /etc/systemd/system/appserver.service
-ln -s /lib/systemd/system/watcher.service /etc/systemd/system/watcher.service
-ln -s /lib/systemd/system/appserver-fpm.service /etc/systemd/system/appserver-fpm.service
+chmod -R 755 /opt/appserver/bin
+chmod 755 /etc/init.d/appserver
+chmod 755 /etc/init.d/watcher
+chmod 755 /etc/init.d/appserver-fpm
 
-# Reload the systemd daemon
-systemctl daemon-reload
-
-# Start the appserver + watcher
-systemctl start appserver.service
-systemctl start watcher.service
-systemctl start appserver-fpm.service
-
-# Make them autostartable for the current runlevel
-systemctl enable appserver.service
-systemctl enable watcher.service
-systemctl enable appserver-fpm.service
+/etc/init.d/appserver start
+/etc/init.d/watcher start
+/etc/init.d/appserver-fpm start
