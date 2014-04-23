@@ -8,6 +8,7 @@
         <array>
             <string>/opt/appserver/sbin/php-fpm</string>
             <string>--pid=/opt/appserver/var/run/php-fpm.pid</string>
+            <string>--nodaemonize</string>
         </array>
         <key>Debug</key>
         <false/>

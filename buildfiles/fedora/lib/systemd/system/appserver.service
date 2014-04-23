@@ -4,3 +4,6 @@ Description=appserver
 
 [Service]
 ExecStart=/opt/appserver/bin/appserver -D FOREGROUND
+
+[Install]
+WantedBy=multi-user.target
