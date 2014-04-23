@@ -43,9 +43,13 @@ case "$1" in
 	start-stop-daemon $START_OPTS
 	echo "$NAME."
 	;;
+  status)
+    echo -n "Status of $DESC: "
+    status -p ${PIDFILE} "$NAME"
+    ;;
   *)
 	N=/etc/init.d/$NAME
-	echo "Usage: $N {start|stop|restart|force-reload}" >&2
+	echo "Usage: $N {start|stop|restart|force-reload|status}" >&2
 	exit 1
 	;;
 esac
