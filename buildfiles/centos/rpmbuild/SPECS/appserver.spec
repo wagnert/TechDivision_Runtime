@@ -24,7 +24,7 @@ Provides:   appserver
 
 %files
 /opt/appserver/*
-/lib/systemd/system/*
+/etc/init.d/*
 
 %changelog
 
