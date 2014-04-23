@@ -1,2 +1,3 @@
-@echo off
+@ECHO OFF
+ECHO Starting appserver.io...
 php\php -dappserver.php_sapi=appserver -dappserver.remove_functions=getenv,putenv server.php
