@@ -1287,6 +1287,7 @@
             <arg value="libevent-dev"/>
             <arg value="libev-dev"/>
         	<arg value="libldap2-dev"/>
+    		<arg value="libicu-dev"/>
         </exec>
     	<!-- Bugfix for missing symlink -->
     	<exec dir="/usr/lib" executable="ln">
