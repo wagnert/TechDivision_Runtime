@@ -1,6 +1,9 @@
 #!/bin/sh
 
-chown -R ${appserver.user}:${appserver.group} /opt/appserver
+# Set needed files as accessable for the configured user
+chown -R ${appserver.user}:${appserver.group} /opt/appserver/var
+chown -R ${appserver.user}:${appserver.group} /opt/appserver/webapps
+chown -R ${appserver.user}:${appserver.group} /opt/appserver/deploy
 
 chmod +x /opt/appserver/bin/composer
 chmod +x /opt/appserver/bin/appserver

@@ -32,10 +32,10 @@ Provides:   appserver
 # Reload shared library list
 ldconfig
 
-# Set needed files as executable
-chown -R nobody:nobody /opt/appserver/var
-chown -R nobody:nobody /opt/appserver/webapps
-chown -R nobody:nobody /opt/appserver/deploy
+# Set needed files as accessable for the configured user
+chown -R ${appserver.user}:${appserver.group} /opt/appserver/var
+chown -R ${appserver.user}:${appserver.group} /opt/appserver/webapps
+chown -R ${appserver.user}:${appserver.group} /opt/appserver/deploy
 
 chmod -R 755 /opt/appserver/bin
 chmod 755 /etc/init.d/appserver
