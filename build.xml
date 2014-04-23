@@ -1350,7 +1350,7 @@
     <!-- Install the necessary libraries to build the centos runtime          -->
     <!-- ==================================================================== -->
     <target name="prepare-centos-build-system" if="${prepare.distribution.build}" description="Install the necessary libraries to build the centos runtime.">
-        <exec dir="${php-target.dir}" executable="yum" inputstring="Y">
+        <exec executable="yum" inputstring="Y">
             <arg value="install"/>
             <arg value="ant"/>
             <arg value="autoconf"/>
@@ -1371,7 +1371,6 @@
             <arg value="libcurl-devel"/>
             <arg value="libpng-devel"/>
             <arg value="libevent-devel"/>
-            <arg value="libev-devel"/>
             <arg value="gcc-c++"/>
             <arg value="openldap-devel"/>
             <arg value="rpm-build"/>
