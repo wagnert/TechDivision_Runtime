@@ -7,6 +7,7 @@
     <xs:element name="appserver">
         <xs:complexType>
             <xs:choice maxOccurs="unbounded">
+                <xs:element ref="appserver:params" />
                 <xs:element ref="appserver:baseDirectory" />
                 <xs:element ref="appserver:initialContext" />
                 <xs:element ref="appserver:loggers" />

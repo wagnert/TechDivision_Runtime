@@ -7,19 +7,10 @@
         <storage type="TechDivision\Storage\StackableStorage" />
     </initialContext>
 
-	<!--
-	<extractors>
-		<extractor type="TechDivision\ApplicationServer\Extractors\PharExtractor">
-			<target dir="webapps">
-				<params>
-		            <param name="user" type="string">${appserver.user}</param>
-		            <param name="group" type="string">${appserver.group}</param>
-		            <param name="umask" type="integer">0775</param>
-				</params>
-			</target>
-		</extractor>
-	</extractors>
-	-->
+    <params>
+        <param name="user" type="string">${appserver.user}</param>
+        <param name="group" type="string">${appserver.group}</param>
+    </params>
 
     <loggers>
         <logger channelName="system" name="System" type="\Monolog\Logger">
@@ -196,8 +187,6 @@
                         <param name="keepAliveMax" type="integer">64</param>
                         <param name="keepAliveTimeout" type="integer">5</param>
                         <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
-                        <param name="user" type="string">${appserver.user}</param>
-                        <param name="group" type="string">${appserver.group}</param>
                     </params>
 
                     <environmentVariables>
@@ -430,8 +419,6 @@
                         <param name="keepAliveMax" type="integer">64</param>
                         <param name="keepAliveTimeout" type="integer">5</param>
                         <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
-                        <param name="user" type="string">${appserver.user}</param>
-                        <param name="group" type="string">${appserver.group}</param>
                     </params>
 
                     <environmentVariables>
