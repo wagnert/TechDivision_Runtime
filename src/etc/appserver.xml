@@ -386,7 +386,7 @@
                         <module type="\TechDivision\WebServer\Modules\AccessModule"/>
                         <module type="\TechDivision\WebServer\Modules\CoreModule"/>
                         <module type="\TechDivision\PhpModule\PhpModule"/>
-                        <module type="\TechDivision\WebServer\Modules\FastCgiModule"/>
+                		<module type="\TechDivision\FastCgiModule\FastCgiModule"/>
                         <module type="\TechDivision\ServletModule\ServletModule" />
                         <!-- RESPONSE_PRE hook -->
                         <module type="\TechDivision\WebServer\Modules\DeflateModule"/>
@@ -620,7 +620,7 @@
                         <module type="\TechDivision\WebServer\Modules\AccessModule"/>
                         <module type="\TechDivision\WebServer\Modules\CoreModule"/>
                         <module type="\TechDivision\PhpModule\PhpModule"/>
-                        <module type="\TechDivision\WebServer\Modules\FastCgiModule"/>
+                		<module type="\TechDivision\FastCgiModule\FastCgiModule"/>
                         <module type="\TechDivision\ServletModule\ServletModule" />
                         <!-- RESPONSE_PRE hook -->
                         <module type="\TechDivision\WebServer\Modules\DeflateModule"/>
