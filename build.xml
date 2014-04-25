@@ -1449,20 +1449,31 @@
     <!-- ==================================================================== -->
     <target name="create-pkg" depends="install-demo-project" description="Creates a .pkg package with the local ApplicationServer runtime.">
         <!-- copy build files to target directory -->
-        <antcall target="move-build-to-target"/>
+        <antcall target="move-build-to-target" />
         <!-- copy ioncube files to required directory -->
         <copy todir="${php-target.dir}/re">
             <fileset dir="${basedir}/buildfiles/macosx">
                 <include name="**/*"/>
-            	<exclude name="scripts"/>
+            	<exclude name="scripts/**"/>
             </fileset>
         </copy>
+        <!-- copy pre/postinstall script files (to replace ANT variables only) -->
+        <copy todir="${php-target.dir}">
+            <fileset dir="${basedir}/buildfiles/macosx">
+            	<include name="scripts/**"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+    	<!-- make the install scripts executable -->
+        <chmod perm="755" dir="${php-target.dir}/scripts" includes="*"/>
         <!-- create the .pkg file -->
         <exec dir="${basedir}" executable="pkgbuild">
             <arg value="--root"/>
             <arg value="${php-target.dir}/re"/>
             <arg value="--scripts"/>
-            <arg value="${basedir}/buildfiles/macosx/scripts"/>
+            <arg value="${php-target.dir}/scripts"/>
             <arg value="--install-location"/>
             <arg value="/"/>
             <arg value="--version"/>
