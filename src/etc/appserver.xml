@@ -10,6 +10,7 @@
     <params>
         <param name="user" type="string">${appserver.user}</param>
         <param name="group" type="string">${appserver.group}</param>
+        <param name="umask" type="string">${appserver.umask}</param>
     </params>
 
     <loggers>
