@@ -12,6 +12,6 @@ chmod 755 /etc/init.d/appserver-fpm
 
 /etc/init.d/appserver start
 /etc/init.d/watcher start
-/etc/init.d/appserver-fpm start
+/etc/init.d/php5-ts-fpm start
 
 exit 0
