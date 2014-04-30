@@ -376,6 +376,13 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Check if icu4c sources has been downloaded yet   		 	          -->
+    <!-- ==================================================================== -->
+    <target name="check-libicu-src-present" description="Check if icu4c sources has been downloaded yet.">
+        <available file="${lib.dir}/icu4c-${libicu.version.major}_${libicu.version.minor}-src.tgz" property="libicu-src.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Get PHP source package by given version number		  		          -->
     <!-- ==================================================================== -->
     <target name="get-php-src" depends="check-php-src-present" unless="${php-src.present}" description="Get PHP source package by given version number">
@@ -562,6 +569,13 @@
     <!-- ==================================================================== -->
     <target name="get-openssl-src" depends="check-openssl-src-present" unless="${openssl-src.present}" description="Get openssl source package by given version number.">
         <get src="${openssl.download.url}" dest="${lib.dir}/openssl-${openssl.version}.tar.gz"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Get icu4c source package by given version number		          -->
+    <!-- ==================================================================== -->
+    <target name="get-libicu-src" depends="check-libicu-src-present" unless="${libicu-src.present}" description="Get icu4c source package by given version number.">
+        <get src="${libicu.download.url}" dest="${lib.dir}/icu4c-${libicu.version.major}_${libicu.version.minor}-src.tgz"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -799,6 +813,24 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Prepares the libicu sources for the runtime                          -->
+    <!-- ==================================================================== -->
+    <target name="build-libicu" if="${libicu.build}" description="Prepares the libicu sources for the runtime.">
+        <antcall target="get-libicu-src"/>
+        <untar src="${lib.dir}/icu4c-${libicu.version.major}_${libicu.version.minor}-src.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <chmod perm="755" dir="${php-target.dir}/icu/source" includes="configure,install-sh"/>
+        <exec dir="${php-target.dir}/icu/source" executable="sh">
+            <arg value="runConfigureICU"/>
+            <arg value="${libicu.target-env}"/>
+            <arg value="--prefix=${appserver.compile.prefix}"/>
+        </exec>
+        <exec dir="${php-target.dir}/icu/source" executable="make"/>
+        <exec dir="${php-target.dir}/icu/source" executable="make">
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Builds the memcached server binaries                                 -->
     <!-- ==================================================================== -->
     <target name="build-memcached-server" if="${memcached.server.build}" description="Builds the memcached server binaries.">
@@ -920,6 +952,7 @@
         <antcall target="build-libevent"/>
         <antcall target="build-openssl"/>
         <antcall target="build-pcre"/>
+        <antcall target="build-libicu"/>
         <antcall target="build-memcached-server"/>
         <antcall target="build-nginx-server"/>
         <antcall target="build-httpd-server"/>
