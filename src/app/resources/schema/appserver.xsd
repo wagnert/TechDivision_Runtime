@@ -69,9 +69,20 @@
             <xs:attribute name="uuid" type="xs:string" />
         </xs:complexType>
     </xs:element>
-    <!-- TODO: complete these definitions -->
     <xs:element name="connectionHandlers">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element ref="appserver:connectionHandler" />
+            </xs:choice>
+        </xs:complexType>
     </xs:element>
+    <xs:element name="connectionHandler">
+        <xs:complexType>
+            <xs:attribute name="type" type="xs:string" />
+            <xs:attribute name="uuid" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+    <!-- TODO: complete these definitions -->
     <xs:element name="modules">
     </xs:element>
     <xs:element name="fileHandlers">
@@ -81,13 +92,13 @@
     <xs:element name="server">
         <xs:complexType>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="appserver:connectionHandlers" />
                 <xs:element ref="appserver:params" />
                 <xs:element ref="appserver:authentications" />
                 <xs:element ref="appserver:accesses" />
                 <xs:element ref="appserver:virtualHosts" />
                 <xs:element ref="appserver:rewrites" />
                 <xs:element ref="appserver:environmentVariables" />
-                <xs:element ref="appserver:connectionHandlers" />
                 <xs:element ref="appserver:modules" />
                 <xs:element ref="appserver:fileHandlers" />
                 <xs:element ref="appserver:locations" />
@@ -152,6 +163,7 @@
                 <xs:element ref="appserver:locations" />
             </xs:choice>
             <xs:attribute name="name" type="xs:string" />
+            <xs:attribute name="extensionType" type="xs:string" />
             <xs:attribute name="uuid" type="xs:string" />
         </xs:complexType>
     </xs:element>
@@ -168,6 +180,7 @@
             <xs:attribute name="condition" type="xs:string" />
             <xs:attribute name="target" type="xs:string" />
             <xs:attribute name="flag" type="xs:string" />
+            <xs:attribute name="extensionType" type="xs:string" />
             <xs:attribute name="uuid" type="xs:string" />
         </xs:complexType>
     </xs:element>

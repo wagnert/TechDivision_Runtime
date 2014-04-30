@@ -138,6 +138,9 @@
                         socket="\TechDivision\WebServer\Sockets\StreamSocket"
                         serverContext="\TechDivision\WebServer\ServerContext"
                         loggerName="System">
+                    <connectionHandlers>
+                        <connectionHandler type="\TechDivision\MemcacheProtocol\MemcacheConnectionHandler" />
+                    </connectionHandlers>
                     <params>
                         <param name="admin" type="string">${appserver.admin.email}</param>
                         <param name="software" type="string">${appserver.version} (${os.family})</param>
@@ -148,11 +151,6 @@
                         <param name="keepAliveMax" type="integer">64</param>
                         <param name="keepAliveTimeout" type="integer">16</param>
                     </params>
-
-                    <connectionHandlers>
-                        <connectionHandler type="\TechDivision\MemcacheProtocol\MemcacheConnectionHandler" />
-                    </connectionHandlers>
-
                 </server>
             </servers>
         </container>
@@ -235,15 +233,14 @@
                                     </params>
                                 </access>
                             </accesses>
-		                    <locations>
-			                    <location condition="~*\.php(\/|\?|$)">
-			                    	<fileHandlers>
-								        <fileHandler name="php" extension=".php" />
-			                    	</fileHandlers>
-							    </location>
-		                    </locations>
+                            <locations>
+                                <location condition="~*\.php(\/|\?|$)">
+                                    <fileHandlers>
+                                        <fileHandler name="php" extension=".php" />
+                                    </fileHandlers>
+                                </location>
+                            </locations>
                         </virtualHost>
-
                         <!--
                         <virtualHost name="magento-real-vhost.dev magento-real-vhost.local">
                             <params>
