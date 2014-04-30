@@ -8,7 +8,7 @@ chown -R ${appserver.user}:${appserver.group} /opt/appserver/deploy
 chmod -R 755 /opt/appserver/bin
 chmod 755 /etc/init.d/appserver
 chmod 755 /etc/init.d/watcher
-chmod 755 /etc/init.d/appserver-fpm
+chmod 755 /etc/init.d/php5-ts-fpm
 
 /etc/init.d/appserver start
 /etc/init.d/watcher start
