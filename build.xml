@@ -1458,15 +1458,15 @@
     <target name="create-rpm" depends="install-demo-project" description="Creates a RPM package with the local ApplicationServer runtime.">
         <!-- copy build files to target directory -->
         <antcall target="move-build-to-target"/>
-		<!-- copy fedora build files -->
+		<!-- copy distribution build files -->
         <copy todir="${php-target.dir}/re">
-            <fileset dir="${basedir}/buildfiles/fedora">
+            <fileset dir="${basedir}/buildfiles/${os.distribution}">
                 <include name="**/*"/>
             	<exclude name="rpmbuild/**"/>
             </fileset>
         </copy>
     	<!-- copy the configuration file to build the .rpm -->
-    	<copy file="${basedir}/buildfiles/fedora/rpmbuild/SPECS/appserver.spec" todir="${php-target.dir}">
+    	<copy file="${basedir}/buildfiles/${os.distribution}/rpmbuild/SPECS/appserver.spec" todir="${php-target.dir}">
             <filterchain>
                 <expandproperties/>
             </filterchain>

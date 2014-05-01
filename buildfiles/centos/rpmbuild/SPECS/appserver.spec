@@ -36,11 +36,11 @@ ldconfig
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/var
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/webapps
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/deploy
-chmod -R 755 /opt/appserver
+chmod -R 775 /opt/appserver
 
-chmod 755 /etc/init.d/appserver
-chmod 755 /etc/init.d/watcher
-chmod 755 /etc/init.d/appserver-fpm
+chmod 775 /etc/init.d/appserver
+chmod 775 /etc/init.d/watcher
+chmod 775 /etc/init.d/appserver-fpm
 
 /etc/init.d/appserver start
 /etc/init.d/watcher start
