@@ -1,15 +1,21 @@
 #!/bin/sh
 
+# Create temporary directory
+mkdir /opt/appserver/tmp
+
 # Set needed files as accessable for the configured user
+chown -R ${appserver.user}:${appserver.group} /opt/appserver/tmp
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/var
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/webapps
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/deploy
 
+# Set the permissions
 chmod -R 755 /opt/appserver/bin
 chmod 755 /etc/init.d/appserver
 chmod 755 /etc/init.d/watcher
 chmod 755 /etc/init.d/php5-ts-fpm
 
+# Start the services
 /etc/init.d/appserver start
 /etc/init.d/watcher start
 /etc/init.d/php5-ts-fpm start
