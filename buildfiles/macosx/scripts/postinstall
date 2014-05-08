@@ -1,10 +1,15 @@
 #!/bin/sh
 
+# Create temporary directory
+mkdir /opt/appserver/tmp
+
 # Set needed files as accessable for the configured user
 chown -R ${appserver.user}:${appserver.group} /opt/appserver
 
+# Set the permissions
 chmod -R 775 /opt/appserver
 
+# Start the services
 /opt/appserver/sbin/appserverctl start
 /opt/appserver/sbin/watcherctl start
 /opt/appserver/sbin/phpfpmctl start
