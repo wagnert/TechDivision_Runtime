@@ -51,53 +51,11 @@
 
     <containers>
 
-        <container name="persistence"
-                   threadType="TechDivision\ApplicationServer\ContainerThread"
-                   type="TechDivision\PersistenceContainer\Container">
-            <description>
-                <![CDATA[This is an example of a container that uses a socket for sending and receiving messages. This solution can be used for clients connecting over a network.]]>
-            </description>
-            <receiver type="TechDivision\ApplicationServer\Socket\Receiver">
-                <worker type="TechDivision\ApplicationServer\Socket\Worker" />
-                <thread type="TechDivision\PersistenceContainer\ThreadRequest" />
-                <params>
-                    <param name="workerNumber" type="integer">16</param>
-                    <param name="address" type="string">0.0.0.0</param>
-                    <param name="port" type="integer">8585</param>
-                </params>
-            </receiver>
-            <deployment type="TechDivision\PersistenceContainer\Deployment" />
-            <host name="localhost" appBase="/webapps" serverAdmin="info@appserver.io"
-                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
-
-        </container>
-
-        <container name="message-queue"
-                   threadType="TechDivision\ApplicationServer\ContainerThread"
-                   type="TechDivision\MessageQueue\Container">
-            <description>
-            	<![CDATA[This is an example of a message queue that uses a socket to receive messages. This solution can be used for clients connecting over a network.]]>
-           	</description>
-            <receiver type="TechDivision\ApplicationServer\Socket\Receiver">
-                <worker type="TechDivision\ApplicationServer\Socket\Worker" />
-                <thread type="TechDivision\MessageQueue\ThreadRequest" />
-                <params>
-                    <param name="workerNumber" type="integer">16</param>
-                    <param name="address" type="string">0.0.0.0</param>
-                    <param name="port" type="integer">8587</param>
-                </params>
-            </receiver>
-            <deployment type="TechDivision\MessageQueue\Deployment" />
-            <host name="localhost" appBase="/webapps" serverAdmin="info@appserver.io"
-                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
-
-        </container>
-
         <container name="web-socket"
                    threadType="TechDivision\ApplicationServer\ContainerThread"
                    type="TechDivision\WebSocketContainer\Container">
             <description>
-            	<![CDATA[This is an example of a web socket container that handles web socket requests/responses.]]>
+                <![CDATA[This is an example of a web socket container that handles web socket requests/responses.]]>
             </description>
             <receiver type="TechDivision\WebSocketContainer\RatchetReceiver">
                 <worker type="TechDivision\WebSocketContainer\RatchetWorker" />
@@ -124,6 +82,84 @@
             </host>
         </container>
 
+        <!--
+        <container name="message-queue"
+                   threadType="TechDivision\ApplicationServer\ContainerThread"
+                   type="TechDivision\MessageQueue\Container">
+            <description>
+            	<![CDATA[This is an example of a message queue that uses a socket to receive messages. This solution can be used for clients connecting over a network.]]>
+           	</description>
+            <receiver type="TechDivision\ApplicationServer\Socket\Receiver">
+                <worker type="TechDivision\ApplicationServer\Socket\Worker" />
+                <thread type="TechDivision\MessageQueue\ThreadRequest" />
+                <params>
+                    <param name="workerNumber" type="integer">16</param>
+                    <param name="address" type="string">0.0.0.0</param>
+                    <param name="port" type="integer">8587</param>
+                </params>
+            </receiver>
+            <deployment type="TechDivision\MessageQueue\Deployment" />
+            <host name="localhost" appBase="/webapps" serverAdmin="info@appserver.io"
+                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
+
+        </container>
+        -->
+  		
+        <container
+                name="persistence-mq"
+                threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\PersistenceContainer\PersistenceContainer">
+            <description>
+            	<![CDATA[This is an example of a container that uses a socket for sending and receiving messages. This solution can be used for clients connecting over a network.]]>
+            </description>
+            <deployment type="TechDivision\PersistenceContainer\Deployment" />
+            <host
+                    name="localhost"
+                    appBase="/webapps"
+                    serverAdmin="info@appserver.io"
+                    serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
+            <servers>
+            
+                <server
+                        type="\TechDivision\WebServer\Servers\MultiThreadedServer"
+                        worker="\TechDivision\WebServer\Workers\ThreadWorker"
+                        socket="\TechDivision\WebServer\Sockets\StreamSocket"
+                        serverContext="\TechDivision\WebServer\ServerContext"
+                        loggerName="System">
+                    <connectionHandlers>
+                        <connectionHandler type="\TechDivision\PersistenceContainerProtocol\ConnectionHandler" />
+                    </connectionHandlers>
+                    <params>
+                        <param name="admin" type="string">${appserver.admin.email}</param>
+                        <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
+                        <param name="transport" type="string">tcp</param>
+                        <param name="address" type="string">0.0.0.0</param>
+                        <param name="port" type="integer">8585</param>
+                        <param name="workerNumber" type="integer">8</param>
+                    </params>
+                </server>
+                
+                <server
+                        type="\TechDivision\WebServer\Servers\MultiThreadedServer"
+                        worker="\TechDivision\WebServer\Workers\ThreadWorker"
+                        socket="\TechDivision\WebServer\Sockets\StreamSocket"
+                        serverContext="\TechDivision\WebServer\ServerContext"
+                        loggerName="System">
+                    <connectionHandlers>
+                        <connectionHandler type="\TechDivision\MessageQueueProtocol\ConnectionHandler" />
+                    </connectionHandlers>
+                    <params>
+                        <param name="admin" type="string">${appserver.admin.email}</param>
+                        <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
+                        <param name="transport" type="string">tcp</param>
+                        <param name="address" type="string">0.0.0.0</param>
+                        <param name="port" type="integer">8587</param>
+                        <param name="workerNumber" type="integer">8</param>
+                    </params>
+                </server>
+                
+            </servers>
+        </container>
+
         <container
                 name="lemcache"
                 threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\LemCacheContainer\CacheContainer">
@@ -143,7 +179,7 @@
                     </connectionHandlers>
                     <params>
                         <param name="admin" type="string">${appserver.admin.email}</param>
-                        <param name="software" type="string">${appserver.version} (${os.family})</param>
+                        <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
                         <param name="transport" type="string">tcp</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">11210</param>
@@ -176,7 +212,7 @@
                         loggerName="System">
                     <params>
                         <param name="admin" type="string">${appserver.admin.email}</param>
-                        <param name="software" type="string">${appserver.version} (${os.family})</param>
+                        <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
                         <param name="transport" type="string">tcp</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">9080</param>
@@ -405,7 +441,7 @@
                         loggerName="System">
                     <params>
                         <param name="admin" type="string">${appserver.admin.email}</param>
-                        <param name="software" type="string">${appserver.version} (${os.family})</param>
+                        <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
                         <param name="workerNumber" type="integer">${container.server.worker.number}</param>
                         <param name="transport" type="string">ssl</param>
                         <param name="address" type="string">0.0.0.0</param>
