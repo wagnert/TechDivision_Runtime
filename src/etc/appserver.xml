@@ -365,7 +365,7 @@
 		                    <locations>
 			                    <location condition="~*\.php(\/|\?|$)">
 			                    	<fileHandlers>
-								        <fileHandler name="php" extension=".php" />
+								        <fileHandler name="fastcgi" extension=".php" />
 			                    	</fileHandlers>
 							    </location>
 		                    </locations>
@@ -382,7 +382,7 @@
 		                    <locations>
 			                    <location condition="~*\.php(\/|\?|$)">
 			                    	<fileHandlers>
-								        <fileHandler name="php" extension=".php" />
+								        <fileHandler name="fastcgi" extension=".php" />
 			                    	</fileHandlers>
 							    </location>
 		                    </locations>
@@ -597,7 +597,7 @@
 		                    <locations>
 			                    <location condition="~*\.php(\/|\?|$)">
 			                    	<fileHandlers>
-								        <fileHandler name="php" extension=".php" />
+								        <fileHandler name="fastcgi" extension=".php" />
 			                    	</fileHandlers>
 							    </location>
 		                    </locations>
@@ -614,7 +614,7 @@
 		                    <locations>
 			                    <location condition="~*\.php(\/|\?|$)">
 			                    	<fileHandlers>
-								        <fileHandler name="php" extension=".php" />
+								        <fileHandler name="fastcgi" extension=".php" />
 			                    	</fileHandlers>
 							    </location>
 		                    </locations>
