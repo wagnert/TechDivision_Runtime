@@ -25,17 +25,33 @@ PIDFILE="/var/run/${NAME}.pid"
 # Start script is implemented manually as we had problems with the "daemon" command
 # @TODO switch to "daemon" command for a unified look and feel
 start() {
+    # Do nothing if there already is a pid or lock file
+    if ([ -f $PIDFILE -o -f LOCKFILE ]) then
+
+        echo -n "Process seems to run already...";
+        echo_failure
+        echo
+        return 1
+    fi
+
+    # Start the server as daemon
     printf "%-50s" "Starting $NAME..."
     cd $BASE_PATH
-	PID=`$DAEMON $DAEMON_OPTS > /dev/null 2>&1 & echo $!`
-	#echo "Saving PID" $PID " to " $PIDFILE
+	$DAEMON $DAEMON_OPTS &
+	PID=$!
 
-	if [ -z $PID ]; then
-	    printf "%s\n" "Fail"
-	else
-	    echo $PID > $PIDFILE
-	    printf "%s\n" "Ok"
-	fi
+    # Did we get something useful?
+    if [ -z $PID ]; then
+        echo -n "Could not start process...";
+        echo_failure
+        echo
+        return 1
+    fi
+
+    echo_success
+    echo
+	[ touch $LOCKFILE && echo $PID > $PIDFILE ]
+	return 0
 }
 
 stop() {
@@ -43,7 +59,7 @@ stop() {
     killproc $NAME
     RETVAL=$?
     echo
-    [ $RETVAL -eq 0 ] && rm -f $PIDFILE
+    [ $RETVAL -eq 0 ] && rm -f $PIDFILE && rm -f $LOCKFILE
     return $RETVAL
 }
 
