@@ -32,7 +32,11 @@ Provides:   appserver
 # Reload shared library list
 ldconfig
 
+# Create temporary directory
+mkdir /opt/appserver/tmp
+
 # Set needed files as accessable for the configured user
+chown -R ${appserver.user}:${appserver.group} /opt/appserver/tmp
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/var
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/webapps
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/deploy
