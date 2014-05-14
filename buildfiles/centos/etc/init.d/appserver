@@ -42,8 +42,8 @@ start() {
 	PID=$!
 
     # Did we get something useful?
-    if [ -z $PID ]; then
-        echo -n "Could not start process...";
+    if ([ -z $PID ]) then
+        echo -n "Process running but missing pid...";
         echo_failure
         echo
         return 1
@@ -51,7 +51,7 @@ start() {
 
     echo_success
     echo
-	[ touch $LOCKFILE && echo $PID > $PIDFILE ]
+	touch $LOCKFILE && echo $PID > $PIDFILE
 	return 0
 }
 
