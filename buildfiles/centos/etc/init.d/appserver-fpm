@@ -18,6 +18,7 @@ DAEMON_OPTS="-D -c /opt/appserver/etc/ -y /opt/appserver/etc/php-fpm.conf"
 NAME="appserver-fpm"
 DESC="appserver-fpm"
 PIDFILE="/var/run/${NAME}.pid"
+LOCKFILE="/var/lock/subsys/${NAME}"
 
 # Include the functions file as we need it for the "killproc" command
 . /etc/init.d/functions
@@ -37,12 +38,11 @@ start() {
     # Start the server as daemon
     printf "%-50s" "Starting $NAME..."
     cd $BASE_PATH
-	$DAEMON $DAEMON_OPTS &
-	PID=$!
+	daemon $DAEMON $DAEMON_OPTS
 
     # Did we get something useful?
-    if [ -z $PID ]; then
-        echo -n "Could not start process...";
+    if ([ ! -f $PIDFILE ]) then
+        echo -n "Process running but missing pid...";
         echo_failure
         echo
         return 1
@@ -50,7 +50,7 @@ start() {
 
     echo_success
     echo
-	[ touch $LOCKFILE && echo $PID > $PIDFILE ]
+	touch $LOCKFILE
 	return 0
 }
 
