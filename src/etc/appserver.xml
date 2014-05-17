@@ -51,6 +51,7 @@
 
     <containers>
 
+		<!--
         <container name="web-socket"
                    threadType="TechDivision\ApplicationServer\ContainerThread"
                    type="TechDivision\WebSocketContainer\Container">
@@ -81,7 +82,8 @@
                 </vhosts>
             </host>
         </container>
-
+  		-->
+  		
         <!--
         <container name="message-queue"
                    threadType="TechDivision\ApplicationServer\ContainerThread"
@@ -204,6 +206,33 @@
                     serverAdmin="info@appserver.io"
                     serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
             <servers>
+            
+            
+                <server
+                        type="\TechDivision\WebSocketServer\Servers\AsyncServer"
+                        socket="\TechDivision\WebSocketServer\Sockets\AsyncSocket"
+                        serverContext="\TechDivision\WebServer\ServerContext"
+                        loggerName="System">
+                    <params>
+                        <param name="admin" type="string">${appserver.admin.email}</param>
+                        <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
+                        <param name="transport" type="string">tcp</param>
+                        <param name="address" type="string">0.0.0.0</param>
+                        <param name="port" type="integer">8589</param>
+                        <param name="workerNumber" type="integer">${container.server.worker.number}</param>
+                        <param name="documentRoot" type="string">webapps</param>
+                        <param name="directoryIndex" type="string">index.do index.php index.html index.htm</param>
+                        <param name="keepAliveMax" type="integer">64</param>
+                        <param name="keepAliveTimeout" type="integer">5</param>
+                        <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
+                    </params>
+
+                    <connectionHandlers>
+                        <connectionHandler type="\TechDivision\WebSocketProtocol\WebSocketConnectionHandler" />
+                    </connectionHandlers>
+                    
+                </server>
+                
                 <server
                         type="\TechDivision\WebServer\Servers\MultiThreadedServer"
                         worker="\TechDivision\WebServer\Workers\ThreadWorker"
