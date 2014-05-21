@@ -5,7 +5,7 @@ mkdir /opt/appserver/tmp
 mkdir /opt/appserver/etc/php-fpm.d
 
 # Set needed files as accessable for the configured user
-chown -R ${appserver.user}:${appserver.group} /opt/appserver
+chown -R ${service.user}:${service.group} /opt/appserver
 
 # Set the permissions
 chmod -R 775 /opt/appserver
