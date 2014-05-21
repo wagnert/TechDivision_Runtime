@@ -11,6 +11,9 @@
         <param name="user" type="string">${appserver.user}</param>
         <param name="group" type="string">${appserver.group}</param>
         <param name="umask" type="string">${appserver.umask}</param>
+        <param name="serviceUser" type="string">${service.user}</param>
+        <param name="serviceGroup" type="string">${service.group}</param>
+        <param name="serviceUmask" type="string">${service.umask}</param>
     </params>
 
     <loggers>
