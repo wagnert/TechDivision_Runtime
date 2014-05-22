@@ -25,7 +25,6 @@ class ConnectionHandler extends Worker
 $startTime = microtime(true);
 
 $connectionHandler = new ConnectionHandler();
-$connectionHandler->start();
 
 $requests = array();
 
@@ -34,6 +33,7 @@ for ($i = 10; $i > 0; $i--) {
     $connectionHandler->stack($requests[$i]);
 }
 
+$connectionHandler->start();
 $connectionHandler->shutdown();
 
 echo sprintf('Successfully finished example in %f seconds', $executionTime) . PHP_EOL;

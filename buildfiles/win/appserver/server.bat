@@ -1,3 +1,7 @@
 @ECHO OFF
 ECHO Starting appserver.io...
-php\php -dappserver.php_sapi=appserver -dappserver.remove_functions=getenv,putenv server.php
+
+set php=php\php.exe
+set ini=php\php.ini
+
+%php% -c %ini% -dappserver.php_sapi=appserver -dappserver.remove_functions=getenv,putenv server.php
