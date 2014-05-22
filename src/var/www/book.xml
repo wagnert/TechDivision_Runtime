@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<para>
+<para  xsi:schemaLocation="http://www.example.org/chapter chapter.xsd">
 	<row>
 		<entry>The Grapes of Wrath</entry>
 		<entry>John Steinbeck</entry>
