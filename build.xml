@@ -1276,9 +1276,8 @@
 	<target name="deploy-default-webapps" description="Deploys the ApplicationServer default webapps.">
     	<copy todir="${appserver.compile.prefix}/deploy">
     		<fileset dir="${basedir}/webapps">
-    			<include name="*-${appserver.version}.phar"/>
+    			<include name="*.phar"/>
     		</fileset>
-    		<globmapper from="*-${appserver.version}.phar" to="*.phar"/>
     	</copy>
 		<touch file="foo">
     		<fileset dir="${appserver.compile.prefix}/deploy">
@@ -1673,9 +1672,8 @@
 		<!-- copy API/Admin + example phars -->
     	<copy todir="${php-target.dir}/appserver/deploy">
     		<fileset dir="${basedir}/webapps">
-    			<include name="*-${appserver.version}.phar"/>
+    			<include name="*.phar"/>
     		</fileset>
-    		<globmapper from="*-${appserver.version}.phar" to="*.phar"/>
     	</copy>
 		<!-- create the .dodeploy files -->
         <touch file="foo">
