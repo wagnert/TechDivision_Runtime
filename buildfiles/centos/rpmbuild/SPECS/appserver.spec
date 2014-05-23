@@ -37,10 +37,10 @@ mkdir /opt/appserver/tmp
 mkdir /opt/appserver/etc/php-fpm.d
 
 # Set needed files as accessable for the configured user
-chown -R ${service.user}:${service.group} /opt/appserver/tmp
-chown -R ${service.user}:${service.group} /opt/appserver/var
-chown -R ${service.user}:${service.group} /opt/appserver/webapps
-chown -R ${service.user}:${service.group} /opt/appserver/deploy
+chown -R ${appserver.user}:${appserver.group} /opt/appserver/tmp
+chown -R ${appserver.user}:${appserver.group} /opt/appserver/var
+chown -R ${appserver.user}:${appserver.group} /opt/appserver/webapps
+chown -R ${appserver.user}:${appserver.group} /opt/appserver/deploy
 chmod -R 775 /opt/appserver
 
 chmod 775 /etc/init.d/appserver
