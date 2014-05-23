@@ -1412,7 +1412,6 @@
             <arg value="pcre-devel"/>
             <arg value="libpng-devel"/>
             <arg value="libcurl-devel"/>
-            <arg value="libpng-devel"/>
             <arg value="libevent-devel"/>
             <arg value="gcc-c++"/>
             <arg value="openldap-devel"/>
