@@ -154,7 +154,7 @@
                 <server
                         type="\TechDivision\WebSocketServer\Servers\AsyncServer"
                         socket="\TechDivision\WebSocketServer\Sockets\AsyncSocket"
-                        serverContext="\TechDivision\WebServer\ServerContext"
+                        serverContext="\TechDivision\Server\ServerContext"
                         loggerName="System">
                     <params>
                         <param name="admin" type="string">${appserver.admin.email}</param>
