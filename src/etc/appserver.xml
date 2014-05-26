@@ -120,10 +120,10 @@
             <servers>
             
                 <server
-                        type="\TechDivision\WebServer\Servers\MultiThreadedServer"
-                        worker="\TechDivision\WebServer\Workers\ThreadWorker"
-                        socket="\TechDivision\WebServer\Sockets\StreamSocket"
-                        serverContext="\TechDivision\WebServer\ServerContext"
+                        type="\TechDivision\Server\Servers\MultiThreadedServer"
+                        worker="\TechDivision\Server\Workers\ThreadWorker"
+                        socket="\TechDivision\Server\Sockets\StreamSocket"
+                        serverContext="\TechDivision\Server\ServerContext"
                         loggerName="System">
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\PersistenceContainerProtocol\ConnectionHandler" />
@@ -139,10 +139,10 @@
                 </server>
                 
                 <server
-                        type="\TechDivision\WebServer\Servers\MultiThreadedServer"
-                        worker="\TechDivision\WebServer\Workers\ThreadWorker"
-                        socket="\TechDivision\WebServer\Sockets\StreamSocket"
-                        serverContext="\TechDivision\WebServer\ServerContext"
+                        type="\TechDivision\Server\Servers\MultiThreadedServer"
+                        worker="\TechDivision\Server\Workers\ThreadWorker"
+                        socket="\TechDivision\Server\Sockets\StreamSocket"
+                        serverContext="\TechDivision\Server\ServerContext"
                         loggerName="System">
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\MessageQueueProtocol\ConnectionHandler" />
@@ -169,10 +169,10 @@
             <deployment type="TechDivision\LemCacheContainer\Deployment" />
             <servers>
                 <server
-                        type="\TechDivision\WebServer\Servers\MultiThreadedServer"
-                        worker="\TechDivision\WebServer\Workers\ThreadWorker"
-                        socket="\TechDivision\WebServer\Sockets\StreamSocket"
-                        serverContext="\TechDivision\WebServer\ServerContext"
+                        type="\TechDivision\Server\Servers\MultiThreadedServer"
+                        worker="\TechDivision\Server\Workers\ThreadWorker"
+                        socket="\TechDivision\Server\Sockets\StreamSocket"
+                        serverContext="\TechDivision\Server\ServerContext"
                         loggerName="System">
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\MemcacheProtocol\MemcacheConnectionHandler" />
@@ -205,10 +205,10 @@
                     serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
             <servers>
                 <server
-                        type="\TechDivision\WebServer\Servers\MultiThreadedServer"
-                        worker="\TechDivision\WebServer\Workers\ThreadWorker"
-                        socket="\TechDivision\WebServer\Sockets\StreamSocket"
-                        serverContext="\TechDivision\WebServer\ServerContext"
+                        type="\TechDivision\Server\Servers\MultiThreadedServer"
+                        worker="\TechDivision\Server\Workers\ThreadWorker"
+                        socket="\TechDivision\Server\Sockets\StreamSocket"
+                        serverContext="\TechDivision\Server\ServerContext"
                         loggerName="System">
                     <params>
                         <param name="admin" type="string">${appserver.admin.email}</param>
@@ -434,10 +434,10 @@
                 </server>
 
                 <server
-                        type="\TechDivision\WebServer\Servers\MultiThreadedServer"
-                        worker="\TechDivision\WebServer\Workers\ThreadWorker"
-                        socket="\TechDivision\WebServer\Sockets\StreamSocket"
-                        serverContext="\TechDivision\WebServer\ServerContext"
+                        type="\TechDivision\Server\Servers\MultiThreadedServer"
+                        worker="\TechDivision\Server\Workers\ThreadWorker"
+                        socket="\TechDivision\Server\Sockets\StreamSocket"
+                        serverContext="\TechDivision\Server\ServerContext"
                         loggerName="System">
                     <params>
                         <param name="admin" type="string">${appserver.admin.email}</param>
