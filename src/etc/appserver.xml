@@ -368,7 +368,7 @@
                     </virtualHosts>
 
                     <connectionHandlers>
-                        <connectionHandler type="\TechDivision\Http\HttpConnectionHandler" />
+                        <connectionHandler type="\TechDivision\WebServer\ConnectionHandlers\HttpConnectionHandler" />
                     </connectionHandlers>
 
                     <modules>
@@ -600,7 +600,7 @@
                     </virtualHosts>
 
                     <connectionHandlers>
-                        <connectionHandler type="\TechDivision\Http\HttpConnectionHandler" />
+                        <connectionHandler type="\TechDivision\WebServer\ConnectionHandlers\HttpConnectionHandler" />
                     </connectionHandlers>
 
                     <modules>
