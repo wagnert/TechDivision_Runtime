@@ -50,64 +50,9 @@
     </loggers>
 
     <containers>
-
-        <container name="web-socket"
-                   threadType="TechDivision\ApplicationServer\ContainerThread"
-                   type="TechDivision\WebSocketContainer\Container">
-            <description>
-                <![CDATA[This is an example of a web socket container that handles web socket requests/responses.]]>
-            </description>
-            <receiver type="TechDivision\WebSocketContainer\RatchetReceiver">
-                <worker type="TechDivision\WebSocketContainer\RatchetWorker" />
-                <thread type="TechDivision\WebSocketContainer\RatchetRequest" />
-                <params>
-                    <param name="workerNumber" type="integer">16</param>
-                    <param name="address" type="string">0.0.0.0</param>
-                    <param name="port" type="integer">8589</param>
-                </params>
-            </receiver>
-            <deployment type="TechDivision\WebSocketContainer\Deployment" />
-            <host name="localhost" appBase="/webapps" serverAdmin="info@appserver.io"
-                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}">
-                <vhosts>
-                    <vhost name="www.appserver.io" appBase="/site">
-                        <aliases>
-                            <alias>appserver.io</alias>
-                            <alias>appserver.local</alias>
-                        </aliases>
-                    </vhost>
-                    <vhost name="neos.local" appBase="/neos" />
-                    <vhost name="neos.appserver.io" appBase="/neos" />
-                </vhosts>
-            </host>
-        </container>
-
-        <!--
-        <container name="message-queue"
-                   threadType="TechDivision\ApplicationServer\ContainerThread"
-                   type="TechDivision\MessageQueue\Container">
-            <description>
-            	<![CDATA[This is an example of a message queue that uses a socket to receive messages. This solution can be used for clients connecting over a network.]]>
-           	</description>
-            <receiver type="TechDivision\ApplicationServer\Socket\Receiver">
-                <worker type="TechDivision\ApplicationServer\Socket\Worker" />
-                <thread type="TechDivision\MessageQueue\ThreadRequest" />
-                <params>
-                    <param name="workerNumber" type="integer">16</param>
-                    <param name="address" type="string">0.0.0.0</param>
-                    <param name="port" type="integer">8587</param>
-                </params>
-            </receiver>
-            <deployment type="TechDivision\MessageQueue\Deployment" />
-            <host name="localhost" appBase="/webapps" serverAdmin="info@appserver.io"
-                  serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
-
-        </container>
-        -->
-  		
         <container
                 name="persistence-mq"
-                threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\PersistenceContainer\PersistenceContainer">
+                type="TechDivision\PersistenceContainer\PersistenceContainer">
             <description>
             	<![CDATA[This is an example of a container that uses a socket for sending and receiving messages. This solution can be used for clients connecting over a network.]]>
             </description>
@@ -162,7 +107,7 @@
 
         <container
                 name="lemcache"
-                threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\LemCacheContainer\CacheContainer">
+                type="TechDivision\LemCacheContainer\CacheContainer">
             <description>
             	<![CDATA[A memcache API compatible PHP implementation of a key value storage server.]]>
             </description>
@@ -193,7 +138,7 @@
 
         <container
                 name="webserver"
-                threadType="TechDivision\ApplicationServer\ContainerThread" type="TechDivision\WebContainer\Container">
+                type="TechDivision\WebContainer\Container">
             <description>
             	<![CDATA[This is an example of a webserver container that handles http requests in common way]]>
             </description>
@@ -204,6 +149,33 @@
                     serverAdmin="info@appserver.io"
                     serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
             <servers>
+            
+            
+                <server
+                        type="\TechDivision\WebSocketServer\Servers\AsyncServer"
+                        socket="\TechDivision\WebSocketServer\Sockets\AsyncSocket"
+                        serverContext="\TechDivision\WebServer\ServerContext"
+                        loggerName="System">
+                    <params>
+                        <param name="admin" type="string">${appserver.admin.email}</param>
+                        <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
+                        <param name="transport" type="string">tcp</param>
+                        <param name="address" type="string">0.0.0.0</param>
+                        <param name="port" type="integer">8589</param>
+                        <param name="workerNumber" type="integer">${container.server.worker.number}</param>
+                        <param name="documentRoot" type="string">webapps</param>
+                        <param name="directoryIndex" type="string">index.do index.php index.html index.htm</param>
+                        <param name="keepAliveMax" type="integer">64</param>
+                        <param name="keepAliveTimeout" type="integer">5</param>
+                        <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
+                    </params>
+
+                    <connectionHandlers>
+                        <connectionHandler type="\TechDivision\WebSocketProtocol\WebSocketConnectionHandler" />
+                    </connectionHandlers>
+                    
+                </server>
+                
                 <server
                         type="\TechDivision\Server\Servers\MultiThreadedServer"
                         worker="\TechDivision\Server\Workers\ThreadWorker"
@@ -365,7 +337,7 @@
 		                    <locations>
 			                    <location condition="~*\.php(\/|\?|$)">
 			                    	<fileHandlers>
-								        <fileHandler name="php" extension=".php" />
+								        <fileHandler name="fastcgi" extension=".php" />
 			                    	</fileHandlers>
 							    </location>
 		                    </locations>
@@ -382,7 +354,7 @@
 		                    <locations>
 			                    <location condition="~*\.php(\/|\?|$)">
 			                    	<fileHandlers>
-								        <fileHandler name="php" extension=".php" />
+								        <fileHandler name="fastcgi" extension=".php" />
 			                    	</fileHandlers>
 							    </location>
 		                    </locations>
@@ -597,7 +569,7 @@
 		                    <locations>
 			                    <location condition="~*\.php(\/|\?|$)">
 			                    	<fileHandlers>
-								        <fileHandler name="php" extension=".php" />
+								        <fileHandler name="fastcgi" extension=".php" />
 			                    	</fileHandlers>
 							    </location>
 		                    </locations>
@@ -614,7 +586,7 @@
 		                    <locations>
 			                    <location condition="~*\.php(\/|\?|$)">
 			                    	<fileHandlers>
-								        <fileHandler name="php" extension=".php" />
+								        <fileHandler name="fastcgi" extension=".php" />
 			                    	</fileHandlers>
 							    </location>
 		                    </locations>
