@@ -40,10 +40,12 @@ class Server extends \Thread
 
                     unset($workers[$i]);
 
+                    echo 'RESTART worker ...' . PHP_EOL;
+
                     $workers[$i] = new ServerWorker($socket, $application);
                     $workers[$i]->start();
 
-                    usleep(100000);
+                    echo 'RESTARTED worker ' . $workers[$i]->getThreadId() . PHP_EOL;
                 }
             }
         }
@@ -136,6 +138,8 @@ class ServerWorker extends \Thread
         }
 
         $this->shouldRestart = true;
+
+        echo 'FINISHED worker ' . $this->getThreadId() . PHP_EOL;
     }
 
     public function shouldRestart()
