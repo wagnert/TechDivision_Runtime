@@ -42,6 +42,8 @@ class Server extends \Thread
 
                     $workers[$i] = new ServerWorker($socket, $application);
                     $workers[$i]->start();
+
+                    usleep(100000);
                 }
             }
         }
