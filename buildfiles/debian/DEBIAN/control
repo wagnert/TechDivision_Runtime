@@ -38,6 +38,6 @@ Depends: libc6,
   memcached,
   libldap2-dev
 Architecture: ${appserver.architecture}
-Version: ${appserver.version}
+Version: ${appserver.version}-${build.number}
 Homepage: http://appserver.io
 Description: Multithreaded Application Server for PHP, written in PHP
