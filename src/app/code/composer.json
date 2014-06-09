@@ -9,6 +9,7 @@
     "require": {
         "php" : ">=5.4.0",
         "monolog/monolog": "*",
+        "techdivision/collections": "dev-master",
         "techdivision/socket": "dev-master",
         "techdivision/stream": "dev-master",
         "techdivision/appserver": "dev-master",
