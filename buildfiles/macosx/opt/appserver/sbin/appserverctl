@@ -45,8 +45,10 @@ ULIMIT_MAX_FILES=""
 # --------------------                              --------------------
 # ||||||||||||||||||||   END CONFIGURATION SECTION  ||||||||||||||||||||
 
+
 LAUNCHCTL="/bin/launchctl"
 LAUNCHD_JOB="/Library/LaunchDaemons/io.appserver.appserver.plist"
+
 
 run_launchctl() {
     if [ $UID != 0 ]; then
@@ -62,10 +64,12 @@ if [ "x$ULIMIT_MAX_FILES" != "x" ] ; then
     $ULIMIT_MAX_FILES
 fi
 
+display_help() {
+echo "usage $0 [start|restart|graceful|stop|graceful-stop]
+(see code for more info)"
+}
+
 ERROR=0
-if [ "x$ARGV" = "x" ] ; then 
-    ARGV="-h"
-fi
 
 case $ARGV in
 start)
@@ -81,7 +85,10 @@ restart|graceful)
     run_launchctl load -w $LAUNCHD_JOB
     ERROR=$?
     ;;
-*)
+help|-h|--help|*)
+    display_help
+    ERROR=1
+    ;;
 esac
 
 exit $ERROR
