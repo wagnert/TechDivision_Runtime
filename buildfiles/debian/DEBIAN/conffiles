@@ -1,2 +1,1 @@
-/etc/init.d/appserver
-/etc/init.d/watcher
+${appserver.compile.prefix}/etc/appserver.xml

@@ -176,6 +176,7 @@
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="appserver:params" />
                 <xs:element ref="appserver:rewrites" />
+                <xs:element ref="appserver:authentications" />
                 <xs:element ref="appserver:environmentVariables" />
                 <xs:element ref="appserver:accesses" />
                 <xs:element ref="appserver:locations" />
