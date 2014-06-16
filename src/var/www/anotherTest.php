@@ -10,11 +10,11 @@ use TechDivision\ServletEngine\DefaultSessionSettings;
 class Server extends \Thread
 {
 
-    protected $applications;
+    protected $handlers;
 
-    public function __construct($applications)
+    public function __construct($handlers)
     {
-        $this->applications = $applications;
+        $this->handlers = $handlers;
     }
 
     public function run()
@@ -24,11 +24,11 @@ class Server extends \Thread
 
         $socket = stream_socket_server("tcp://0.0.0.0:8111", $errno, $errstr);
 
-        $applications = $this->applications;
+        $handlers = $this->handlers;
         $workers = array();
 
         for ($i = 0; $i < 100; $i++) {
-            $workers[$i] = new ServerWorker($socket, $applications);
+            $workers[$i] = new ServerWorker($socket, $handlers);
             $workers[$i]->start();
         }
 
@@ -42,7 +42,7 @@ class Server extends \Thread
 
                     echo 'RESTART worker ...' . PHP_EOL;
 
-                    $workers[$i] = new ServerWorker($socket, $applications);
+                    $workers[$i] = new ServerWorker($socket, $handlers);
                     $workers[$i]->start();
 
                     echo 'RESTARTED worker ' . $workers[$i]->getThreadId() . PHP_EOL;
@@ -52,17 +52,104 @@ class Server extends \Thread
     }
 }
 
+class Response extends Stackable
+{
+
+    public function __construct()
+    {
+        $this->head = array("HTTP/1.0 200 OK", "Content-Type: text/html", "Connection: close");
+        $this->body = array();
+    }
+}
+
+class Request extends Stackable
+{
+}
+
+class RequestHandler extends Thread
+{
+
+    protected $worker;
+    protected $request;
+    protected $response;
+    protected $run;
+    protected $application;
+
+    public function __construct($application)
+    {
+        $this->run = true;
+        $this->application = $application;
+        $this->start();
+    }
+
+    protected function handleRequest($worker, $request, $response)
+    {
+        $this->worker = $worker;
+        $this->request = $request;
+        $this->response = $response;
+
+        $this->notify();
+    }
+
+    public function run()
+    {
+
+        while ($this->run) {
+
+            $this->wait();
+
+            $worker = $this->worker;
+            $application = $this->application;
+
+            $sessionManager = $application->getSessionManager();
+            $servlet = $application->getServlet();
+
+            $sessionId = $servlet->service($sessionManager);
+
+            $body = $this->response->body;
+            $body[] = "<html>";
+            $body[] = "<head>";
+            $body[] = "<title>Multithread Sockets PHP ({$this->request->address}:{$this->request->port})</title>";
+            $body[] = "</head>";
+            $body[] = "<body>";
+            $body[] = "<pre>";
+            $body[] = "Session-ID: $sessionId";
+            $body[] = "</pre>";
+            $body[] = "</body>";
+            $body[] = "</html>";
+
+            $implodedBody = implode("\r\n", $body);
+
+            $this->response->body = $implodedBody;
+
+            $head = $this->response->head;
+            $head[] = sprintf("Content-Length: %d", strlen($implodedBody));
+
+            $implodedHead = implode("\r\n", $head);
+            $this->response->head = $implodedHead;
+
+            $removedSessions = $sessionManager->collectGarbage();
+
+            if ($removedSessions > 0) {
+                echo 'REMOVED ' . $removedSessions . ' sessions [' . date('Y-m-d: H:i:s') . '] - Thread-ID: ' . $this->getThreadId() . PHP_EOL;
+            }
+
+            $worker->notify();
+        }
+    }
+}
+
 class ServerWorker extends \Thread
 {
 
     protected $socket;
-    protected $applications;
+    protected $handlers;
     protected $shouldRestart;
 
-    public function __construct($socket, $applications)
+    public function __construct($socket, $handlers)
     {
         $this->socket = $socket;
-        $this->applications = $applications;
+        $this->handlers = $handlers;
 
         $this->shouldRestart = false;
     }
@@ -72,19 +159,17 @@ class ServerWorker extends \Thread
 
         require APPSERVER_BP . '/app/code/vendor/autoload.php';
 
-        $clients = array();
-
         $socket = $this->socket;
-        $applications = $this->applications;
+        $handlers = $this->handlers;
 
         $handle = 0;
-        $line = '';
-
         while ($handle < 100) {
 
             $client = stream_socket_accept($socket);
 
             if (is_resource($client)) {
+
+                $line = '';
 
                 $startLine = fgets($client);
 
@@ -95,54 +180,28 @@ class ServerWorker extends \Thread
                     $messageHeaders .= $line;
                 }
 
-    			list ($address, $port) = explode(':', stream_socket_get_name($client, true));
+                $request = new Request();
 
+                list ($address, $port) = explode(':', stream_socket_get_name($client, true));
 
-    			$application = $applications[rand(0, sizeof($applications) - 1)];
+                $request->address = $address;
+                $request->port = $port;
 
-    			$sessionManager = $application->getSessionManager();
-    			$servlet = $application->getServlet();
+                $response = new Response();
 
-    			$sessionId = $servlet->service($sessionManager);
+                $handler = $handlers[rand(0, sizeof($handlers) - 1)];
+                $handler->handleRequest($this, $request, $response);
 
-                $response = array(
-                    "head" => array(
-                        "HTTP/1.0 200 OK",
-                        "Content-Type: text/html",
-                        "Connection: close"
-                    ),
-                    "body" => array()
-                );
+                $this->wait();
 
-    			$response["body"][]="<html>";
-    			$response["body"][]="<head>";
-    			$response["body"][]="<title>Multithread Sockets PHP ({$address}:{$port})</title>";
-    			$response["body"][]="</head>";
-    			$response["body"][]="<body>";
-    			$response["body"][]="<pre>";
-    			$response["body"][]="Session-ID: $sessionId";
-    			$response["body"][]="</pre>";
-    			$response["body"][]="</body>";
-    			$response["body"][]="</html>";
-    			$response["body"] = implode("\r\n", $response["body"]);
+                fwrite($client, $response->head);
+                fwrite($client, "\r\n\r\n");
+                fwrite($client, $response->body);
 
-    			$response["head"][] = sprintf("Content-Length: %d", strlen($response["body"]));
-    			$response["head"] = implode("\r\n", $response["head"]);
+                stream_socket_shutdown($client, STREAM_SHUT_RDWR);
 
-    			fwrite($client, $response["head"]);
-    			fwrite($client, "\r\n\r\n");
-    			fwrite($client, $response["body"]);
-
-    			stream_socket_shutdown($client, STREAM_SHUT_RDWR);
-
-                $removedSessions = $sessionManager->collectGarbage();
-
-                if ($removedSessions > 0) {
-                    echo 'REMOVED ' . $removedSessions . ' sessions [' . date('Y-m-d: H:i:s') . '] - Thread-ID: ' . $this->getThreadId() . PHP_EOL;
-                }
+                $handle++;
             }
-
-            $handle++;
         }
 
         $this->shouldRestart = true;
@@ -181,6 +240,13 @@ class Application extends Thread
 
     public function getServlet()
     {
+
+        $name = $this->name;
+
+        require_once __DIR__ . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR . 'Servlet.php';
+
+        error_log("Now initialize servlet for app $name");
+
         return $this->servlet;
     }
 
@@ -189,7 +255,7 @@ class Application extends Thread
 
         $name = $this->name;
 
-        include __DIR__ . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR . 'Servlet.php';
+        require_once __DIR__ . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR . 'Servlet.php';
 
         $this->servlet = new Servlet(10000);
 
@@ -211,6 +277,10 @@ $applications[1] = new Application('app_02');
 $applications[1]->injectSessionManager($sessionManager);
 $applications[1]->start();
 
-$server = new Server($applications);
+foreach ($applications as $application) {
+    $handlers[] = new RequestHandler($application);
+}
+
+$server = new Server($handlers);
 $server->start();
 $server->join();
