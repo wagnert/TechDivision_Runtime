@@ -10,11 +10,11 @@ use TechDivision\ServletEngine\DefaultSessionSettings;
 class Server extends \Thread
 {
 
-    protected $handlers;
+    protected $applications;
 
-    public function __construct($handlers)
+    public function __construct($applications)
     {
-        $this->handlers = $handlers;
+        $this->applications = $applications;
     }
 
     public function run()
@@ -24,11 +24,17 @@ class Server extends \Thread
 
         $socket = stream_socket_server("tcp://0.0.0.0:8111", $errno, $errstr);
 
-        $handlers = $this->handlers;
+        $applications = $this->applications;
         $workers = array();
+        $handlers = array();
 
         for ($i = 0; $i < 100; $i++) {
-            $workers[$i] = new ServerWorker($socket, $handlers);
+
+            foreach ($applications as $application) {
+                $handlers[$i][] = new RequestHandler($application);
+            }
+
+            $workers[$i] = new ServerWorker($socket, $handlers[$i]);
             $workers[$i]->start();
         }
 
@@ -39,8 +45,13 @@ class Server extends \Thread
                 if ($workers[$i]->shouldRestart()) {
 
                     unset($workers[$i]);
+                    unset($handlers[$i]);
 
                     echo 'RESTART worker ...' . PHP_EOL;
+
+                    foreach ($applications as $application) {
+                        $handlers[$i][] = new RequestHandler($application);
+                    }
 
                     $workers[$i] = new ServerWorker($socket, $handlers);
                     $workers[$i]->start();
@@ -100,33 +111,15 @@ class RequestHandler extends Thread
 
             $worker = $this->worker;
             $application = $this->application;
+            $request = $this->request;
+            $response = $this->response;
 
             $sessionManager = $application->getSessionManager();
-            $servlet = $application->getServlet();
 
-            $sessionId = $servlet->service($sessionManager);
+            $request->sessionManager = $sessionManager;
 
-            $body = $this->response->body;
-            $body[] = "<html>";
-            $body[] = "<head>";
-            $body[] = "<title>Multithread Sockets PHP ({$this->request->address}:{$this->request->port})</title>";
-            $body[] = "</head>";
-            $body[] = "<body>";
-            $body[] = "<pre>";
-            $body[] = "Session-ID: $sessionId";
-            $body[] = "</pre>";
-            $body[] = "</body>";
-            $body[] = "</html>";
-
-            $implodedBody = implode("\r\n", $body);
-
-            $this->response->body = $implodedBody;
-
-            $head = $this->response->head;
-            $head[] = sprintf("Content-Length: %d", strlen($implodedBody));
-
-            $implodedHead = implode("\r\n", $head);
-            $this->response->head = $implodedHead;
+            $servlet = $application->lookup();
+            $servlet->service($request, $response);
 
             $removedSessions = $sessionManager->collectGarbage();
 
@@ -238,14 +231,14 @@ class Application extends Thread
         return $this->sessionManager;
     }
 
-    public function getServlet()
+    public function lookup()
     {
 
         $name = $this->name;
 
-        require_once __DIR__ . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR . 'Servlet.php';
+        error_log("Now lookup servlet for app $name");
 
-        error_log("Now initialize servlet for app $name");
+        require_once __DIR__ . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR . 'Servlet.php';
 
         return $this->servlet;
     }
@@ -277,10 +270,6 @@ $applications[1] = new Application('app_02');
 $applications[1]->injectSessionManager($sessionManager);
 $applications[1]->start();
 
-foreach ($applications as $application) {
-    $handlers[] = new RequestHandler($application);
-}
-
-$server = new Server($handlers);
+$server = new Server($applications);
 $server->start();
 $server->join();
