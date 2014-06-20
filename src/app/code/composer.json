@@ -30,6 +30,7 @@
         "techdivision/servletengine": "dev-master",
         "techdivision/servletmodule": "dev-master",
         "techdivision/php-by-contract": "dev-master",
+        "techdivision/mageservlet": "dev-master",
         "doctrine/orm": "*",
         "psr/log": "*",
         "symfony/symfony": "*",
