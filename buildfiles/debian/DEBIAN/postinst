@@ -13,12 +13,12 @@ chown -R ${appserver.user}:${appserver.group} /opt/appserver/deploy
 # Set the permissions
 chmod -R 755 /opt/appserver/bin
 chmod 755 /etc/init.d/appserver
-chmod 755 /etc/init.d/watcher
-chmod 755 /etc/init.d/php5-ts-fpm
+chmod 755 /etc/init.d/appserver-watcher
+chmod 755 /etc/init.d/appserver-php5-fpm
 
 # Start the services
 /etc/init.d/appserver start
-/etc/init.d/watcher start
-/etc/init.d/php5-ts-fpm start
+/etc/init.d/appserver-watcher start
+/etc/init.d/appserver-php5-fpm start
 
 exit 0
