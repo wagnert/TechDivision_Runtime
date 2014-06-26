@@ -45,18 +45,18 @@ chmod -R 755 /opt/appserver
 
 # Make the link to our system systemd file
 ln -s /lib/systemd/system/appserver.service /etc/systemd/system/appserver.service
-ln -s /lib/systemd/system/watcher.service /etc/systemd/system/watcher.service
-ln -s /lib/systemd/system/appserver-fpm.service /etc/systemd/system/appserver-fpm.service
+ln -s /lib/systemd/system/appserver-watcher.service /etc/systemd/system/appserver-watcher.service
+ln -s /lib/systemd/system/appserver-php5-fpm.service /etc/systemd/system/appserver-php5-fpm.service
 
 # Reload the systemd daemon
 systemctl daemon-reload
 
 # Start the appserver + watcher
 systemctl start appserver.service
-systemctl start watcher.service
-systemctl start appserver-fpm.service
+systemctl start appserver-watcher.service
+systemctl start appserver-php5-fpm.service
 
 # Make them autostartable for the current runlevel
 systemctl enable appserver.service
-systemctl enable watcher.service
-systemctl enable appserver-fpm.service
+systemctl enable appserver-watcher.service
+systemctl enable appserver-php5-fpm.service
