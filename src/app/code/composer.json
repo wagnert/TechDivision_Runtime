@@ -32,6 +32,8 @@
         "techdivision/php-by-contract": "dev-master",
         "techdivision/mageservlet": "dev-master",
         "techdivision/lang": "dev-master",
+        "techdivision/collections": "dev-master",
+        "techdivision/properties": "dev-master",
         "doctrine/orm": "*",
         "psr/log": "*",
         "symfony/symfony": "*",
