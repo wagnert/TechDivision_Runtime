@@ -32,12 +32,15 @@
         "techdivision/php-by-contract": "dev-master",
         "techdivision/mageservlet": "dev-master",
         "techdivision/lang": "dev-master",
+        "techdivision/collections": "dev-master",
+        "techdivision/properties": "dev-master",
         "doctrine/orm": "*",
         "psr/log": "*",
         "symfony/symfony": "*",
         "herrera-io/annotations": "1.0.*",
         "cboden/Ratchet": "0.2.*",
-        "rhumsaa/uuid": "~2.4"
+        "rhumsaa/uuid": "~2.4",
+        "appserver-io/routlt": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
