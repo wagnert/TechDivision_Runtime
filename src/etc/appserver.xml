@@ -50,18 +50,23 @@
     </loggers>
 
     <containers>
+
         <container
-                name="persistence-mq"
-                type="TechDivision\PersistenceContainer\PersistenceContainer">
+                name="combined-appserver"
+                type="TechDivision\ApplicationServer\GenericContainer">
+                
             <description>
-            	<![CDATA[This is an example of a container that uses a socket for sending and receiving messages. This solution can be used for clients connecting over a network.]]>
+            	<![CDATA[This is an example of a webserver container that handles http requests in common way]]>
             </description>
-            <deployment type="TechDivision\PersistenceContainer\Deployment" />
+            
+            <deployment type="TechDivision\ApplicationServer\GenericDeployment" />
+            
             <host
                     name="localhost"
                     appBase="/webapps"
                     serverAdmin="info@appserver.io"
                     serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
+                    
             <servers>
             
                 <server
@@ -71,60 +76,11 @@
                         serverContext="\TechDivision\Server\Contexts\ServerContext"
                         requestContext="\TechDivision\Server\Contexts\RequestContext"
                         loggerName="System">
-                    <connectionHandlers>
-                        <connectionHandler type="\TechDivision\PersistenceContainerProtocol\ConnectionHandler" />
-                    </connectionHandlers>
-                    <params>
-                        <param name="admin" type="string">${appserver.admin.email}</param>
-                        <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
-                        <param name="transport" type="string">tcp</param>
-                        <param name="address" type="string">0.0.0.0</param>
-                        <param name="port" type="integer">8585</param>
-                        <param name="workerNumber" type="integer">8</param>
-                    </params>
-                </server>
-                
-                <server
-                        type="\TechDivision\Server\Servers\MultiThreadedServer"
-                        worker="\TechDivision\Server\Workers\ThreadWorker"
-                        socket="\TechDivision\Server\Sockets\StreamSocket"
-                        serverContext="\TechDivision\Server\Contexts\ServerContext"
-                        requestContext="\TechDivision\Server\Contexts\RequestContext"
-                        loggerName="System">
-                    <connectionHandlers>
-                        <connectionHandler type="\TechDivision\MessageQueueProtocol\ConnectionHandler" />
-                    </connectionHandlers>
-                    <params>
-                        <param name="admin" type="string">${appserver.admin.email}</param>
-                        <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
-                        <param name="transport" type="string">tcp</param>
-                        <param name="address" type="string">0.0.0.0</param>
-                        <param name="port" type="integer">8587</param>
-                        <param name="workerNumber" type="integer">8</param>
-                    </params>
-                </server>
-                
-            </servers>
-        </container>
-
-        <container
-                name="lemcache"
-                type="TechDivision\LemCacheContainer\CacheContainer">
-            <description>
-            	<![CDATA[A memcache API compatible PHP implementation of a key value storage server.]]>
-            </description>
-            <deployment type="TechDivision\LemCacheContainer\Deployment" />
-            <servers>
-                <server
-                        type="\TechDivision\Server\Servers\MultiThreadedServer"
-                        worker="\TechDivision\Server\Workers\ThreadWorker"
-                        socket="\TechDivision\Server\Sockets\StreamSocket"
-                        serverContext="\TechDivision\Server\Contexts\ServerContext"
-                        requestContext="\TechDivision\Server\Contexts\RequestContext"
-                        loggerName="System">
+                        
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\MemcacheProtocol\MemcacheConnectionHandler" />
                     </connectionHandlers>
+                    
                     <params>
                         <param name="admin" type="string">${appserver.admin.email}</param>
                         <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
@@ -136,23 +92,114 @@
                         <param name="keepAliveTimeout" type="integer">16</param>
                     </params>
                 </server>
-            </servers>
-        </container>
-
-        <container
-                name="webserver"
-                type="TechDivision\WebContainer\Container">
-            <description>
-            	<![CDATA[This is an example of a webserver container that handles http requests in common way]]>
-            </description>
-            <deployment type="TechDivision\WebContainer\WebContainerDeployment" />
-            <host
-                    name="localhost"
-                    appBase="/webapps"
-                    serverAdmin="info@appserver.io"
-                    serverSoftware="appserver/${appserver.version} (${os.family}) PHP/${appserver.php.version}" />
-            <servers>
             
+                <server
+                        type="\TechDivision\Server\Servers\MultiThreadedServer"
+                        worker="\TechDivision\Server\Workers\ThreadWorker"
+                        socket="\TechDivision\Server\Sockets\StreamSocket"
+                        requestContext="\TechDivision\Server\Contexts\RequestContext"
+                        serverContext="\TechDivision\Server\Contexts\ServerContext"
+                        loggerName="System">
+                        
+                    <connectionHandlers>
+                        <connectionHandler type="\TechDivision\WebServer\ConnectionHandlers\HttpConnectionHandler" />
+                    </connectionHandlers>
+                    
+                    <params>
+                        <param name="admin" type="string">${appserver.admin.email}</param>
+                        <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
+                        <param name="transport" type="string">tcp</param>
+                        <param name="address" type="string">0.0.0.0</param>
+                        <param name="port" type="integer">8585</param>
+                        <param name="workerNumber" type="integer">8</param>
+                        <param name="directoryIndex" type="string">index.pc</param>
+                        <param name="keepAliveMax" type="integer">64</param>
+                        <param name="keepAliveTimeout" type="integer">5</param>
+                        <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
+                    </params>
+
+                    <accesses>
+                        <!-- per default allow everything -->
+                        <access type="allow">
+                            <params>
+                                <param name="X_REQUEST_URI" type="string">.*</param>
+                            </params>
+                        </access>
+                    </accesses>
+
+                    <modules>
+                        <!-- REQUEST_POST hook -->
+                        <module type="\TechDivision\WebServer\Modules\AuthenticationModule"/>
+                        <module type="\TechDivision\WebServer\Modules\VirtualHostModule"/>
+                        <module type="\TechDivision\WebServer\Modules\EnvironmentVariableModule" />
+                        <module type="\TechDivision\RewriteModule\RewriteModule"/>
+                        <module type="\TechDivision\WebServer\Modules\DirectoryModule"/>
+                        <module type="\TechDivision\WebServer\Modules\AccessModule"/>
+                        <module type="\TechDivision\WebServer\Modules\CoreModule"/>
+                        <module type="\TechDivision\PersistenceContainer\PersistenceContainerModule" />
+                        <!-- RESPONSE_PRE hook -->
+                        <module type="\TechDivision\WebServer\Modules\DeflateModule"/>
+                    </modules>
+                    
+                    <fileHandlers>
+                        <fileHandler name="persistence-container" extension=".pc" />
+                    </fileHandlers>
+                    
+                </server>
+                
+                <server
+                        type="\TechDivision\Server\Servers\MultiThreadedServer"
+                        worker="\TechDivision\Server\Workers\ThreadWorker"
+                        socket="\TechDivision\Server\Sockets\StreamSocket"
+                        requestContext="\TechDivision\Server\Contexts\RequestContext"
+                        serverContext="\TechDivision\Server\Contexts\ServerContext"
+                        loggerName="System">
+                        
+                    <connectionHandlers>
+                        <connectionHandler type="\TechDivision\WebServer\ConnectionHandlers\HttpConnectionHandler" />
+                    </connectionHandlers>
+                    
+                    <params>
+                        <param name="admin" type="string">${appserver.admin.email}</param>
+                        <param name="software" type="string">appserver/${appserver.version} (${os.family})</param>
+                        <param name="transport" type="string">tcp</param>
+                        <param name="address" type="string">0.0.0.0</param>
+                        <param name="port" type="integer">8587</param>
+                        <param name="workerNumber" type="integer">8</param>
+                        <param name="directoryIndex" type="string">index.mq</param>
+                        <param name="keepAliveMax" type="integer">64</param>
+                        <param name="keepAliveTimeout" type="integer">5</param>
+                        <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
+                    </params>
+
+                    <accesses>
+                        <!-- per default allow everything -->
+                        <access type="allow">
+                            <params>
+                                <param name="X_REQUEST_URI" type="string">.*</param>
+                            </params>
+                        </access>
+                    </accesses>
+
+                    <modules>
+                        <!-- REQUEST_POST hook -->
+                        <module type="\TechDivision\WebServer\Modules\AuthenticationModule"/>
+                        <module type="\TechDivision\WebServer\Modules\VirtualHostModule"/>
+                        <module type="\TechDivision\WebServer\Modules\EnvironmentVariableModule" />
+                        <module type="\TechDivision\RewriteModule\RewriteModule"/>
+                        <module type="\TechDivision\WebServer\Modules\DirectoryModule"/>
+                        <module type="\TechDivision\WebServer\Modules\AccessModule"/>
+                        <module type="\TechDivision\WebServer\Modules\CoreModule"/>
+                        <module type="\TechDivision\MessageQueue\MessageQueueModule" />
+                        <!-- RESPONSE_PRE hook -->
+                        <module type="\TechDivision\WebServer\Modules\DeflateModule"/>
+                    </modules>
+                    
+                    <fileHandlers>
+                        <fileHandler name="message-queue" extension=".mq" />
+                    </fileHandlers>
+                    
+                </server>
             
                 <server
                         type="\TechDivision\WebSocketServer\Servers\AsyncServer"
@@ -389,7 +436,7 @@
                         <module type="\TechDivision\WebServer\Modules\CoreModule"/>
                         <module type="\TechDivision\PhpModule\PhpModule"/>
                 		<module type="\TechDivision\FastCgiModule\FastCgiModule"/>
-                        <module type="\TechDivision\ServletModule\ServletModule" />
+                        <module type="\TechDivision\ServletEngine\ServletEngine" />
                         <!-- RESPONSE_PRE hook -->
                         <module type="\TechDivision\WebServer\Modules\DeflateModule"/>
                     </modules>
@@ -624,7 +671,7 @@
                         <module type="\TechDivision\WebServer\Modules\CoreModule"/>
                         <module type="\TechDivision\PhpModule\PhpModule"/>
                 		<module type="\TechDivision\FastCgiModule\FastCgiModule"/>
-                        <module type="\TechDivision\ServletModule\ServletModule" />
+                        <module type="\TechDivision\ServletEngine\ServletEngine" />
                         <!-- RESPONSE_PRE hook -->
                         <module type="\TechDivision\WebServer\Modules\DeflateModule"/>
                     </modules>
