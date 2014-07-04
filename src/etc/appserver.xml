@@ -68,7 +68,8 @@
                         type="\TechDivision\Server\Servers\MultiThreadedServer"
                         worker="\TechDivision\Server\Workers\ThreadWorker"
                         socket="\TechDivision\Server\Sockets\StreamSocket"
-                        serverContext="\TechDivision\Server\ServerContext"
+                        serverContext="\TechDivision\Server\Contexts\ServerContext"
+                        requestContext="\TechDivision\Server\Contexts\RequestContext"
                         loggerName="System">
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\PersistenceContainerProtocol\ConnectionHandler" />
@@ -87,7 +88,8 @@
                         type="\TechDivision\Server\Servers\MultiThreadedServer"
                         worker="\TechDivision\Server\Workers\ThreadWorker"
                         socket="\TechDivision\Server\Sockets\StreamSocket"
-                        serverContext="\TechDivision\Server\ServerContext"
+                        serverContext="\TechDivision\Server\Contexts\ServerContext"
+                        requestContext="\TechDivision\Server\Contexts\RequestContext"
                         loggerName="System">
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\MessageQueueProtocol\ConnectionHandler" />
@@ -117,7 +119,8 @@
                         type="\TechDivision\Server\Servers\MultiThreadedServer"
                         worker="\TechDivision\Server\Workers\ThreadWorker"
                         socket="\TechDivision\Server\Sockets\StreamSocket"
-                        serverContext="\TechDivision\Server\ServerContext"
+                        serverContext="\TechDivision\Server\Contexts\ServerContext"
+                        requestContext="\TechDivision\Server\Contexts\RequestContext"
                         loggerName="System">
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\MemcacheProtocol\MemcacheConnectionHandler" />
@@ -154,7 +157,8 @@
                 <server
                         type="\TechDivision\WebSocketServer\Servers\AsyncServer"
                         socket="\TechDivision\WebSocketServer\Sockets\AsyncSocket"
-                        serverContext="\TechDivision\Server\ServerContext"
+                        serverContext="\TechDivision\Server\Contexts\ServerContext"
+                        requestContext="\TechDivision\Server\Contexts\RequestContext"
                         loggerName="System">
                     <params>
                         <param name="admin" type="string">${appserver.admin.email}</param>
@@ -180,7 +184,8 @@
                         type="\TechDivision\Server\Servers\MultiThreadedServer"
                         worker="\TechDivision\Server\Workers\ThreadWorker"
                         socket="\TechDivision\Server\Sockets\StreamSocket"
-                        serverContext="\TechDivision\Server\ServerContext"
+                        serverContext="\TechDivision\Server\Contexts\ServerContext"
+                        requestContext="\TechDivision\Server\Contexts\RequestContext"
                         loggerName="System">
                     <params>
                         <param name="admin" type="string">${appserver.admin.email}</param>
@@ -411,7 +416,8 @@
                         type="\TechDivision\Server\Servers\MultiThreadedServer"
                         worker="\TechDivision\Server\Workers\ThreadWorker"
                         socket="\TechDivision\Server\Sockets\StreamSocket"
-                        serverContext="\TechDivision\Server\ServerContext"
+                        serverContext="\TechDivision\Server\Contexts\ServerContext"
+                        requestContext="\TechDivision\Server\Contexts\RequestContext"
                         loggerName="System">
                     <params>
                         <param name="admin" type="string">${appserver.admin.email}</param>
