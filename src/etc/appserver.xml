@@ -54,7 +54,7 @@
                 name="persistence-mq"
                 type="TechDivision\PersistenceContainer\PersistenceContainer">
             <description>
-            	<![CDATA[This is an example of a container that uses a socket for sending and receiving messages. This solution can be used for clients connecting over a network.]]>
+                <![CDATA[This is an example of a container that uses a socket for sending and receiving messages. This solution can be used for clients connecting over a network.]]>
             </description>
             <deployment type="TechDivision\PersistenceContainer\Deployment" />
             <host
@@ -111,7 +111,7 @@
                 name="lemcache"
                 type="TechDivision\LemCacheContainer\CacheContainer">
             <description>
-            	<![CDATA[A memcache API compatible PHP implementation of a key value storage server.]]>
+                <![CDATA[A memcache API compatible PHP implementation of a key value storage server.]]>
             </description>
             <deployment type="TechDivision\LemCacheContainer\Deployment" />
             <servers>
@@ -143,7 +143,7 @@
                 name="webserver"
                 type="TechDivision\WebContainer\Container">
             <description>
-            	<![CDATA[This is an example of a webserver container that handles http requests in common way]]>
+                <![CDATA[This is an example of a webserver container that handles http requests in common way]]>
             </description>
             <deployment type="TechDivision\WebContainer\WebContainerDeployment" />
             <host
@@ -273,13 +273,13 @@
                                     </params>
                                 </access>
                             </accesses>
-		                    <locations>
-			                    <location condition="~*\.php(\/|\?|$)">
-			                    	<fileHandlers>
-								        <fileHandler name="php" extension=".php" />
-			                    	</fileHandlers>
-							    </location>
-		                    </locations>
+                            <locations>
+                                <location condition="~*\.php(\/|\?|$)">
+                                    <fileHandlers>
+                                        <fileHandler name="php" extension=".php" />
+                                    </fileHandlers>
+                                </location>
+                            </locations>
                         </virtualHost>
                         -->
 
@@ -341,13 +341,13 @@
                                 <environmentVariable condition="" definition="FLOW_CONTEXT=Production" />
                                 <environmentVariable condition="Basic ([a-zA-Z0-9\+/=]+)@$Authorization" definition="REMOTE_AUTHORIZATION=$1" />
                             </environmentVariables>
-		                    <locations>
-			                    <location condition="~*\.php(\/|\?|$)">
-			                    	<fileHandlers>
-								        <fileHandler name="fastcgi" extension=".php" />
-			                    	</fileHandlers>
-							    </location>
-		                    </locations>
+                            <locations>
+                                <location condition="~*\.php(\/|\?|$)">
+                                    <fileHandlers>
+                                        <fileHandler name="fastcgi" extension=".php" />
+                                    </fileHandlers>
+                                </location>
+                            </locations>
                         </virtualHost>
                         <virtualHost name="oro-crm.local">
                             <params>
@@ -358,13 +358,13 @@
                                 <rewrite condition="%{REQUEST_FILENAME}" target="!-f" flag="" />
                                 <rewrite condition="^/(.*)$" target="app.php" flag="[QSA,L]" />
                             </rewrites>
-		                    <locations>
-			                    <location condition="~*\.php(\/|\?|$)">
-			                    	<fileHandlers>
-								        <fileHandler name="fastcgi" extension=".php" />
-			                    	</fileHandlers>
-							    </location>
-		                    </locations>
+                            <locations>
+                                <location condition="~*\.php(\/|\?|$)">
+                                    <fileHandlers>
+                                        <fileHandler name="fastcgi" extension=".php" />
+                                    </fileHandlers>
+                                </location>
+                            </locations>
                         </virtualHost>
                         <virtualHost name="wordpress.local">
                             <params>
@@ -388,7 +388,7 @@
                         <module type="\TechDivision\WebServer\Modules\AccessModule"/>
                         <module type="\TechDivision\WebServer\Modules\CoreModule"/>
                         <module type="\TechDivision\PhpModule\PhpModule"/>
-                		<module type="\TechDivision\FastCgiModule\FastCgiModule"/>
+                        <module type="\TechDivision\FastCgiModule\FastCgiModule"/>
                         <module type="\TechDivision\ServletModule\ServletModule" />
                         <!-- RESPONSE_PRE hook -->
                         <module type="\TechDivision\WebServer\Modules\DeflateModule"/>
@@ -396,16 +396,16 @@
 
                     <fileHandlers>
                         <fileHandler name="fastcgi" extension=".php">
-                        	<params>
-                        		<param name="host" type="string">${php-fpm.host}</param>
-                        		<param name="port" type="integer">${php-fpm.port}</param>
-                        	</params>
+                            <params>
+                                <param name="host" type="string">${php-fpm.host}</param>
+                                <param name="port" type="integer">${php-fpm.port}</param>
+                            </params>
                         </fileHandler>
                         <fileHandler name="fastcgi" extension=".phtml">
-                        	<params>
-                        		<param name="host" type="string">${php-fpm.host}</param>
-                        		<param name="port" type="integer">${php-fpm.port}</param>
-                        	</params>
+                            <params>
+                                <param name="host" type="string">${php-fpm.host}</param>
+                                <param name="port" type="integer">${php-fpm.port}</param>
+                            </params>
                         </fileHandler>
                         <fileHandler name="servlet" extension=".do" />
                     </fileHandlers>
@@ -482,13 +482,13 @@
                                     </params>
                                 </access>
                             </accesses>
-		                    <locations>
-			                    <location condition="~*\.php(\/|\?|$)">
-			                    	<fileHandlers>
-								        <fileHandler name="php" extension=".php" />
-			                    	</fileHandlers>
-							    </location>
-		                    </locations>
+                            <locations>
+                                <location condition="~*\.php(\/|\?|$)">
+                                    <fileHandlers>
+                                        <fileHandler name="php" extension=".php" />
+                                    </fileHandlers>
+                                </location>
+                            </locations>
                         </virtualHost>
 
                         <!--
@@ -508,13 +508,13 @@
                                     </params>
                                 </access>
                             </accesses>
-		                    <locations>
-			                    <location condition="~*\.php(\/|\?|$)">
-			                    	<fileHandlers>
-								        <fileHandler name="php" extension=".php" />
-			                    	</fileHandlers>
-							    </location>
-		                    </locations>
+                            <locations>
+                                <location condition="~*\.php(\/|\?|$)">
+                                    <fileHandlers>
+                                        <fileHandler name="php" extension=".php" />
+                                    </fileHandlers>
+                                </location>
+                            </locations>
                         </virtualHost>
                         -->
 
@@ -576,13 +576,13 @@
                                 <environmentVariable condition="" definition="FLOW_CONTEXT=Production" />
                                 <environmentVariable condition="Basic ([a-zA-Z0-9\+/=]+)@$Authorization" definition="REMOTE_AUTHORIZATION=$1" />
                             </environmentVariables>
-		                    <locations>
-			                    <location condition="~*\.php(\/|\?|$)">
-			                    	<fileHandlers>
-								        <fileHandler name="fastcgi" extension=".php" />
-			                    	</fileHandlers>
-							    </location>
-		                    </locations>
+                            <locations>
+                                <location condition="~*\.php(\/|\?|$)">
+                                    <fileHandlers>
+                                        <fileHandler name="fastcgi" extension=".php" />
+                                    </fileHandlers>
+                                </location>
+                            </locations>
                         </virtualHost>
                         <virtualHost name="oro-crm.local">
                             <params>
@@ -593,13 +593,13 @@
                                 <rewrite condition="%{REQUEST_FILENAME}" target="!-f" flag="" />
                                 <rewrite condition="^/(.*)$" target="app.php" flag="[QSA,L]" />
                             </rewrites>
-		                    <locations>
-			                    <location condition="~*\.php(\/|\?|$)">
-			                    	<fileHandlers>
-								        <fileHandler name="fastcgi" extension=".php" />
-			                    	</fileHandlers>
-							    </location>
-		                    </locations>
+                            <locations>
+                                <location condition="~*\.php(\/|\?|$)">
+                                    <fileHandlers>
+                                        <fileHandler name="fastcgi" extension=".php" />
+                                    </fileHandlers>
+                                </location>
+                            </locations>
                         </virtualHost>
                         <virtualHost name="wordpress.local">
                             <params>
@@ -623,7 +623,7 @@
                         <module type="\TechDivision\WebServer\Modules\AccessModule"/>
                         <module type="\TechDivision\WebServer\Modules\CoreModule"/>
                         <module type="\TechDivision\PhpModule\PhpModule"/>
-                		<module type="\TechDivision\FastCgiModule\FastCgiModule"/>
+                        <module type="\TechDivision\FastCgiModule\FastCgiModule"/>
                         <module type="\TechDivision\ServletModule\ServletModule" />
                         <!-- RESPONSE_PRE hook -->
                         <module type="\TechDivision\WebServer\Modules\DeflateModule"/>
@@ -631,16 +631,16 @@
 
                     <fileHandlers>
                         <fileHandler name="fastcgi" extension=".php">
-                        	<params>
-                        		<param name="host" type="string">${php-fpm.host}</param>
-                        		<param name="port" type="integer">${php-fpm.port}</param>
-                        	</params>
+                            <params>
+                                <param name="host" type="string">${php-fpm.host}</param>
+                                <param name="port" type="integer">${php-fpm.port}</param>
+                            </params>
                         </fileHandler>
                         <fileHandler name="fastcgi" extension=".phtml">
-                        	<params>
-                        		<param name="host" type="string">${php-fpm.host}</param>
-                        		<param name="port" type="integer">${php-fpm.port}</param>
-                        	</params>
+                            <params>
+                                <param name="host" type="string">${php-fpm.host}</param>
+                                <param name="port" type="integer">${php-fpm.port}</param>
+                            </params>
                         </fileHandler>
                         <fileHandler name="servlet" extension=".do" />
                     </fileHandlers>
@@ -652,3 +652,4 @@
     </containers>
 
 </appserver>
+
