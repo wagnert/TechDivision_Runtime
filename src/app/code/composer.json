@@ -26,6 +26,7 @@
         "techdivision/lemcachecontainer": "dev-master",
         "techdivision/context": "dev-master",
         "techdivision/storage": "dev-master",
+        "techdivision/connection": "dev-master",
         "techdivision/servlet": "dev-master",
         "techdivision/servletengine": "dev-master",
         "techdivision/servletmodule": "dev-master",
