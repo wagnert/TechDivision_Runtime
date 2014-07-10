@@ -1751,7 +1751,7 @@
 
             #execute "buildconf"
 
-            #execute "configure --without-gd --enable-zts --enable-appserver"
+            #execute "configure without-gd enable-zts enable-appserver"
 
             #execute "nmake"
 
