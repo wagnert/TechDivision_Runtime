@@ -1654,8 +1654,8 @@
         <untar src="${lib.dir}/ext-appserver-${appserver.ext-appserver.version}.tgz" dest="${win.php-sdk.dir}" compression="gzip"/>
         <!-- Move the src files into the folder they belong -->
         <copy todir="${win.php-buildtree.dir}/php-${appserver.php.version}/ext/appserver" preservelastmodified="true" overwrite="true">
-            <fileset dir="${win.php-sdk.dir}">
-                <include name="appserver-${appserver.ext-appserver.version}/*" />
+            <fileset dir="${win.php-sdk.dir}/appserver-${appserver.ext-appserver.version}">
+                <include name="**/*" />
             </fileset>
         </copy>
     </target>
@@ -1703,10 +1703,25 @@
                      setonempty="false"/>
     </target>
 
+    <!-- ======================================================================= -->
+    <!-- Will expand the properties of the scripts and store them in custom-libs -->
+    <!-- ======================================================================= -->
+    <target name="WIN-expand-scripts" description="Will expand the properties of the scripts and store them in custom-libs.">
+        <!-- We have to expand the scripts here, as we are going to use them -->
+        <copy todir="${custom-lib.dir}">
+            <fileset dir="${basedir}/buildfiles/win">
+                <include name="scripts/**"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+    </target>
+
     <!-- ==================================================================== -->
     <!-- Prepare Windows PHP SDK as a build environment                       -->
     <!-- ==================================================================== -->
-    <target name="WIN-prepare-php-sdk" depends="WIN-check-php-sdk-prepared" unless="win-php-sdk.prepared" description="Prepare Windows PHP SDK as a build environment.">
+    <target name="WIN-prepare-php-sdk" depends="WIN-check-php-sdk-prepared, WIN-expand-scripts" unless="win-php-sdk.prepared" description="Prepare Windows PHP SDK as a build environment.">
         <!-- Without Visual Studio installed this makes no sense! -->
         <antcall target="WIN-check-vc-present"/>
         <!-- Download the PHP SDK archive -->
@@ -1714,11 +1729,9 @@
         <!-- Untar the php sdk into the development environment -->
         <unzip src="${win.build-workspace.dir}/php-sdk.zip" dest="${win.php-sdk.dir}"/>
         <!-- Set the build environment vars and create the build tree -->
-        <exec dir="${win.php-sdk.dir}/bin" executable="cmd" failonerror="true">
-            <arg line="/c ${win.native-tools-cmd.bat}"/>
-            <arg line="/c phpsdk_setvars.bat"/>
-            <arg line="/c phpsdk_buildtree.bat"/>
-            <arg line="phpdev"/>
+        <exec dir="${custom-lib.dir}" executable="cmd" failonerror="true">
+            <arg value="/C"/>
+            <arg value="prepare_php_sdk.bat"/>
         </exec>
         <!-- Download the PHP sources and copy it into the SDK environment -->
         <antcall target="WIN-prepare-php-src"/>
@@ -1729,20 +1742,15 @@
     <!-- ==================================================================== -->
     <!-- Will create binaries which cannot be downloaded as .dll. 		      -->
     <!-- ==================================================================== -->
-    <target name="WIN-build-binaries" depends="WIN-prepare-php-sdk" description="Will create binaries which cannot be downloaded as .dll.">
+    <target name="WIN-build-binaries" depends="WIN-prepare-php-sdk, WIN-expand-scripts" description="Will create binaries which cannot be downloaded as .dll.">
 
         <!-- Prepare the appserve src as we need it -->
         <antcall target="WIN-prepare-ext-appserver-src"/>
-
         <!-- Do the thing -->
-        <exec dir="${win.php-sdk.dir}/bin" executable="cmd" failonerror="true">
-            <arg line="/c ${win.native-tools-cmd.bat}"/>
-            <arg line="/c phpsdk_setvars.bat"/>
-            <arg line="/c buildconf"/>
-            <arg line="/c ${win.binaries.config-command}"/>
-            <arg line="/c nmake"/>
+        <exec dir="${custom-lib.dir}" executable="cmd" failonerror="true">
+            <arg value="/C"/>
+            <arg value="build_extensions.bat"/>
         </exec>
-
         <!-- Finally move the created dll files into the "custom-lib" dir where they get picked up -->
         <copy todir="${custom-lib.dir}" preservelastmodified="true" overwrite="true">
             <fileset dir="${win.php-buildtree.dir}/php-${appserver.php.version}">
