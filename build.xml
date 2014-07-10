@@ -390,7 +390,7 @@
     <!-- ==================================================================== -->
     <!-- Get PHP source package by given version number		  		          -->
     <!-- ==================================================================== -->
-    <target name="get-php-src" depends="check-php-src-present" unless="php-src.present" description="Get PHP source package by given version number">
+    <target name="get-php-src" depends="check-php-src-present,prepare" unless="php-src.present" description="Get PHP source package by given version number">
         <get src="http://de1.php.net/get/php-${appserver.php.version}.tar.gz/from/this/mirror" dest="${lib.dir}/php-${appserver.php.version}.tar.gz" usetimestamp="true"/>
     </target>
 
@@ -1638,7 +1638,7 @@
     <!-- ==================================================================== -->
     <!-- Unzip the php build dependencies into the development dir            -->
     <!-- ==================================================================== -->
-    <target name="WIN-prepare-php-build-deps" depends="get-php-build-deps,WIN-check-7zip-present" description="Get Windows PHP sources by given version number.">
+    <target name="WIN-prepare-php-build-deps" depends="WIN-get-php-build-deps,WIN-check-7zip-present" description="Get Windows PHP sources by given version number.">
         <!-- Unzip the php build dependencies into the sdk environment -->
         <exec executable="${win.7zip-cmd.exe}">
             <arg value="/c "/>
@@ -1681,16 +1681,22 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Checks if the appserver extension got built as it should             -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-ext-appserver-built" description="Checks if the appserver extension got built as it should.">
+        <!-- Set property if the dll exists -->
+        <available file="${custom-lib.dir}/php_appserver-${appserver.ext-appserver.version}.dll" property="win.ext-appserver.present"/>
+        <!-- Fail if property was not set -->
+        <fail unless="win.ext-appserver.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Will check if the environment has already been prepared.             -->
     <!-- This is done by checking if a non-empty buildtree exists             -->
     <!-- ==================================================================== -->
     <target name="WIN-check-php-sdk-prepared" description="Will check if the environment has already been prepared.">
         <!-- Define a fileset we can pickup -->
-        <fileset dir="${win.php-buildtree.dir}" id="php-buildtree.fileset">
-            <include>deps/bin</include>
-            <include>deps/include</include>
-            <include>deps/lib</include>
-        </fileset>
+        <fileset dir="${win.php-buildtree.dir}/deps/lib" id="php-buildtree.fileset"/>
         <!-- Set the property if the fileset is not empty -->
         <pathconvert refid="php-buildtree.fileset"
                      property="win-php-sdk.prepared"
@@ -1725,8 +1731,8 @@
     <!-- ==================================================================== -->
     <target name="WIN-build-binaries" depends="WIN-prepare-php-sdk" description="Will create binaries which cannot be downloaded as .dll.">
 
-        <!-- Load the binaries sources into the build environment -->
-        <antcall target="WIN-prepare-php-src"/>
+        <!-- Prepare the appserve src as we need it -->
+        <antcall target="WIN-prepare-ext-appserver-src"/>
 
         <!-- Do the thing -->
         <exec dir="${win.php-sdk.dir}/bin" executable="cmd" failonerror="true">
@@ -1744,36 +1750,8 @@
             </fileset>
         </copy>
 
-        <!--
-            #download php sources
-
-            open VS2012 x86 Native Tools Command Prompt
-
-            #cd into phpsdk
-
-            #execute "bin\phpsdk_setvars.bat"
-
-            #execute "bin\phpsdk_buildtree.bat phpdev" if not exists
-
-            #copy php sources into buildtree
-
-            #cd into moved php sources
-
-            #download deps from http://windows.php.net/downloads/php-sdk/
-
-            #move (unpack with 7zip??) deps into <buildtree>/deps
-                (freetype location wrong? move content to parent dir?)
-
-            move appserver-ext-src folder to <buildtree><php-src>/ext
-
-            #execute "buildconf"
-
-            #execute "configure without-gd enable-zts enable-appserver"
-
-            #execute "nmake"
-
-            #moves created .dll to build dir "custom-lib"
-        -->
+        <!-- Fail if certain binaries did not get built -->
+        <antcall target="WIN-check-ext-appserver-built"/>
     </target>
 
     <!-- ==================================================================== -->
