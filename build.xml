@@ -1681,6 +1681,23 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Will check if the environment has already been prepared.             -->
+    <!-- This is done by checking if a non-empty buildtree exists             -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-php-sdk-prepared" description="Will check if the environment has already been prepared.">
+        <!-- Define a fileset we can pickup -->
+        <fileset dir="${win.php-buildtree.dir}" id="php-buildtree.fileset">
+            <include>deps/bin</include>
+            <include>deps/include</include>
+            <include>deps/lib</include>
+        </fileset>
+        <!-- Set the property if the fileset is not empty -->
+        <pathconvert refid="php-buildtree.fileset"
+                     property="win-php-sdk.prepared"
+                     setonempty="false"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Prepare Windows PHP SDK as a build environment                       -->
     <!-- ==================================================================== -->
     <target name="WIN-prepare-php-sdk" depends="WIN-check-php-sdk-prepared" unless="win-php-sdk.prepared" description="Prepare Windows PHP SDK as a build environment.">
