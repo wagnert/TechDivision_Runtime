@@ -13,7 +13,7 @@
         "doctrine/orm": "2.4.*",
         "herrera-io/annotations": "1.0.*",
         "techdivision/collections": "0.1.*",
-        "techdivision/appserver": "0.6.*,
+        "techdivision/appserver": "0.6.*",
         "techdivision/webserver": "0.2.*",
         "techdivision/server": "0.1.*",
         "techdivision/http": "0.1.*",
