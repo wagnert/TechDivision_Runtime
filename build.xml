@@ -390,197 +390,197 @@
     <!-- ==================================================================== -->
     <!-- Get PHP source package by given version number		  		          -->
     <!-- ==================================================================== -->
-    <target name="get-php-src" depends="check-php-src-present" unless="${php-src.present}" description="Get PHP source package by given version number">
-        <get src="http://de1.php.net/get/php-${appserver.php.version}.tar.gz/from/this/mirror" dest="${lib.dir}/php-${appserver.php.version}.tar.gz"/>
+    <target name="get-php-src" depends="check-php-src-present" unless="php-src.present" description="Get PHP source package by given version number">
+        <get src="http://de1.php.net/get/php-${appserver.php.version}.tar.gz/from/this/mirror" dest="${lib.dir}/php-${appserver.php.version}.tar.gz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get PECL memcached source package by given version number		      -->
     <!-- ==================================================================== -->
-    <target name="get-memcached-src" depends="check-memcached-src-present" unless="${memcached-src.present}" description="Get PECL memcached source package by given version number">
-        <get src="http://pecl.php.net/get/memcached-${appserver.memcached.version}.tgz" dest="${lib.dir}/memcached-${appserver.memcached.version}.tgz"/>
+    <target name="get-memcached-src" depends="check-memcached-src-present" unless="memcached-src.present" description="Get PECL memcached source package by given version number">
+        <get src="http://pecl.php.net/get/memcached-${appserver.memcached.version}.tgz" dest="${lib.dir}/memcached-${appserver.memcached.version}.tgz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get PECL pthreads source package by given version number		      -->
     <!-- ==================================================================== -->
-    <target name="get-pthreads-src" depends="check-pthreads-src-present" unless="${pthreads-src.present}" description="Get PECL pthreads source package by given version number">
-        <get src="http://pecl.php.net/get/pthreads-${appserver.pthreads.version}.tgz" dest="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz"/>
+    <target name="get-pthreads-src" depends="check-pthreads-src-present" unless="pthreads-src.present" description="Get PECL pthreads source package by given version number">
+        <get src="http://pecl.php.net/get/pthreads-${appserver.pthreads.version}.tgz" dest="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get PECL apcu source package by given version number                 -->
     <!-- ==================================================================== -->
-    <target name="get-apcu-src" depends="check-apcu-src-present" unless="${apcu-src.present}" description="Get PECL apcu source package by given version number">
-        <get src="http://pecl.php.net/get/apcu-${appserver.apcu.version}.tgz" dest="${lib.dir}/apcu-${appserver.apcu.version}.tgz"/>
+    <target name="get-apcu-src" depends="check-apcu-src-present" unless="apcu-src.present" description="Get PECL apcu source package by given version number">
+        <get src="http://pecl.php.net/get/apcu-${appserver.apcu.version}.tgz" dest="${lib.dir}/apcu-${appserver.apcu.version}.tgz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get PECL redis source package by given version number		          -->
     <!-- ==================================================================== -->
-    <target name="get-redis-src" depends="check-redis-src-present" unless="${redis-src.present}" description="Get PECL redis source package by given version number">
-        <get src="http://pecl.php.net/get/redis-${appserver.redis.version}.tgz" dest="${lib.dir}/redis-${appserver.redis.version}.tgz"/>
+    <target name="get-redis-src" depends="check-redis-src-present" unless="redis-src.present" description="Get PECL redis source package by given version number">
+        <get src="http://pecl.php.net/get/redis-${appserver.redis.version}.tgz" dest="${lib.dir}/redis-${appserver.redis.version}.tgz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get PECL libevent source package by given version number		      -->
     <!-- ==================================================================== -->
-    <target name="get-libevent-src" depends="check-libevent-src-present" unless="${libevent-src.present}" description="Get PECL libevent source package by given version number">
-        <get src="http://pecl.php.net/get/libevent-${appserver.libevent.version}.tgz" dest="${lib.dir}/libevent-${appserver.libevent.version}.tgz"/>
+    <target name="get-libevent-src" depends="check-libevent-src-present" unless="libevent-src.present" description="Get PECL libevent source package by given version number">
+        <get src="http://pecl.php.net/get/libevent-${appserver.libevent.version}.tgz" dest="${lib.dir}/libevent-${appserver.libevent.version}.tgz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get PECL ev source package by given version number		              -->
     <!-- ==================================================================== -->
-    <target name="get-ev-src" depends="check-ev-src-present" unless="${ev-src.present}" description="Get PECL ev source package by given version number">
-        <get src="http://pecl.php.net/get/ev-${appserver.ev.version}.tgz" dest="${lib.dir}/ev-${appserver.ev.version}.tgz"/>
+    <target name="get-ev-src" depends="check-ev-src-present" unless="ev-src.present" description="Get PECL ev source package by given version number">
+        <get src="http://pecl.php.net/get/ev-${appserver.ev.version}.tgz" dest="${lib.dir}/ev-${appserver.ev.version}.tgz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get PECL event source package by given version number		          -->
     <!-- ==================================================================== -->
-    <target name="get-event-src" depends="check-event-src-present" unless="${event-src.present}" description="Get PECL event source package by given version number">
-        <get src="http://pecl.php.net/get/event-${appserver.event.version}.tgz" dest="${lib.dir}/event-${appserver.event.version}.tgz"/>
+    <target name="get-event-src" depends="check-event-src-present" unless="event-src.present" description="Get PECL event source package by given version number">
+        <get src="http://pecl.php.net/get/event-${appserver.event.version}.tgz" dest="${lib.dir}/event-${appserver.event.version}.tgz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get PECL libev source package by given version number		      -->
     <!-- ==================================================================== -->
-    <target name="get-libev-src" depends="check-libev-src-present" unless="${libev-src.present}" description="Get PECL libev source package by given version number">
-        <get src="https://github.com/whatthejeff/php-libev/archive/${appserver.libev.version}.zip" dest="${lib.dir}/libev-${appserver.libev.version}.zip"/>
+    <target name="get-libev-src" depends="check-libev-src-present" unless="libev-src.present" description="Get PECL libev source package by given version number">
+        <get src="https://github.com/whatthejeff/php-libev/archive/${appserver.libev.version}.zip" dest="${lib.dir}/libev-${appserver.libev.version}.zip" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get PECL operator source package by given version number		      -->
     <!-- ==================================================================== -->
-    <target name="get-operator-src" depends="check-operator-src-present" unless="${operator-src.present}" description="Get PECL operator source package by given version number">
-        <get src="http://pecl.php.net/get/operator-${appserver.operator.version}.tgz" dest="${lib.dir}/operator-${appserver.operator.version}.tgz"/>
+    <target name="get-operator-src" depends="check-operator-src-present" unless="operator-src.present" description="Get PECL operator source package by given version number">
+        <get src="http://pecl.php.net/get/operator-${appserver.operator.version}.tgz" dest="${lib.dir}/operator-${appserver.operator.version}.tgz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get PECL pecl_http source package by given version number		      -->
     <!-- ==================================================================== -->
-    <target name="get-pecl_http-src" depends="check-pecl_http-src-present" unless="${pecl_http-src.present}" description="Get PECL pecl_http source package by given version number">
-        <get src="http://pecl.php.net/get/pecl_http-${appserver.pecl_http.version}.tgz" dest="${lib.dir}/pecl_http-${appserver.pecl_http.version}.tgz"/>
+    <target name="get-pecl_http-src" depends="check-pecl_http-src-present" unless="pecl_http-src.present" description="Get PECL pecl_http source package by given version number">
+        <get src="http://pecl.php.net/get/pecl_http-${appserver.pecl_http.version}.tgz" dest="${lib.dir}/pecl_http-${appserver.pecl_http.version}.tgz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get PECL AOP source package by given version number		          -->
     <!-- ==================================================================== -->
-    <target name="get-AOP-src" depends="check-AOP-src-present" unless="${AOP-src.present}" description="Get PECL AOP source package by given version number">
-        <get src="http://pecl.php.net/get/AOP-${appserver.AOP.version}.tgz" dest="${lib.dir}/AOP-${appserver.AOP.version}.tgz"/>
+    <target name="get-AOP-src" depends="check-AOP-src-present" unless="AOP-src.present" description="Get PECL AOP source package by given version number">
+        <get src="http://pecl.php.net/get/AOP-${appserver.AOP.version}.tgz" dest="${lib.dir}/AOP-${appserver.AOP.version}.tgz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get PECL xdebug source package by given version number		          -->
     <!-- ==================================================================== -->
-    <target name="get-xdebug-src" depends="check-xdebug-src-present" unless="${xdebug-src.present}" description="Get PECL xdebug source package by given version number">
-        <get src="http://pecl.php.net/get/xdebug-${appserver.xdebug.version}.tgz" dest="${lib.dir}/xdebug-${appserver.xdebug.version}.tgz"/>
+    <target name="get-xdebug-src" depends="check-xdebug-src-present" unless="xdebug-src.present" description="Get PECL xdebug source package by given version number">
+        <get src="http://pecl.php.net/get/xdebug-${appserver.xdebug.version}.tgz" dest="${lib.dir}/xdebug-${appserver.xdebug.version}.tgz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get PECL appserver source package by given version number		          -->
     <!-- ==================================================================== -->
-    <target name="get-ext-appserver-src" depends="check-ext-appserver-src-present" unless="${ext-appserver-src.present}" description="Get php ext appserver source package by given version number">
-        <get src="https://github.com/techdivision/php-ext-appserver/releases/download/v${appserver.ext-appserver.version}-beta/appserver-${appserver.ext-appserver.version}.tgz" dest="${lib.dir}/ext-appserver-${appserver.ext-appserver.version}.tgz"/>
+    <target name="get-ext-appserver-src" depends="check-ext-appserver-src-present" unless="ext-appserver-src.present" description="Get php ext appserver source package by given version number">
+        <get src="https://github.com/techdivision/php-ext-appserver/releases/download/v${appserver.ext-appserver.version}-beta/appserver-${appserver.ext-appserver.version}.tgz" dest="${lib.dir}/ext-appserver-${appserver.ext-appserver.version}.tgz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get memcached server source package by given version number		  -->
     <!-- ==================================================================== -->
-    <target name="get-memcached-server-src" depends="check-memcached-server-src-present" unless="${memcached-server-src.present}" description="Get memcached server source package by given version number.">
-        <get src="${memcached.server.download.url}" dest="${lib.dir}/memcached-${memcached.server.version}.tar.gz"/>
+    <target name="get-memcached-server-src" depends="check-memcached-server-src-present" unless="memcached-server-src.present" description="Get memcached server source package by given version number.">
+        <get src="${memcached.server.download.url}" dest="${lib.dir}/memcached-${memcached.server.version}.tar.gz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get libfreetype source package by given version number		          -->
     <!-- ==================================================================== -->
-    <target name="get-libfreetype-src" depends="check-libfreetype-src-present" unless="${libfreetype-src.present}" description="Get libfreetype source package by given version number.">
-        <get src="${libfreetype.download.url}" dest="${lib.dir}/freetype-${libfreetype.version}.tar.gz"/>
+    <target name="get-libfreetype-src" depends="check-libfreetype-src-present" unless="libfreetype-src.present" description="Get libfreetype source package by given version number.">
+        <get src="${libfreetype.download.url}" dest="${lib.dir}/freetype-${libfreetype.version}.tar.gz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get libmemcached source package by given version number		      -->
     <!-- ==================================================================== -->
-    <target name="get-libmemcached-src" depends="check-libmemcached-src-present" unless="${libmemcached-src.present}" description="Get libmemcached source package by given version number.">
-        <get src="${libmemcached.download.url}" dest="${lib.dir}/libmemcached-${libmemcached.version}.tar.gz"/>
+    <target name="get-libmemcached-src" depends="check-libmemcached-src-present" unless="libmemcached-src.present" description="Get libmemcached source package by given version number.">
+        <get src="${libmemcached.download.url}" dest="${lib.dir}/libmemcached-${libmemcached.version}.tar.gz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get libmcrypt source package by given version number		          -->
     <!-- ==================================================================== -->
-    <target name="get-libmcrypt-src" depends="check-libmcrypt-src-present" unless="${libmcrypt-src.present}" description="Get libmcrypt source package by given version number.">
-        <get src="${libmcrypt.download.url}" dest="${lib.dir}/libmcrypt-${libmcrypt.version}.tar.gz"/>
+    <target name="get-libmcrypt-src" depends="check-libmcrypt-src-present" unless="libmcrypt-src.present" description="Get libmcrypt source package by given version number.">
+        <get src="${libmcrypt.download.url}" dest="${lib.dir}/libmcrypt-${libmcrypt.version}.tar.gz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get readline source package by given version number		          -->
     <!-- ==================================================================== -->
-    <target name="get-readline-src" depends="check-readline-src-present" unless="${readline-src.present}" description="Get readline source package by given version number.">
-        <get src="${readline.download.url}" dest="${lib.dir}/readline-${readline.version}.tar.gz"/>
+    <target name="get-readline-src" depends="check-readline-src-present" unless="readline-src.present" description="Get readline source package by given version number.">
+        <get src="${readline.download.url}" dest="${lib.dir}/readline-${readline.version}.tar.gz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get libpng source package by given version number		          -->
     <!-- ==================================================================== -->
-    <target name="get-libpng-src" depends="check-libpng-src-present" unless="${libpng-src.present}" description="Get libpng source package by given version number.">
-        <get src="${libpng.download.url}" dest="${lib.dir}/libpng-${libpng.version}.tar.gz"/>
+    <target name="get-libpng-src" depends="check-libpng-src-present" unless="libpng-src.present" description="Get libpng source package by given version number.">
+        <get src="${libpng.download.url}" dest="${lib.dir}/libpng-${libpng.version}.tar.gz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get libjpeg source package by given version number		          -->
     <!-- ==================================================================== -->
-    <target name="get-libjpeg-src" depends="check-libjpeg-src-present" unless="${libjpeg-src.present}" description="Get libjpeg source package by given version number.">
-        <get src="${libjpeg.download.url}" dest="${lib.dir}/jpegsrc.v${libjpeg.version}.tar.gz"/>
+    <target name="get-libjpeg-src" depends="check-libjpeg-src-present" unless="libjpeg-src.present" description="Get libjpeg source package by given version number.">
+        <get src="${libjpeg.download.url}" dest="${lib.dir}/jpegsrc.v${libjpeg.version}.tar.gz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get libevent source package by given version number		  -->
     <!-- ==================================================================== -->
-    <target name="get-libevent-library-src" depends="check-libevent-library-src-present" unless="${libevent-library-src.present}" description="Get libevent source package by given version number.">
-        <get src="${libevent.download.url}" dest="${lib.dir}/libevent-${libevent.version}.tar.gz"/>
+    <target name="get-libevent-library-src" depends="check-libevent-library-src-present" unless="libevent-library-src.present" description="Get libevent source package by given version number.">
+        <get src="${libevent.download.url}" dest="${lib.dir}/libevent-${libevent.version}.tar.gz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get httpd server source package by given version number		      -->
     <!-- ==================================================================== -->
-    <target name="get-httpd-server-src" depends="check-httpd-server-src-present" unless="${httpd-server-src.present}" description="Get httpd server source package by given version number.">
-        <get src="${httpd.server.download.url}" dest="${lib.dir}/httpd-${httpd.server.version}.tar.gz"/>
+    <target name="get-httpd-server-src" depends="check-httpd-server-src-present" unless="httpd-server-src.present" description="Get httpd server source package by given version number.">
+        <get src="${httpd.server.download.url}" dest="${lib.dir}/httpd-${httpd.server.version}.tar.gz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get nginx server source package by given version number		      -->
     <!-- ==================================================================== -->
-    <target name="get-nginx-server-src" depends="check-nginx-server-src-present" unless="${nginx-server-src.present}" description="Get nginx server source package by given version number.">
-        <get src="${nginx.server.download.url}" dest="${lib.dir}/nginx-${nginx.server.version}.tar.gz"/>
+    <target name="get-nginx-server-src" depends="check-nginx-server-src-present" unless="nginx-server-src.present" description="Get nginx server source package by given version number.">
+        <get src="${nginx.server.download.url}" dest="${lib.dir}/nginx-${nginx.server.version}.tar.gz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get redis server source package by given version number		      -->
     <!-- ==================================================================== -->
-    <target name="get-redis-server-src" depends="check-redis-server-src-present" unless="${redis-server-src.present}" description="Get redis server source package by given version number.">
-        <get src="${redis.server.download.url}" dest="${lib.dir}/redis-${redis.server.version}.zip"/>
+    <target name="get-redis-server-src" depends="check-redis-server-src-present" unless="redis-server-src.present" description="Get redis server source package by given version number.">
+        <get src="${redis.server.download.url}" dest="${lib.dir}/redis-${redis.server.version}.zip" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get pcre source package by given version number		              -->
     <!-- ==================================================================== -->
-    <target name="get-pcre-src" depends="check-pcre-src-present" unless="${pcre-src.present}" description="Get pcre source package by given version number.">
-        <get src="${pcre.download.url}" dest="${lib.dir}/pcre-${pcre.version}.tar.gz"/>
+    <target name="get-pcre-src" depends="check-pcre-src-present" unless="pcre-src.present" description="Get pcre source package by given version number.">
+        <get src="${pcre.download.url}" dest="${lib.dir}/pcre-${pcre.version}.tar.gz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get openssl source package by given version number		          -->
     <!-- ==================================================================== -->
-    <target name="get-openssl-src" depends="check-openssl-src-present" unless="${openssl-src.present}" description="Get openssl source package by given version number.">
-        <get src="${openssl.download.url}" dest="${lib.dir}/openssl-${openssl.version}.tar.gz"/>
+    <target name="get-openssl-src" depends="check-openssl-src-present" unless="openssl-src.present" description="Get openssl source package by given version number.">
+        <get src="${openssl.download.url}" dest="${lib.dir}/openssl-${openssl.version}.tar.gz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get icu4c source package by given version number		          -->
     <!-- ==================================================================== -->
-    <target name="get-libicu-src" depends="check-libicu-src-present" unless="${libicu-src.present}" description="Get icu4c source package by given version number.">
-        <get src="${libicu.download.url}" dest="${lib.dir}/icu4c-${libicu.version.major}_${libicu.version.minor}-src.tgz"/>
+    <target name="get-libicu-src" depends="check-libicu-src-present" unless="libicu-src.present" description="Get icu4c source package by given version number.">
+        <get src="${libicu.download.url}" dest="${lib.dir}/icu4c-${libicu.version.major}_${libicu.version.minor}-src.tgz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
