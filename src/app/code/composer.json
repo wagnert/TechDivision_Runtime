@@ -21,6 +21,7 @@
         "techdivision/server": "0.1.*",
         "techdivision/http": "0.1.*",
         "techdivision/webcontainer": "0.5.*",
+        "techdivision/lemcachecontainer": "0.5.*",
         "techdivision/persistencecontainer": "0.5.*",
         "techdivision/persistencecontainerclient": "0.5.*",
         "techdivision/messagequeue": "0.5.*",
