@@ -9,7 +9,6 @@
         "monolog/monolog": "1.10.*",
         "appserver-io/routlt": "0.1.*",
         "rhumsaa/uuid": "~2.4",
-        "cboden/Ratchet": "0.2.*",
         "doctrine/orm": "2.4.*",
         "herrera-io/annotations": "1.0.*",
         "techdivision/collections": "0.1.*",
