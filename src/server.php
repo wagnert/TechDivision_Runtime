@@ -25,7 +25,7 @@ declare (ticks = 1);
 
 /**
  * Rewrite the SAPI to avoid invalid CLI SAPI detection for TYPO3 Flow for example
- * 
+ *
  * @see https://github.com/techdivision/php-ext-appserver#ini-settings
  */
 error_reporting(~E_NOTICE);
@@ -66,7 +66,7 @@ if ($configurationFile->schemaValidate($schemaFileName) === false) {
 }
 
 // initialize the SimpleXMLElement with the content XML configuration file
-$configuration = new Configuration();
+$configuration = new \TechDivision\Configuration\Configuration();
 $configuration->initFromFile($configurationFileName);
 $configuration->addChildWithNameAndValue('baseDirectory', APPSERVER_BP);
 
