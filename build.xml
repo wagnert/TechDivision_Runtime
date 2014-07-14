@@ -1596,7 +1596,6 @@
     <!-- Check if Windows PHP build dependencies have been downloaded yet     -->
     <!-- ==================================================================== -->
     <target name="WIN-check-php-build-deps-present" description="Check if Windows PHP build dependencies have been downloaded yet.">
-        ${win.build-workspace.dir}/deps-${appserver.php.major-version}-vc${win.compiler-version}-${win.os.architecture}.7z
         <available file="${win.build-workspace.dir}/deps-${appserver.php.major-version}-vc${win.compiler-version}-${win.os.architecture}.7z" property="win-php-build-deps.present"/>
     </target>
 
