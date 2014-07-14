@@ -1589,14 +1589,15 @@
     <!-- Check if Windows PHP SDK has been downloaded yet                     -->
     <!-- ==================================================================== -->
     <target name="WIN-check-php-sdk-present" description="Check if Windows PHP SDK has been downloaded yet.">
-        <available file="php-sdk-binary-tools-${win.php-sdk.timestamp}.zip" property="win-php-sdk.present"/>
+        <available file="${win.build-workspace.dir}/php-sdk-binary-tools-${win.php-sdk.timestamp}.zip" property="win-php-sdk.present"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Check if Windows PHP build dependencies have been downloaded yet     -->
     <!-- ==================================================================== -->
     <target name="WIN-check-php-build-deps-present" description="Check if Windows PHP build dependencies have been downloaded yet.">
-        <available file="${win.build-workspace.dir}/deps-${appserver.php.major-version}-vc${win.compiler-version}-${win.os.architecture = x86}.7z" property="win-php-build-deps.present"/>
+        ${win.build-workspace.dir}/deps-${appserver.php.major-version}-vc${win.compiler-version}-${win.os.architecture}.7z
+        <available file="${win.build-workspace.dir}/deps-${appserver.php.major-version}-vc${win.compiler-version}-${win.os.architecture}.7z" property="win-php-build-deps.present"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -1624,7 +1625,7 @@
     <!-- Download the dependencies for building PHP                           -->
     <!-- ==================================================================== -->
     <target name="WIN-get-php-build-deps" depends="WIN-check-php-build-deps-present" unless="win-php-build-deps.present" description="Download the dependencies for building PHP.">
-        <get src="win.php-build-deps.download.url" dest="${win.build-workspace.dir}/deps-${appserver.php.major-version}-vc${win.compiler-version}-${win.os.architecture}.7z"/>
+        <get src="${win.php-build-deps.download.url}" dest="${win.build-workspace.dir}/deps-${appserver.php.major-version}-vc${win.compiler-version}-${win.os.architecture}.7z"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -1640,10 +1641,9 @@
     <!-- ==================================================================== -->
     <target name="WIN-prepare-php-build-deps" depends="WIN-get-php-build-deps,WIN-check-7zip-present" description="Get Windows PHP sources by given version number.">
         <!-- Unzip the php build dependencies into the sdk environment -->
-        <exec executable="${win.7zip-cmd.exe}">
-            <arg value="/c "/>
+        <exec dir="${win.build-workspace.dir}" executable="${win.7zip-cmd.dir}/7z">
+            <arg line="x deps-${appserver.php.major-version}-vc${win.compiler-version}-${win.os.architecture}.7z -o${win.php-buildtree.dir}"/>
         </exec>
-        <unzip src="${win.build-workspace.dir}/deps-${appserver.php.major-version}-vc${win.compiler-version}-${win.os.architecture}.7z" dest="${win.php-buildtree.dir}"/>
     </target>
 
     <!-- =============================================================================== -->
@@ -1665,7 +1665,7 @@
     <!-- ==================================================================== -->
     <target name="WIN-check-7zip-present" description="Will check if there is an usable instance of 7zip installed">
         <!-- Set property if the executable exists -->
-        <available file="${win.7zip-cmd.exe}" property="win.7zip.present"/>
+        <available file="${win.7zip-cmd.dir}/7z.exe" property="win.7zip.present"/>
         <!-- Fail if property was not set -->
         <fail unless="win.7zip.present"/>
     </target>
@@ -1675,7 +1675,7 @@
     <!-- ============================================================================= -->
     <target name="WIN-check-vc-present" description="Will check if there is an usable instance of Visual Studio C/C++ installed">
         <!-- Set property if the executable exists -->
-        <available file="${win.native-tools-cmd.bat}" property="win.vc.present"/>
+        <available file="${win.native-tools-cmd.dir}/vcvarsall.bat" property="win.vc.present"/>
         <!-- Fail if property was not set -->
         <fail unless="win.vc.present"/>
     </target>
@@ -1691,10 +1691,18 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Checks if php buildtree even exists                                  -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-php-buildtree-present" description="Checks if php buildtree even exists .">
+        <!-- Set property if the buildtree directory exists -->
+        <available file="${win.php-buildtree.dir}/deps/lib" property="win.php-buildtree.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Will check if the environment has already been prepared.             -->
     <!-- This is done by checking if a non-empty buildtree exists             -->
     <!-- ==================================================================== -->
-    <target name="WIN-check-php-sdk-prepared" description="Will check if the environment has already been prepared.">
+    <target name="WIN-check-php-sdk-prepared" depends="WIN-check-php-buildtree-present" if="win.php-buildtree.present" description="Will check if the environment has already been prepared.">
         <!-- Define a fileset we can pickup -->
         <fileset dir="${win.php-buildtree.dir}/deps/lib" id="php-buildtree.fileset"/>
         <!-- Set the property if the fileset is not empty -->
@@ -1725,11 +1733,11 @@
         <!-- Without Visual Studio installed this makes no sense! -->
         <antcall target="WIN-check-vc-present"/>
         <!-- Download the PHP SDK archive -->
-        <antcall target="WIN-prepare-php-src"/>
-        <!-- Untar the php sdk into the development environment -->
-        <unzip src="${win.build-workspace.dir}/php-sdk.zip" dest="${win.php-sdk.dir}"/>
+        <antcall target="WIN-get-php-sdk"/>
+        <!-- Unzip the php sdk into the development environment -->
+        <unzip src="${win.build-workspace.dir}/php-sdk-binary-tools-${win.php-sdk.timestamp}.zip" dest="${win.php-sdk.dir}"/>
         <!-- Set the build environment vars and create the build tree -->
-        <exec dir="${custom-lib.dir}" executable="cmd" failonerror="true">
+        <exec dir="${custom-lib.dir}/scripts" executable="cmd" failonerror="true">
             <arg value="/C"/>
             <arg value="prepare_php_sdk.bat"/>
         </exec>

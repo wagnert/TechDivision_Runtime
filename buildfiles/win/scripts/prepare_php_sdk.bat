@@ -16,4 +16,4 @@ cd ${win.php-sdk.dir}\bin
 call "phpsdk_setvars.bat"
 
 :: Trigger buildtree buildup
-call "phpsdk_buildtree.bat" phpdev
+start call "phpsdk_buildtree.bat" phpdev
