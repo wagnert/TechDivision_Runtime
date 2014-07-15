@@ -15,7 +15,7 @@ chmod -R 775 /opt/appserver
 
 # Start the services
 /opt/appserver/sbin/appserverctl start
-/opt/appserver/sbin/watcherctl start
-/opt/appserver/sbin/phpfpmctl start
+/opt/appserver/sbin/appserver-watcherctl start
+/opt/appserver/sbin/appserver-php5-fpmctl start
 
 exit 0

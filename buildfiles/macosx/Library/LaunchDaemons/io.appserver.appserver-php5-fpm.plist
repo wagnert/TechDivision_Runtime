@@ -3,11 +3,11 @@
 <plist version='1.0'>
     <dict>
         <key>Label</key>
-        <string>io.appserver.php-fpm</string>
+        <string>io.appserver.appserver-php5-fpm</string>
         <key>ProgramArguments</key>
         <array>
             <string>/opt/appserver/sbin/php-fpm</string>
-            <string>--pid=/opt/appserver/var/run/php-fpm.pid</string>
+            <string>--pid=/opt/appserver/var/run/appserver-php5-fpm.pid</string>
             <string>--nodaemonize</string>
         </array>
         <key>Debug</key>

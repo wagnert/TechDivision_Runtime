@@ -15,7 +15,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 BASE_PATH='/opt/appserver'
 DAEMON="${BASE_PATH}/bin/php"
 DAEMON_OPTS="-dappserver.php_sapi=appserver -dappserver.remove_functions=putenv,getenv ${BASE_PATH}/server.php -w"
-NAME="watcher"
+NAME="appserver-watcher"
 DESC="Deployment Scanner"
 PIDFILE="/var/run/${NAME}.pid"
 LOCKFILE="/var/lock/subsys/${NAME}"

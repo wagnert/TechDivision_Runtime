@@ -1,8 +1,8 @@
 #!/bin/sh
 
 /opt/appserver/sbin/appserverctl stop
-/opt/appserver/sbin/watcherctl stop
-/opt/appserver/sbin/phpfpmctl stop
+/opt/appserver/sbin/appserver-watcherctl stop
+/opt/appserver/sbin/appserver-php5-fpmctl stop
 /opt/appserver/sbin/memcachedctl stop
 /opt/appserver/sbin/redisctl stop
 
