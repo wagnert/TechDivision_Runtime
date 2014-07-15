@@ -25,7 +25,7 @@
 #	8 - configuration syntax error
 #
 # When multiple arguments are given, only the error from the _last_
-# one is reported.  Run "php-fpmctl help" for usage info
+# one is reported.  Run "appserver-php5-fpmctl help" for usage info
 #
 ARGV="$@"
 #
@@ -40,7 +40,7 @@ fi
 # ||||||||||||||||||||   END CONFIGURATION SECTION  ||||||||||||||||||||
 
 LAUNCHCTL="/bin/launchctl"
-LAUNCHD_JOB="/Library/LaunchDaemons/io.appserver.php-fpm.plist"
+LAUNCHD_JOB="/Library/LaunchDaemons/io.appserver.appserver-php5-fpm.plist"
 
 run_launchctl() {
     if [ $UID != 0 ]; then

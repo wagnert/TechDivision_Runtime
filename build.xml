@@ -40,7 +40,7 @@
     <!-- files as we had problems defining it within properties files         -->
     <!-- CAUTION, THIS SYNTAX IS DOUBLED IN THE rpmbuild SPECS FILE!          -->
     <!-- ==================================================================== -->
-    <property name="package.name" value="appserver-${appserver.version}${appserver.version.delimiter}${build.number}.${os.qualified.name}.${os.architecture}.${os.package-extension}"/>
+    <property name="package.name" value="appserver-${appserver.version}-${appserver.version.suffix}${build.number}.${os.qualified.name}.${os.architecture}.${os.package-extension}"/>
     <property name="package.specific-dir" value="${php-target.dir}/"/>
 
     <!-- ==================================================================== -->
@@ -397,7 +397,7 @@
     <!-- ==================================================================== -->
     <!-- Get PHP source package by given version number		  		          -->
     <!-- ==================================================================== -->
-    <target name="get-php-src" depends="check-php-src-present" unless="php-src.present" description="Get PHP source package by given version number">
+    <target name="get-php-src" depends="check-php-src-present,prepare" unless="php-src.present" description="Get PHP source package by given version number">
         <get src="http://de1.php.net/get/php-${appserver.php.version}.tar.gz/from/this/mirror" dest="${lib.dir}/php-${appserver.php.version}.tar.gz" usetimestamp="true"/>
     </target>
 
@@ -1554,56 +1554,229 @@
     <!-- Check if Windows PHP binaries has been downloaded yet   		 	  -->
     <!-- ==================================================================== -->
     <target name="WIN-check-php-binaries-present" description="Check if Windows PHP binaries has been downloaded yet.">
-        <available file="${lib.dir}/php-${appserver.php.version}-Win32-VC11-x86.zip" property="win-php-binaries.present"/>
+        <available file="${lib.dir}/php-${appserver.php.version}-Win32-VC${win.compiler-version}-${win.os.architecture}.zip" property="win-php-binaries.present"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get Windows PHP binaries package by given version number		      -->
     <!-- ==================================================================== -->
-    <target name="WIN-get-php-binaries" depends="WIN-check-php-binaries-present" unless="${win-php-binaries.present}" description="Get Windows PHP binaries package by given version number.">
-        <get src="${win.php.download.url}" dest="${lib.dir}/php-${appserver.php.version}-Win32-VC11-x86.zip"/>
+    <target name="WIN-get-php-binaries" depends="WIN-check-php-binaries-present" unless="win-php-binaries.present" description="Get Windows PHP binaries package by given version number.">
+        <get src="${win.php.download.url}" dest="${lib.dir}/php-${appserver.php.version}-Win32-VC${win.compiler-version}-${win.os.architecture}.zip"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Check if Windows apcu binaries has been downloaded yet   		 	  -->
     <!-- ==================================================================== -->
     <target name="WIN-check-apcu-binaries-present" description="Check if Windows apcu binaries has been downloaded yet.">
-        <available file="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc11-x86.zip" property="win-apcu-binaries.present"/>
+        <available file="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc${win.compiler-version}-${win.os.architecture}.zip" property="win-apcu-binaries.present"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Check if Windows event binaries has been downloaded yet   		 	  -->
     <!-- ==================================================================== -->
     <target name="WIN-check-event-binaries-present" description="Check if Windows event binaries has been downloaded yet.">
-        <available file="${lib.dir}/php_event-${appserver.event.version}-5.5-ts-vc11-x86.zip" property="win-event-binaries.present"/>
+        <available file="${lib.dir}/php_event-${appserver.event.version}-5.5-ts-vc${win.compiler-version}-${win.os.architecture}.zip" property="win-event-binaries.present"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get Windows apcu binaries package by given version number		      -->
     <!-- ==================================================================== -->
-    <target name="WIN-get-apcu-binaries" depends="WIN-check-apcu-binaries-present" unless="${win-apcu-binaries.present}" description="Get Windows apcu binaries package by given version number.">
-        <get src="${win.apcu.download.url}" dest="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc11-x86.zip"/>
+    <target name="WIN-get-apcu-binaries" depends="WIN-check-apcu-binaries-present" unless="win-apcu-binaries.present" description="Get Windows apcu binaries package by given version number.">
+        <get src="${win.apcu.download.url}" dest="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc${win.compiler-version}-${win.os.architecture}.zip"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Check if Windows pthreads binaries has been downloaded yet   		  -->
     <!-- ==================================================================== -->
     <target name="WIN-check-pthreads-binaries-present" description="Check if Windows pthreads binaries has been downloaded yet.">
-        <available file="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip" property="win-pthreads-binaries.present"/>
+        <available file="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc${win.compiler-version}-${win.os.architecture}.zip" property="win-pthreads-binaries.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if Windows PHP SDK has been downloaded yet                     -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-php-sdk-present" description="Check if Windows PHP SDK has been downloaded yet.">
+        <available file="${win.build-workspace.dir}/php-sdk-binary-tools-${win.php-sdk.timestamp}.zip" property="win-php-sdk.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Check if Windows PHP build dependencies have been downloaded yet     -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-php-build-deps-present" description="Check if Windows PHP build dependencies have been downloaded yet.">
+        <available file="${win.build-workspace.dir}/deps-${appserver.php.major-version}-vc${win.compiler-version}-${win.os.architecture}.7z" property="win-php-build-deps.present"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get Windows pthreads binaries package by given version number		  -->
     <!-- ==================================================================== -->
-    <target name="WIN-get-pthreads-binaries" depends="WIN-check-pthreads-binaries-present" unless="${win-pthreads-binaries.present}" description="Get Windows pthreads binaries package by given version number.">
-        <get src="${win.pthreads.download.url}" dest="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip"/>
+    <target name="WIN-get-pthreads-binaries" depends="WIN-check-pthreads-binaries-present" unless="win-pthreads-binaries.present" description="Get Windows pthreads binaries package by given version number.">
+        <get src="${win.pthreads.download.url}" dest="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc${win.compiler-version}-${win.os.architecture}.zip"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Get Windows event binaries package by given version number		      -->
     <!-- ==================================================================== -->
-    <target name="WIN-get-event-binaries" depends="WIN-check-event-binaries-present" unless="${win-event-binaries.present}" description="Get Windows event binaries package by given version number.">
-        <get src="${win.event.download.url}" dest="${lib.dir}/php_event-${appserver.event.version}-5.5-ts-vc11-x86.zip"/>
+    <target name="WIN-get-event-binaries" depends="WIN-check-event-binaries-present" unless="win-event-binaries.present" description="Get Windows event binaries package by given version number.">
+        <get src="${win.event.download.url}" dest="${lib.dir}/php_event-${appserver.event.version}-5.5-ts-vc${win.compiler-version}-${win.os.architecture}.zip"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Download the PHP SDK from the official site                          -->
+    <!-- ==================================================================== -->
+    <target name="WIN-get-php-sdk" depends="WIN-check-php-sdk-present" unless="win-php-sdk.present" description="Download the PHP SDK from the official site.">
+        <get src="${win.php-sdk.download.url}" dest="${win.build-workspace.dir}/php-sdk-binary-tools-${win.php-sdk.timestamp}.zip"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Download the dependencies for building PHP                           -->
+    <!-- ==================================================================== -->
+    <target name="WIN-get-php-build-deps" depends="WIN-check-php-build-deps-present" unless="win-php-build-deps.present" description="Download the dependencies for building PHP.">
+        <get src="${win.php-build-deps.download.url}" dest="${win.build-workspace.dir}/deps-${appserver.php.major-version}-vc${win.compiler-version}-${win.os.architecture}.7z"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Untar the PHP source into the development dir                        -->
+    <!-- ==================================================================== -->
+    <target name="WIN-prepare-php-src" depends="get-php-src" description="Untar the PHP source into the development dir.">
+        <!-- Untar the php source into the sdk environment -->
+        <untar src="${lib.dir}/php-${appserver.php.version}.tar.gz" dest="${win.php-buildtree.dir}" compression="gzip"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Unzip the php build dependencies into the development dir            -->
+    <!-- ==================================================================== -->
+    <target name="WIN-prepare-php-build-deps" depends="WIN-get-php-build-deps,WIN-check-7zip-present" description="Get Windows PHP sources by given version number.">
+        <!-- Unzip the php build dependencies into the sdk environment -->
+        <exec dir="${win.build-workspace.dir}" executable="${win.7zip-cmd.dir}/7z">
+            <arg line="x deps-${appserver.php.major-version}-vc${win.compiler-version}-${win.os.architecture}.7z -o${win.php-buildtree.dir}"/>
+        </exec>
+    </target>
+
+    <!-- =============================================================================== -->
+    <!-- Prepare the appserver extension source by including it in the build environment -->
+    <!-- =============================================================================== -->
+    <target name="WIN-prepare-ext-appserver-src" depends="get-ext-appserver-src" description="Prepare the appserver extension source by including it in the build environment.">
+        <!-- Untar the appserver extension source into the sdk environment -->
+        <untar src="${lib.dir}/ext-appserver-${appserver.ext-appserver.version}.tgz" dest="${win.php-sdk.dir}" compression="gzip"/>
+        <!-- Move the src files into the folder they belong -->
+        <copy todir="${win.php-buildtree.dir}/php-${appserver.php.version}/ext/appserver" preservelastmodified="true" overwrite="true">
+            <fileset dir="${win.php-sdk.dir}/appserver-${appserver.ext-appserver.version}">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Will check if there is an usable instance of 7zip installed          -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-7zip-present" description="Will check if there is an usable instance of 7zip installed">
+        <!-- Set property if the executable exists -->
+        <available file="${win.7zip-cmd.dir}/7z.exe" property="win.7zip.present"/>
+        <!-- Fail if property was not set -->
+        <fail unless="win.7zip.present"/>
+    </target>
+
+    <!-- ============================================================================= -->
+    <!-- Will check if there is an usable instance of Visual Studio C/C++ installed    -->
+    <!-- ============================================================================= -->
+    <target name="WIN-check-vc-present" description="Will check if there is an usable instance of Visual Studio C/C++ installed">
+        <!-- Set property if the executable exists -->
+        <available file="${win.native-tools-cmd.dir}/vcvarsall.bat" property="win.vc.present"/>
+        <!-- Fail if property was not set -->
+        <fail unless="win.vc.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Checks if the appserver extension got built as it should             -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-ext-appserver-built" description="Checks if the appserver extension got built as it should.">
+        <!-- Set property if the dll exists -->
+        <available file="${custom-lib.dir}/php_appserver-${appserver.ext-appserver.version}.dll" property="win.ext-appserver.present"/>
+        <!-- Fail if property was not set -->
+        <fail unless="win.ext-appserver.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Checks if php buildtree even exists                                  -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-php-buildtree-present" description="Checks if php buildtree even exists .">
+        <!-- Set property if the buildtree directory exists -->
+        <available file="${win.php-buildtree.dir}/deps/lib" property="win.php-buildtree.present"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Will check if the environment has already been prepared.             -->
+    <!-- This is done by checking if a non-empty buildtree exists             -->
+    <!-- ==================================================================== -->
+    <target name="WIN-check-php-sdk-prepared" depends="WIN-check-php-buildtree-present" if="win.php-buildtree.present" description="Will check if the environment has already been prepared.">
+        <!-- Define a fileset we can pickup -->
+        <fileset dir="${win.php-buildtree.dir}/deps/lib" id="php-buildtree.fileset"/>
+        <!-- Set the property if the fileset is not empty -->
+        <pathconvert refid="php-buildtree.fileset"
+                     property="win-php-sdk.prepared"
+                     setonempty="false"/>
+    </target>
+
+    <!-- ======================================================================= -->
+    <!-- Will expand the properties of the scripts and store them in custom-libs -->
+    <!-- ======================================================================= -->
+    <target name="WIN-expand-scripts" description="Will expand the properties of the scripts and store them in custom-libs.">
+        <!-- We have to expand the scripts here, as we are going to use them -->
+        <copy todir="${custom-lib.dir}">
+            <fileset dir="${basedir}/buildfiles/win">
+                <include name="scripts/**"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Prepare Windows PHP SDK as a build environment                       -->
+    <!-- ==================================================================== -->
+    <target name="WIN-prepare-php-sdk" depends="WIN-check-php-sdk-prepared, WIN-expand-scripts" unless="win-php-sdk.prepared" description="Prepare Windows PHP SDK as a build environment.">
+        <!-- Without Visual Studio installed this makes no sense! -->
+        <antcall target="WIN-check-vc-present"/>
+        <!-- Download the PHP SDK archive -->
+        <antcall target="WIN-get-php-sdk"/>
+        <!-- Unzip the php sdk into the development environment -->
+        <unzip src="${win.build-workspace.dir}/php-sdk-binary-tools-${win.php-sdk.timestamp}.zip" dest="${win.php-sdk.dir}"/>
+        <!-- Set the build environment vars and create the build tree -->
+        <exec dir="${custom-lib.dir}/scripts" executable="cmd" failonerror="true">
+            <arg value="/C"/>
+            <arg value="prepare_php_sdk.bat"/>
+        </exec>
+        <!-- Download the PHP sources and copy it into the SDK environment -->
+        <antcall target="WIN-prepare-php-src"/>
+        <!-- Download the PHP build dependencies and copy them into the SDK environment -->
+        <antcall target="WIN-prepare-php-build-deps"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Will create binaries which cannot be downloaded as .dll. 		      -->
+    <!-- ==================================================================== -->
+    <target name="WIN-build-binaries" depends="WIN-prepare-php-sdk, WIN-expand-scripts" description="Will create binaries which cannot be downloaded as .dll.">
+
+        <!-- Prepare the appserve src as we need it -->
+        <antcall target="WIN-prepare-ext-appserver-src"/>
+        <!-- Do the thing -->
+        <exec dir="${custom-lib.dir}/scripts" executable="cmd" failonerror="true">
+            <arg value="/C"/>
+            <arg value="build_extensions.bat"/>
+        </exec>
+        <!-- Finally move the created dll files into the "custom-lib" dir where they get picked up -->
+        <copy todir="${custom-lib.dir}" preservelastmodified="true" overwrite="true">
+            <fileset dir="${win.php-buildtree.dir}/php-${appserver.php.version}/Release_TS">
+                <include name="**/*.dll" />
+            </fileset>
+        </copy>
+
+        <!-- For some special extensions we have to attach version numbers -->
+        <move file="${custom-lib.dir}/php_appserver.dll" tofile="${custom-lib.dir}/php_appserver-${appserver.ext-appserver.version}.dll"/>
+
+        <!-- Fail if certain binaries did not get built -->
+        <antcall target="WIN-check-ext-appserver-built"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -1612,14 +1785,17 @@
 	<target name="WIN-prepare-binaries" depends="prepare" description="Prepares the PHP/PECL Windows binaries.">
 		<!-- download the PHP/PECL binaries if not already available -->
 		<antcall target="WIN-get-php-binaries"/>
+        <!-- Build binaries we cannot download ourselves (if not already present) -->
+        <antcall target="WIN-build-binaries"/>
+        <!-- Get the apcu binaries -->
         <antcall target="WIN-get-apcu-binaries"/>
         <!-- antcall target="WIN-get-pthreads-binaries"/ -->
         <antcall target="WIN-get-event-binaries"/>
 		<!-- extract the PHP/PECL binaries into the target folder -->
-        <unzip src="${lib.dir}/php-${appserver.php.version}-Win32-VC11-x86.zip" dest="${php-target.dir}/appserver/php"/>
-        <unzip src="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/apcu"/>
-        <!-- unzip src="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/pthreads"/ -->
-        <unzip src="${lib.dir}/php_event-${appserver.event.version}-5.5-ts-vc11-x86.zip" dest="${php-target.dir}/event"/>
+        <unzip src="${lib.dir}/php-${appserver.php.version}-Win32-VC${win.compiler-version}-${win.os.architecture}.zip" dest="${php-target.dir}/appserver/php"/>
+        <unzip src="${lib.dir}/php_apcu-${appserver.apcu.version}-5.5-ts-vc${win.compiler-version}-${win.os.architecture}.zip" dest="${php-target.dir}/apcu"/>
+        <!-- unzip src="${lib.dir}/php_pthreads-${appserver.pthreads.version}-5.5-ts-vc${win.compiler-version}-${win.os.architecture}.zip" dest="${php-target.dir}/pthreads"/ -->
+        <unzip src="${lib.dir}/php_event-${appserver.event.version}-5.5-ts-vc${win.compiler-version}-${win.os.architecture}.zip" dest="${php-target.dir}/event"/>
 		<!-- copy the DLL's to the PHP ext directory -->
 		<copy file="${php-target.dir}/apcu/php_apcu.dll" todir="${php-target.dir}/appserver/php/ext"/>
 		<!-- copy file="${php-target.dir}/pthreads/php_pthreads.dll" todir="${php-target.dir}/appserver/php/ext"/ -->
@@ -1706,7 +1882,7 @@
 	    <taskdef name="izpack" classpathref="build.classpath" classname="com.izforge.izpack.ant.IzPackTask" />
 		<!-- create the IzPack installer JAR file -->
         <izpack input="${php-target.dir}\appserver-izpack.xml"
-                output="${php-target.dir}\appserver-${appserver.version}-${env.BUILD_NUMBER}.${os.qualified.name}.${os.architecture}.${os.package-extension}"
+                output="${php-target.dir}\${package.name}"
                 installerType="standard"
                 inheritAll="true"
                 basedir="${php-target.dir}"

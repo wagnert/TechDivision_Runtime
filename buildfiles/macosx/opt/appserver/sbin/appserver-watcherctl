@@ -25,7 +25,7 @@
 #	8 - configuration syntax error
 #
 # When multiple arguments are given, only the error from the _last_
-# one is reported.  Run "appserverctl help" for usage info
+# one is reported.  Run "appserver-watcherctl help" for usage info
 #
 ARGV="$@"
 #
@@ -46,7 +46,7 @@ ULIMIT_MAX_FILES=""
 # ||||||||||||||||||||   END CONFIGURATION SECTION  ||||||||||||||||||||
 
 LAUNCHCTL="/bin/launchctl"
-LAUNCHD_JOB="/Library/LaunchDaemons/io.appserver.watcher.plist"
+LAUNCHD_JOB="/Library/LaunchDaemons/io.appserver.appserver-watcher.plist"
 
 run_launchctl() {
     if [ $UID != 0 ]; then

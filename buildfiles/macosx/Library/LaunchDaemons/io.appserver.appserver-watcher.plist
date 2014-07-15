@@ -5,7 +5,7 @@
 	<key>Disabled</key>
 	<true/>
 	<key>Label</key>
-	<string>io.appserver.watcher</string>
+	<string>io.appserver.appserver-watcher</string>
 	<key>EnvironmentVariables</key>
 	<dict>
 		<key>XPC_SERVICES_UNAVAILABLE</key>
@@ -13,7 +13,7 @@
 	</dict>
 	<key>ProgramArguments</key>
 	<array>
-		<string>/opt/appserver/bin/watcher</string>
+		<string>/opt/appserver/bin/appserver-watcher</string>
 		<string>-D</string>
 		<string>FOREGROUND</string>
 	</array>

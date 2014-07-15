@@ -1,13 +1,13 @@
 #!/bin/bash
 
 ### BEGIN INIT INFO
-# Provides:          appserver-fpm
+# Provides:          appserver-php5-fpm
 # Required-Start:    $all
 # Required-Stop:     $all
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: starts/stops appserver-fpm
-# Description:       Control sript for the appserver-fpm. Makes use of /etc/init.d/functions
+# Short-Description: starts/stops appserver-php5-fpm
+# Description:       Control sript for the appserver-php5-fpm. Makes use of /etc/init.d/functions
 ### END INIT INFO
 
 # Define constants holding our execution setup
@@ -15,8 +15,8 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 BASE_PATH='/opt/appserver'
 DAEMON="${BASE_PATH}/sbin/php-fpm"
 DAEMON_OPTS="-D -c /opt/appserver/etc/ -y /opt/appserver/etc/php-fpm.conf"
-NAME="appserver-fpm"
-DESC="appserver-fpm"
+NAME="appserver-php5-fpm"
+DESC="appserver-php5-fpm"
 PIDFILE="/var/run/${NAME}.pid"
 LOCKFILE="/var/lock/subsys/${NAME}"
 

@@ -13,7 +13,7 @@
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="PHP5 Thread-Safe FastCGI Process Manager"
-NAME=php5-ts-fpm
+NAME=appserver-php5-fpm
 DAEMON=/opt/appserver/sbin/php-fpm
 DAEMON_ARGS="--fpm-config /opt/appserver/etc/php-fpm.conf"
 PIDFILE=/opt/appserver/var/run/php-fpm.pid
