@@ -40,7 +40,7 @@
     <!-- files as we had problems defining it within properties files         -->
     <!-- CAUTION, THIS SYNTAX IS DOUBLED IN THE rpmbuild SPECS FILE!          -->
     <!-- ==================================================================== -->
-    <property name="package.name" value="appserver-${appserver.version}${appserver.version.delimiter}${build.number}.${os.qualified.name}.${os.architecture}.${os.package-extension}"/>
+    <property name="package.name" value="appserver-${appserver.version}-${appserver.version.suffix}${build.number}.${os.qualified.name}.${os.architecture}.${os.package-extension}"/>
     <property name="package.specific-dir" value="${php-target.dir}/"/>
 
     <!-- ==================================================================== -->
@@ -1882,7 +1882,7 @@
 	    <taskdef name="izpack" classpathref="build.classpath" classname="com.izforge.izpack.ant.IzPackTask" />
 		<!-- create the IzPack installer JAR file -->
         <izpack input="${php-target.dir}\appserver-izpack.xml"
-                output="${php-target.dir}\appserver-${appserver.version}-${env.BUILD_NUMBER}.${os.qualified.name}.${os.architecture}.${os.package-extension}"
+                output="${php-target.dir}\${package.name}"
                 installerType="standard"
                 inheritAll="true"
                 basedir="${php-target.dir}"
