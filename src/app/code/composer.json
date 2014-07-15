@@ -3,6 +3,12 @@
     "description": "Runtime environment for thread based PHP daemon to implement stuff like message queues.",
     "homepage": "https://github.com/techdivision/TechDivision_Runtime",
     "license": [ "OSL-3.0" ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/techdivision/FastCGI"
+        }
+    ],
     "require": {
         "php" : ">=5.4.0",
         "techdivision/appserver": "0.7.*",
@@ -14,7 +20,8 @@
         "techdivision/messagequeue": "0.6.*",
         "techdivision/servletengine": "0.6.*",
         "techdivision/websocketserver": "0.2.*",
-        "techdivision/memcacheserver": "0.1.*"
+        "techdivision/memcacheserver": "0.1.*",
+        "crunch/fastcgi": "0.1.*"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
