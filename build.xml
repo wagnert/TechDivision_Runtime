@@ -1767,8 +1767,8 @@
         </exec>
         <!-- Finally move the created dll files into the "custom-lib" dir where they get picked up -->
         <copy todir="${custom-lib.dir}" preservelastmodified="true" overwrite="true">
-            <fileset dir="${win.php-buildtree.dir}/php-${appserver.php.version}">
-                <include name="Release_TS/*.dll" />
+            <fileset dir="${win.php-buildtree.dir}/php-${appserver.php.version}/Release_TS">
+                <include name="**/*.dll" />
             </fileset>
         </copy>
 
