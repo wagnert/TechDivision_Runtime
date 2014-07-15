@@ -5,6 +5,13 @@
     <!-- Load the environment variables into our properties                   -->
     <!-- ==================================================================== -->
     <property environment="env" />
+    
+    <!-- ==================================================================== -->
+    <!-- Generate a time stamp for further use in build targets               -->
+    <!-- ==================================================================== --> 
+    <tstamp>
+        <format property="time.stamp" pattern="yyyy-MM-dd_HHmmss"/>
+    </tstamp>
 
     <!-- ==================================================================== -->
     <!-- Load all property files in the right order                           -->

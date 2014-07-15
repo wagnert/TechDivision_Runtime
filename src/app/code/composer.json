@@ -1,52 +1,23 @@
 {
     "name": "techdivision/runtime",
-    "type": "package",
     "description": "Runtime environment for thread based PHP daemon to implement stuff like message queues.",
     "homepage": "https://github.com/techdivision/TechDivision_Runtime",
-    "license": ["OSL-3.0"],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "license": [ "OSL-3.0" ],
     "require": {
         "php" : ">=5.4.0",
-        "monolog/monolog": "*",
-        "techdivision/collections": "dev-master",
-        "techdivision/socket": "dev-master",
-        "techdivision/stream": "dev-master",
-        "techdivision/appserver": "dev-master",
-        "techdivision/webserver": "dev-master",
-        "techdivision/server": "dev-master",
-        "techdivision/http": "dev-master",
-        "techdivision/webcontainer": "dev-master",
-        "techdivision/servletcontainer": "dev-master",
-        "techdivision/persistencecontainer": "dev-master",
-        "techdivision/persistencecontainerclient": "dev-master",
-        "techdivision/messagequeue": "dev-master",
-        "techdivision/messagequeueclient": "dev-master",
-        "techdivision/websocketcontainer": "dev-master",
-        "techdivision/lemcachecontainer": "dev-master",
-        "techdivision/context": "dev-master",
-        "techdivision/storage": "dev-master",
-        "techdivision/connection": "dev-master",
-        "techdivision/servlet": "dev-master",
-        "techdivision/servletengine": "dev-master",
-        "techdivision/servletmodule": "dev-master",
-        "techdivision/php-by-contract": "dev-master",
-        "techdivision/mageservlet": "dev-master",
-        "techdivision/lang": "dev-master",
-        "techdivision/properties": "dev-master",
-        "doctrine/orm": "*",
-        "psr/log": "*",
-        "symfony/symfony": "*",
-        "herrera-io/annotations": "1.0.*",
-        "cboden/Ratchet": "0.2.*",
-        "rhumsaa/uuid": "~2.4",
-        "appserver-io/routlt": "dev-master"
+        "techdivision/appserver": "0.7.*",
+        "techdivision/webserver": "0.2.*",
+        "techdivision/persistencecontainer": "0.6.*",
+        "techdivision/messagequeue": "0.6.*",
+        "techdivision/servletengine": "0.6.*",
+        "techdivision/websocketserver": "0.2.*",
+        "techdivision/memcacheserver": "0.1.*"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
     },
-    "config":{
-        "github-oauth":{
+    "config": {
+        "github-oauth": {
             "github.com":"604a3b5943228e434a5b52c2ba3cf72286d30db9"
         }
     }
