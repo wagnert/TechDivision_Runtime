@@ -1772,6 +1772,9 @@
             </fileset>
         </copy>
 
+        <!-- For some special extensions we have to attach version numbers -->
+        <move file="${custom-lib.dir}/php_appserver.dll" tofile="php_appserver-${appserver.ext-appserver.version}.dll"/>
+
         <!-- Fail if certain binaries did not get built -->
         <antcall target="WIN-check-ext-appserver-built"/>
     </target>
