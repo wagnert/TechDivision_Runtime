@@ -7,9 +7,9 @@
         "php" : ">=5.4.0",
         "techdivision/appserver": "0.7.*",
         "techdivision/webserver": "0.2.*",
-        "techdivision/persistencecontainer": "0.5.*",
-        "techdivision/messagequeue": "0.5.*",
-        "techdivision/servletengine": "0.5.*",
+        "techdivision/persistencecontainer": "0.6.*",
+        "techdivision/messagequeue": "0.6.*",
+        "techdivision/servletengine": "0.6.*",
         "techdivision/websocketserver": "0.2.*",
         "techdivision/memcacheserver": "0.1.*"
     },
