@@ -5,7 +5,7 @@
 
 Name:		appserver
 Version:	${appserver.version}
-Release:	${build.number}.${os.qualified.name}
+Release:	${appserver.version.suffix}${build.number}.${os.qualified.name}
 Summary:	Multithreaded Application Server für PHP, geschrieben in PHP
 Group:		System Environment/Base
 License:	OSL 3.0
