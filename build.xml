@@ -1754,7 +1754,7 @@
         <!-- Prepare the appserve src as we need it -->
         <antcall target="WIN-prepare-ext-appserver-src"/>
         <!-- Do the thing -->
-        <exec dir="${custom-lib.dir}" executable="cmd" failonerror="true">
+        <exec dir="${custom-lib.dir}/scripts" executable="cmd" failonerror="true">
             <arg value="/C"/>
             <arg value="build_extensions.bat"/>
         </exec>
