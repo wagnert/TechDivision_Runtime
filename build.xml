@@ -40,7 +40,7 @@
     <!-- files as we had problems defining it within properties files         -->
     <!-- CAUTION, THIS SYNTAX IS DOUBLED IN THE rpmbuild SPECS FILE!          -->
     <!-- ==================================================================== -->
-    <property name="package.name" value="appserver-${appserver.version}-${build.number}.${os.qualified.name}.${os.architecture}.${os.package-extension}"/>
+    <property name="package.name" value="appserver-${appserver.version}${appserver.version.delimiter}${build.number}.${os.qualified.name}.${os.architecture}.${os.package-extension}"/>
     <property name="package.specific-dir" value="${php-target.dir}/"/>
 
     <!-- ==================================================================== -->
