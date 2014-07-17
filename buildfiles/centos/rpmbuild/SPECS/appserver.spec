@@ -43,6 +43,9 @@ chown -R ${appserver.user}:${appserver.group} /opt/appserver/webapps
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/deploy
 chmod -R 775 /opt/appserver
 
+# Create composer symlink
+ln -s /opt/appserver/bin/composer.phar /opt/appserver/bin/composer
+
 chmod 775 /etc/init.d/appserver
 chmod 775 /etc/init.d/appserver-watcher
 chmod 775 /etc/init.d/appserver-php5-fpm
