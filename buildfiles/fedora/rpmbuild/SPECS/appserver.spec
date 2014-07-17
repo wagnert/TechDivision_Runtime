@@ -48,6 +48,9 @@ ln -s /lib/systemd/system/appserver.service /etc/systemd/system/appserver.servic
 ln -s /lib/systemd/system/appserver-watcher.service /etc/systemd/system/appserver-watcher.service
 ln -s /lib/systemd/system/appserver-php5-fpm.service /etc/systemd/system/appserver-php5-fpm.service
 
+# Create composer symlink
+ln -s /opt/appserver/bin/composer.phar /opt/appserver/bin/composer
+
 # Reload the systemd daemon
 systemctl daemon-reload
 
