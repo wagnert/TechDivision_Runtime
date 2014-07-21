@@ -14,7 +14,8 @@
         "techdivision/messagequeue": "0.6.*",
         "techdivision/servletengine": "0.6.*",
         "techdivision/websocketserver": "0.2.*",
-        "techdivision/memcacheserver": "0.1.*"
+        "techdivision/memcacheserver": "0.1.*",
+        "crunch/fastcgi": "@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
