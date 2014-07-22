@@ -78,10 +78,6 @@
                         serverContext="\TechDivision\Server\Contexts\ServerContext"
                         requestContext="\TechDivision\Server\Contexts\RequestContext"
                         loggerName="System">
-                        
-                    <connectionHandlers>
-                        <connectionHandler type="\TechDivision\MemcacheProtocol\MemcacheConnectionHandler" />
-                    </connectionHandlers>
                     
                     <params>
                         <param name="admin" type="string">${appserver.admin.email}</param>
@@ -93,6 +89,15 @@
                         <param name="keepAliveMax" type="integer">64</param>
                         <param name="keepAliveTimeout" type="integer">16</param>
                     </params>
+
+                    <environmentVariables>
+                        <environmentVariable condition="" definition="LOGGER_ACCESS=Access" />
+                    </environmentVariables>
+                        
+                    <connectionHandlers>
+                        <connectionHandler type="\TechDivision\MemcacheProtocol\MemcacheConnectionHandler" />
+                    </connectionHandlers>
+                    
                 </server>
             
                 <server
@@ -103,10 +108,6 @@
                         requestContext="\TechDivision\Server\Contexts\RequestContext"
                         serverContext="\TechDivision\Server\Contexts\ServerContext"
                         loggerName="System">
-                        
-                    <connectionHandlers>
-                        <connectionHandler type="\TechDivision\WebServer\ConnectionHandlers\HttpConnectionHandler" />
-                    </connectionHandlers>
                     
                     <params>
                         <param name="admin" type="string">${appserver.admin.email}</param>
@@ -120,6 +121,14 @@
                         <param name="keepAliveTimeout" type="integer">5</param>
                         <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
                     </params>
+
+                    <environmentVariables>
+                        <environmentVariable condition="" definition="LOGGER_ACCESS=Access" />
+                    </environmentVariables>
+                        
+                    <connectionHandlers>
+                        <connectionHandler type="\TechDivision\WebServer\ConnectionHandlers\HttpConnectionHandler" />
+                    </connectionHandlers>
 
                     <accesses>
                         <!-- per default allow everything -->
@@ -158,10 +167,6 @@
                         requestContext="\TechDivision\Server\Contexts\RequestContext"
                         serverContext="\TechDivision\Server\Contexts\ServerContext"
                         loggerName="System">
-                        
-                    <connectionHandlers>
-                        <connectionHandler type="\TechDivision\WebServer\ConnectionHandlers\HttpConnectionHandler" />
-                    </connectionHandlers>
                     
                     <params>
                         <param name="admin" type="string">${appserver.admin.email}</param>
@@ -175,6 +180,14 @@
                         <param name="keepAliveTimeout" type="integer">5</param>
                         <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
                     </params>
+
+                    <environmentVariables>
+                        <environmentVariable condition="" definition="LOGGER_ACCESS=Access" />
+                    </environmentVariables>
+                        
+                    <connectionHandlers>
+                        <connectionHandler type="\TechDivision\WebServer\ConnectionHandlers\HttpConnectionHandler" />
+                    </connectionHandlers>
 
                     <accesses>
                         <!-- per default allow everything -->
@@ -226,6 +239,10 @@
                         <param name="errorsPageTemplatePath" type="string">var/www/errors/error.phtml</param>
                     </params>
 
+                    <environmentVariables>
+                        <environmentVariable condition="" definition="LOGGER_ACCESS=Access" />
+                    </environmentVariables>
+
                     <connectionHandlers>
                         <connectionHandler type="\TechDivision\WebSocketProtocol\WebSocketConnectionHandler" />
                     </connectionHandlers>
@@ -260,6 +277,10 @@
                         <environmentVariable condition="" definition="LOGGER_ACCESS=Access" />
                     </environmentVariables>
 
+                    <connectionHandlers>
+                        <connectionHandler type="\TechDivision\WebServer\ConnectionHandlers\HttpConnectionHandler" />
+                    </connectionHandlers>
+
                     <authentications>
                         <authentication uri="^\/admin.*">
                             <params>
@@ -289,10 +310,6 @@
                      !
                      ! https://github.com/techdivision/TechDivision_AppserverDocumentation/blob/master/docs/components/servers/webserver/modules/vhostmodule.md
                      -->
-
-                    <connectionHandlers>
-                        <connectionHandler type="\TechDivision\WebServer\ConnectionHandlers\HttpConnectionHandler" />
-                    </connectionHandlers>
 
                     <modules>
                         <!-- REQUEST_POST hook -->
@@ -358,6 +375,10 @@
                         <environmentVariable condition="" definition="LOGGER_ACCESS=Access" />
                     </environmentVariables>
 
+                    <connectionHandlers>
+                        <connectionHandler type="\TechDivision\WebServer\ConnectionHandlers\HttpConnectionHandler" />
+                    </connectionHandlers>
+
                     <authentications>
                         <authentication uri="^\/admin.*">
                             <params>
@@ -387,10 +408,6 @@
                      !
                      ! https://github.com/techdivision/TechDivision_AppserverDocumentation/blob/master/docs/components/servers/webserver/modules/vhostmodule.md
                      -->
-
-                    <connectionHandlers>
-                        <connectionHandler type="\TechDivision\WebServer\ConnectionHandlers\HttpConnectionHandler" />
-                    </connectionHandlers>
 
                     <modules>
                         <!-- REQUEST_POST hook -->
