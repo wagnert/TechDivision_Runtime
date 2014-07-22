@@ -59,6 +59,7 @@
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="appserver:params" />
                 <xs:element ref="appserver:directories" />
+                <xs:element ref="appserver:namespaces" />
             </xs:choice>
             <xs:attribute name="name" type="xs:string" />
             <xs:attribute name="type" type="xs:string" />
@@ -534,6 +535,25 @@
             <xs:attribute name="name" type="xs:string" />
             <xs:attribute name="type" type="xs:string" />
             <xs:attribute name="uuid" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="namespaces">
+        <xs:complexType>
+            <xs:choice minOccurs="1" maxOccurs="unbounded">
+                <xs:element ref="appserver:namespace" />
+            </xs:choice>
+            <xs:attribute name="uuid" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="namespace">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="omitEnforcement" type="xs:string" />
+                    <xs:attribute name="omitAutoLoading" type="xs:string" />
+                    <xs:attribute name="uuid" type="xs:string" />
+                </xs:extension>
+            </xs:simpleContent>
         </xs:complexType>
     </xs:element>
 </xs:schema>
