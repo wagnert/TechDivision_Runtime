@@ -10,8 +10,8 @@
             </directories>
         </classLoader>
         <classLoader
-            name="generic" 
-            type="TechDivision\ApplicationServer\GenericClassLoader">
+            name="pbc"
+            type="TechDivision\ApplicationServer\PbcClassLoader">
             <params>
                 <param name="environment" type="string">production</param>
                 <param name="enforcementLevel" type="integer">7</param>
