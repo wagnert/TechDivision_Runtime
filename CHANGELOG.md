@@ -1,3 +1,16 @@
+# Version 0.8.2
+
+## Bugfixes
+
+* None
+
+## Features
+
+* [Issue #178](https://github.com/techdivision/TechDivision_ApplicationServer/issues/178) App-based context configuration
+* Use DirectoryKeys to create path to appserver.xml + appserver.xsd in server.php
+* Create new configuration directory structure etc/appserver + etc/appserver/conf.d
+* Move appserver.xml to new configuration directory etc/appserver and context.xml to etc/appserver/conf.d
+
 # Version 0.8.1
 
 ## Bugfixes

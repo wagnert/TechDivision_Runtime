@@ -102,7 +102,7 @@
     <!-- ==================================================================== -->
     <target name="deploy" depends="copy" description="Copies the sources to the deploy directory.">
     	<!-- validate the appserver.xml file against the schema definition -->
-    	<schemavalidate file="${php-target.dir}/etc/appserver.xml" failonerror="true">
+    	<schemavalidate file="${php-target.dir}/etc/appserver/appserver.xml" failonerror="true">
     		<schema namespace="http://www.appserver.io/appserver" file="${php-target.dir}/app/resources/schema/appserver.xsd" />
      	</schemavalidate>
     	<!-- copy the sources to the runtime environment -->
