@@ -2,7 +2,7 @@
 
 ## Bugfixes
 
-* None
+* Bugfix schema validation when calling copy-runtime target
 
 ## Features
 

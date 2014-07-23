@@ -943,7 +943,7 @@
             </filterchain>
         </copy>
     	<!-- validate the appserver.xml file against the schema definition -->
-    	<schemavalidate file="${appserver.compile.prefix}/etc/appserver.xml" failonerror="true">
+    	<schemavalidate file="${appserver.compile.prefix}/etc/appserver/appserver.xml" failonerror="true">
     		<schema namespace="http://www.appserver.io/appserver" file="${appserver.compile.prefix}/app/resources/schema/appserver.xsd" />
      	</schemavalidate>
     </target>
