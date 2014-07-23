@@ -6,6 +6,7 @@
 
 ## Features
 
+* Switch to new [TechDivision_ApplicationServer](https://github.com/techdivision/TechDivision_ApplicationServer) version 0.9.*
 * [Issue #178](https://github.com/techdivision/TechDivision_ApplicationServer/issues/178) App-based context configuration
 * Use DirectoryKeys to create path to appserver.xml + appserver.xsd in server.php
 * Create new configuration directory structure etc/appserver + etc/appserver/conf.d
