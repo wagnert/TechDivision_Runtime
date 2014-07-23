@@ -21,6 +21,8 @@
 
 namespace TechDivision\ApplicationServer;
 
+use TechDivision\ApplicationServer\Utilities\DirectoryKeys;
+
 declare (ticks = 1);
 
 /**
@@ -46,8 +48,8 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'scripts' 
 require __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
 // initialize configuration and schema file name
-$configurationFileName = APPSERVER_BP . DIRECTORY_SEPARATOR . 'etc' . DIRECTORY_SEPARATOR . 'appserver.xml';
-$schemaFileName = APPSERVER_BP . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'schema' . DIRECTORY_SEPARATOR . 'appserver.xsd';
+$configurationFileName = DirectoryKeys::realpath(sprintf('%s/%s/appserver.xml', APPSERVER_BP, DirectoryKeys::CONF));
+$schemaFileName = DirectoryKeys::realpath(sprintf('%s/app/resources/schema/appserver.xsd', APPSERVER_BP));
 
 // initialize the DOMDocument with the configuration file to be validated
 $configurationFile = new \DOMDocument();
