@@ -2,6 +2,7 @@
 
 ## Bugfixes
 
+* Bugfix invalid path to appserver.xml in DEBIAN conffiles
 * Bugfix schema validation when calling copy-runtime target
 
 ## Features
