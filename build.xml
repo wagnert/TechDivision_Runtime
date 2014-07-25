@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<project name="TechDivision_Runtime" default="deploy" basedir=".">
+<!DOCTYPE project>
+<project name="techdivision/runtime" default="deploy" basedir=".">
 
     <!-- ==================================================================== -->
     <!-- Load the environment variables into our properties                   -->
