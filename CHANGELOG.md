@@ -2,6 +2,16 @@
 
 ## Bugfixes
 
+* None
+
+## Features
+
+* Add new configuration nodes to allow configuration of extractors + provisioners incl. XSD schema validation
+
+# Version 0.8.2
+
+## Bugfixes
+
 * Bugfix invalid path to appserver.xml in DEBIAN conffiles
 * Bugfix schema validation when calling copy-runtime target
 
