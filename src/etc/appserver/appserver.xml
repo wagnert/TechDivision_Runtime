@@ -7,6 +7,15 @@
         <storage type="TechDivision\Storage\StackableStorage" />
     </initialContext>
 
+    <extractors>
+        <extractor name="phar" type="TechDivision\ApplicationServer\Extractors\PharExtractor" createBackups="false" restoreBackups="false" />
+    </extractors>
+
+    <provisioners>
+        <provisioner name="datasource" type="TechDivision\ApplicationServer\DatasourceProvisioner" />
+        <provisioner name="standard" type="TechDivision\ApplicationServer\StandardProvisioner" />
+    </provisioners>
+    
     <params>
         <param name="user" type="string">${appserver.user}</param>
         <param name="group" type="string">${appserver.group}</param>

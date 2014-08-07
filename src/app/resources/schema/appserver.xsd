@@ -10,6 +10,8 @@
                 <xs:element ref="appserver:params" />
                 <xs:element ref="appserver:baseDirectory" />
                 <xs:element ref="appserver:initialContext" />
+                <xs:element ref="appserver:extractors" />
+                <xs:element ref="appserver:provisioners" />
                 <xs:element ref="appserver:loggers" />
                 <xs:element ref="appserver:containers" />
                 <xs:element ref="appserver:apps" />
@@ -232,6 +234,38 @@
         <xs:complexType>
             <xs:attribute name="condition" type="xs:string" />
             <xs:attribute name="definition" type="xs:string" />
+            <xs:attribute name="uuid" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="extractors">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element ref="appserver:extractor"/>
+            </xs:choice>
+            <xs:attribute name="uuid" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="extractor">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" />
+            <xs:attribute name="type" type="xs:string" />
+            <xs:attribute name="createBackups" type="xs:boolean" />
+            <xs:attribute name="restoreBackups" type="xs:boolean" />
+            <xs:attribute name="uuid" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="provisioners">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element ref="appserver:provisioner"/>
+            </xs:choice>
+            <xs:attribute name="uuid" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="provisioner">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" />
+            <xs:attribute name="type" type="xs:string" />
             <xs:attribute name="uuid" type="xs:string" />
         </xs:complexType>
     </xs:element>
