@@ -1,4 +1,4 @@
-# Version 0.8.2
+# Version 0.8.3
 
 ## Bugfixes
 
@@ -6,7 +6,9 @@
 
 ## Features
 
+* Add xsl + bcmath extension to builds
 * Add new configuration nodes to allow configuration of extractors + provisioners incl. XSD schema validation
+* Remove configuration for context, loggers, extractors + provisioners from appserver.xml because of default programmatical values
 
 # Version 0.8.2
 
