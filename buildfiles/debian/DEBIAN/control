@@ -36,7 +36,8 @@ Depends: libc6,
   git,
   redis-server,
   memcached,
-  libldap2-dev
+  libldap2-dev,
+  libxslt1.1
 Architecture: ${appserver.architecture}
 Version: ${appserver.version}-${appserver.version.suffix}${build.number}
 Homepage: http://appserver.io

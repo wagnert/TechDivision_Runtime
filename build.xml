@@ -1316,7 +1316,7 @@
             <arg value="install"/>
             <arg value="ant"/>
             <arg value="autoconf"/>
-		    <arg value="make"/>
+            <arg value="make"/>
             <arg value="curl"/>
             <arg value="bison"/>
             <arg value="libxml2-dev"/>
@@ -1337,8 +1337,9 @@
             <arg value="libpng12-dev"/>
             <arg value="libevent-dev"/>
             <arg value="libev-dev"/>
-        	<arg value="libldap2-dev"/>
-    		<arg value="libicu-dev"/>
+            <arg value="libldap2-dev"/>
+            <arg value="libicu-dev"/>
+            <arg value="libxslt-dev"/>
         </exec>
     	<!-- Bugfix for missing symlink -->
     	<exec dir="/usr/lib" executable="ln">
@@ -1389,6 +1390,7 @@
             <arg value="rpm-build"/>
             <arg value="systemd-devel"/>
             <arg value="libicu-devel"/>
+            <arg value="libxslt-devel"/>
         </exec>
         <!-- Bugfix for missing symlink -->
         <exec dir="/usr/${appserver.compile.libdir}" executable="ln">
@@ -1425,6 +1427,7 @@
             <arg value="openldap-devel"/>
             <arg value="rpm-build"/>
             <arg value="libicu-devel"/>
+            <arg value="libxslt-devel"/>
         </exec>
     </target>
 

@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <appserver xmlns="http://www.appserver.io/appserver">
 
+    <params>
+        <param name="user" type="string">${appserver.user}</param>
+        <param name="group" type="string">${appserver.group}</param>
+        <param name="umask" type="string">${appserver.umask}</param>
+    </params>
+
+    <!--
     <initialContext type="TechDivision\ApplicationServer\InitialContext">
         <description><![CDATA[The initial context configuration.]]></description>
         <classLoader name="default" type="TechDivision\ApplicationServer\SplClassLoader" />
@@ -15,15 +22,8 @@
         <provisioner name="datasource" type="TechDivision\ApplicationServer\DatasourceProvisioner" />
         <provisioner name="standard" type="TechDivision\ApplicationServer\StandardProvisioner" />
     </provisioners>
-    
-    <params>
-        <param name="user" type="string">${appserver.user}</param>
-        <param name="group" type="string">${appserver.group}</param>
-        <param name="umask" type="string">${appserver.umask}</param>
-    </params>
 
     <loggers>
-   
         <logger channelName="system" name="System" type="\Monolog\Logger">
             <processors>
                 <processor type="\Monolog\Processor\IntrospectionProcessor" />
@@ -58,6 +58,7 @@
             </handlers>
         </logger>
     </loggers>
+    -->
 
     <containers>
 
