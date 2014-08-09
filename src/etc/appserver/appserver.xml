@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <appserver xmlns="http://www.appserver.io/appserver">
 
-    <initialContext type="TechDivision\ApplicationServer\InitialContext">
-        <description><![CDATA[The initial context configuration.]]></description>
-        <classLoader name="default" type="TechDivision\ApplicationServer\SplClassLoader" />
-        <storage type="TechDivision\Storage\StackableStorage" />
-    </initialContext>
-
     <params>
         <param name="user" type="string">${appserver.user}</param>
         <param name="group" type="string">${appserver.group}</param>
         <param name="umask" type="string">${appserver.umask}</param>
     </params>
 
+    <!--
+    <initialContext type="TechDivision\ApplicationServer\InitialContext">
+        <description><![CDATA[The initial context configuration.]]></description>
+        <classLoader name="default" type="TechDivision\ApplicationServer\SplClassLoader" />
+        <storage type="TechDivision\Storage\StackableStorage" />
+    </initialContext>
+
+    <extractors>
+        <extractor name="phar" type="TechDivision\ApplicationServer\Extractors\PharExtractor" createBackups="false" restoreBackups="false" />
+    </extractors>
+
+    <provisioners>
+        <provisioner name="datasource" type="TechDivision\ApplicationServer\DatasourceProvisioner" />
+        <provisioner name="standard" type="TechDivision\ApplicationServer\StandardProvisioner" />
+    </provisioners>
+
     <loggers>
-   
         <logger channelName="system" name="System" type="\Monolog\Logger">
             <processors>
                 <processor type="\Monolog\Processor\IntrospectionProcessor" />
@@ -49,6 +58,7 @@
             </handlers>
         </logger>
     </loggers>
+    -->
 
     <containers>
 
@@ -362,7 +372,7 @@
                         <param name="transport" type="string">ssl</param>
                         <param name="address" type="string">0.0.0.0</param>
                         <param name="port" type="integer">9443</param>
-                        <param name="certPath" type="string">etc/server.pem</param>
+                        <param name="certPath" type="string">etc/appserver/server.pem</param>
                         <param name="passphrase" type="string"></param>
                         <param name="documentRoot" type="string">webapps</param>
                         <param name="directoryIndex" type="string">index.do index.php index.html index.htm</param>
