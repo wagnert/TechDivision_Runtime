@@ -6,7 +6,7 @@
 
 ## Features
 
-* Add xsl + bcmath extension to builds
+* Add xsl + bcmath extension + .ini files to builds
 * Add new configuration nodes to allow configuration of extractors + provisioners incl. XSD schema validation
 * Remove configuration for context, loggers, extractors + provisioners from appserver.xml because of default programmatical values
 
