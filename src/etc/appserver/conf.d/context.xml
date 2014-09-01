@@ -27,7 +27,12 @@
 
     <managers>
         <manager name="handler" type="TechDivision\WebSocketServer\HandlerManager"/>
-        <manager name="bean" type="TechDivision\PersistenceContainer\BeanManager"/>
+        <manager name="bean" type="TechDivision\PersistenceContainer\BeanManager">
+            <!-- params>
+                <param name="lifetime" type="integer">1440</param>
+                <param name="garbageCollectionProbability" type="float">0.1</param>
+            </params -->
+        </manager>
         <manager name="queue" type="TechDivision\MessageQueue\QueueManager"/>
         <manager name="servlet" type="TechDivision\ServletEngine\ServletManager"/>
         <manager name="session" type="TechDivision\ServletEngine\StandardSessionManager"/>
