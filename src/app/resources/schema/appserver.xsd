@@ -566,6 +566,9 @@
     </xs:element>
     <xs:element name="manager">
         <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="appserver:params" />
+            </xs:choice>
             <xs:attribute name="name" type="xs:string" />
             <xs:attribute name="type" type="xs:string" />
             <xs:attribute name="uuid" type="xs:string" />
