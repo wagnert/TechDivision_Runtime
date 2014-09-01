@@ -1,3 +1,14 @@
+# Version 0.8.4
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Switch to beta status for 0.8.x version
+* Switch to new TechDivision_PersistenceContainer implementation supporting @Startup, @PostConstruct and @PreDestruct functionality for session beans
+
 # Version 0.8.3
 
 ## Bugfixes
