@@ -33,6 +33,7 @@
                 <param name="garbageCollectionProbability" type="float">0.1</param>
             </params -->
         </manager>
+        <manager name="timer" type="TechDivision\PersistenceContainer\TimerService"/>
         <manager name="queue" type="TechDivision\MessageQueue\QueueManager"/>
         <manager name="servlet" type="TechDivision\ServletEngine\ServletManager"/>
         <manager name="session" type="TechDivision\ServletEngine\StandardSessionManager"/>
