@@ -36,6 +36,7 @@
         <manager name="queue" type="TechDivision\MessageQueue\QueueManager"/>
         <manager name="servlet" type="TechDivision\ServletEngine\ServletManager"/>
         <manager name="session" type="TechDivision\ServletEngine\StandardSessionManager"/>
+        <manager name="timerservice" type="TechDivision\PersistenceContainer\TimerServiceRegistry"/>
         <manager name="authentication" type="TechDivision\ServletEngine\Authentication\StandardAuthenticationManager"/>
     </managers>
 
