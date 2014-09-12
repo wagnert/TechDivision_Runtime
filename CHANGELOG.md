@@ -1,3 +1,22 @@
+# Version 0.9.0
+
+## Bugfixes
+
+* Replace BeanContext::class with class name for PHP 5.4 compatibility in package techdivision/persistencecontainerprotocol
+
+## Features
+
+* Close Timer service #185
+* Add new package techdivision/naming to allow JNDI like bean lookup
+* Messages of techdivision/messagequeueprotocol now implements \Serializable interface
+* Switch to new version of techdivision/properties providing interface PropertiesInterface
+* Add userland interfaces for reflection annotation, class and method in package techdivision/lang
+* String, Integer, Float and Boolean class now implements \Serializable interface in package techdivision/lang
+* Switch from \Stackable to GenericStackable when extending QueueManager in package techdivision/messagequeue
+* Refactoring + Optimizing package techdivision/persistencecontainerclient for usage with techdivision/naming package
+* Make techdivision/enterprisebeans part of the techdivision/persistencecontainer package (not a require-dev dependency only)
+* Remove BeanContext::getBeanAnnotation() method => method has been moved to BeanUtils in package techdivision/persistencecontainerprotocol
+
 # Version 0.8.4
 
 ## Bugfixes
