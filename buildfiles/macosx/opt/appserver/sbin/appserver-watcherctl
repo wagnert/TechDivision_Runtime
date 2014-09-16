@@ -46,7 +46,8 @@ ULIMIT_MAX_FILES=""
 # ||||||||||||||||||||   END CONFIGURATION SECTION  ||||||||||||||||||||
 
 LAUNCHCTL="/bin/launchctl"
-LAUNCHD_JOB="/Library/LaunchDaemons/io.appserver.appserver-watcher.plist"
+JOB_LABEL="io.appserver.appserver-watcher"
+LAUNCHD_JOB="/Library/LaunchDaemons/$JOB_LABEL.plist"
 
 run_launchctl() {
     if [ $UID != 0 ]; then
@@ -62,6 +63,11 @@ if [ "x$ULIMIT_MAX_FILES" != "x" ] ; then
     $ULIMIT_MAX_FILES
 fi
 
+display_help() {
+    echo "usage $0 [start|restart|graceful|stop|status|graceful-stop]
+    (see code for more info)"
+}
+
 ERROR=0
 if [ "x$ARGV" = "x" ] ; then 
     ARGV="-h"
@@ -76,12 +82,19 @@ stop|graceful-stop)
     run_launchctl unload -w $LAUNCHD_JOB
     ERROR=$?
     ;;
+status)
+    run_launchctl list $JOB_LABEL
+    ERROR=$?
+    ;;
 restart|graceful)
     run_launchctl unload -w $LAUNCHD_JOB 2> /dev/null
     run_launchctl load -w $LAUNCHD_JOB
     ERROR=$?
     ;;
-*)
+help|-h|--help|*)
+    display_help
+    ERROR=1
+    ;;
 esac
 
 exit $ERROR

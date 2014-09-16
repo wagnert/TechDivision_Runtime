@@ -47,7 +47,8 @@ ULIMIT_MAX_FILES=""
 
 
 LAUNCHCTL="/bin/launchctl"
-LAUNCHD_JOB="/Library/LaunchDaemons/io.appserver.appserver.plist"
+JOB_LABEL="io.appserver.appserver"
+LAUNCHD_JOB="/Library/LaunchDaemons/$JOB_LABEL.plist"
 
 
 run_launchctl() {
@@ -65,8 +66,8 @@ if [ "x$ULIMIT_MAX_FILES" != "x" ] ; then
 fi
 
 display_help() {
-echo "usage $0 [start|restart|graceful|stop|graceful-stop]
-(see code for more info)"
+    echo "usage $0 [start|restart|graceful|stop|status|graceful-stop]
+    (see code for more info)"
 }
 
 ERROR=0
@@ -78,6 +79,10 @@ start)
     ;;
 stop|graceful-stop)
     run_launchctl unload -w $LAUNCHD_JOB
+    ERROR=$?
+    ;;
+status)
+    run_launchctl list $JOB_LABEL
     ERROR=$?
     ;;
 restart|graceful)
