@@ -207,27 +207,6 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Check if the memcached server source package has been downloaded yet -->
-    <!-- ==================================================================== -->
-    <target name="check-memcached-server-src-present" description="Check if the memcached server source package has been downloaded yet.">
-        <available file="${lib.dir}/php-${memcached.server.version}.tar.gz" property="memcached-server-src.present"/>
-    </target>
-
-    <!-- ==================================================================== -->
-    <!-- Check if the httpd server source package has been downloaded yet     -->
-    <!-- ==================================================================== -->
-    <target name="check-httpd-server-src-present" description="Check if the httpd server source package has been downloaded yet.">
-        <available file="${lib.dir}/httpd-${httpd.server.version}.tar.gz" property="httpd-server-src.present"/>
-    </target>
-
-    <!-- ==================================================================== -->
-    <!-- Check if the nginx server source package has been downloaded yet     -->
-    <!-- ==================================================================== -->
-    <target name="check-nginx-server-src-present" description="Check if the nginx server source package has been downloaded yet.">
-        <available file="${lib.dir}/nginx-${nginx.server.version}.tar.gz" property="nginx-server-src.present"/>
-    </target>
-
-    <!-- ==================================================================== -->
     <!-- Check if PECL memcached sources has been downloaded yet  		 	  -->
     <!-- ==================================================================== -->
     <target name="check-memcached-src-present" description="Check if PECL memcached sources has been downloaded yet.">
@@ -375,13 +354,6 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Check if the redis server source package has been downloaded yet     -->
-    <!-- ==================================================================== -->
-    <target name="check-redis-server-src-present" description="Check if the redis server source package has been downloaded yet.">
-        <available file="${lib.dir}/redis-${redis.server.version}.zip" property="redis-server-src.present"/>
-    </target>
-
-    <!-- ==================================================================== -->
     <!-- Check if openssl sources has been downloaded yet   		 	      -->
     <!-- ==================================================================== -->
     <target name="check-openssl-src-present" description="Check if openssl sources has been downloaded yet.">
@@ -494,13 +466,6 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Get memcached server source package by given version number		  -->
-    <!-- ==================================================================== -->
-    <target name="get-memcached-server-src" depends="check-memcached-server-src-present" unless="memcached-server-src.present" description="Get memcached server source package by given version number.">
-        <get src="${memcached.server.download.url}" dest="${lib.dir}/memcached-${memcached.server.version}.tar.gz" usetimestamp="true"/>
-    </target>
-
-    <!-- ==================================================================== -->
     <!-- Get libfreetype source package by given version number		          -->
     <!-- ==================================================================== -->
     <target name="get-libfreetype-src" depends="check-libfreetype-src-present" unless="libfreetype-src.present" description="Get libfreetype source package by given version number.">
@@ -547,27 +512,6 @@
     <!-- ==================================================================== -->
     <target name="get-libevent-library-src" depends="check-libevent-library-src-present" unless="libevent-library-src.present" description="Get libevent source package by given version number.">
         <get src="${libevent.download.url}" dest="${lib.dir}/libevent-${libevent.version}.tar.gz" usetimestamp="true"/>
-    </target>
-
-    <!-- ==================================================================== -->
-    <!-- Get httpd server source package by given version number		      -->
-    <!-- ==================================================================== -->
-    <target name="get-httpd-server-src" depends="check-httpd-server-src-present" unless="httpd-server-src.present" description="Get httpd server source package by given version number.">
-        <get src="${httpd.server.download.url}" dest="${lib.dir}/httpd-${httpd.server.version}.tar.gz" usetimestamp="true"/>
-    </target>
-
-    <!-- ==================================================================== -->
-    <!-- Get nginx server source package by given version number		      -->
-    <!-- ==================================================================== -->
-    <target name="get-nginx-server-src" depends="check-nginx-server-src-present" unless="nginx-server-src.present" description="Get nginx server source package by given version number.">
-        <get src="${nginx.server.download.url}" dest="${lib.dir}/nginx-${nginx.server.version}.tar.gz" usetimestamp="true"/>
-    </target>
-
-    <!-- ==================================================================== -->
-    <!-- Get redis server source package by given version number		      -->
-    <!-- ==================================================================== -->
-    <target name="get-redis-server-src" depends="check-redis-server-src-present" unless="redis-server-src.present" description="Get redis server source package by given version number.">
-        <get src="${redis.server.download.url}" dest="${lib.dir}/redis-${redis.server.version}.zip" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
@@ -844,93 +788,6 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Builds the memcached server binaries                                 -->
-    <!-- ==================================================================== -->
-    <target name="build-memcached-server" if="${memcached.server.build}" description="Builds the memcached server binaries.">
-        <antcall target="get-memcached-server-src"/>
-        <untar src="${lib.dir}/memcached-${memcached.server.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
-        <exec dir="${php-target.dir}/memcached-${memcached.server.version}" executable="sh">
-            <env key="CC" value="${memcached.server.cc}"/>
-            <arg value="configure"/>
-            <arg value="--prefix=${appserver.compile.prefix}"/>
-            <arg value="-with-libevent=${appserver.compile.prefix}"/>
-        </exec>
-        <chmod perm="755" dir="${php-target.dir}/memcached-${memcached.server.version}" includes="install-sh"/>
-        <exec dir="${php-target.dir}/memcached-${memcached.server.version}" executable="make"/>
-        <exec dir="${php-target.dir}/memcached-${memcached.server.version}" executable="make">
-            <arg value="install"/>
-        </exec>
-    </target>
-
-    <!-- ==================================================================== -->
-    <!-- Builds the httpd server binaries                                     -->
-    <!-- ==================================================================== -->
-    <target name="build-httpd-server" if="${httpd.server.build}" description="Builds the httpd server binaries.">
-        <antcall target="get-httpd-server-src"/>
-        <untar src="${lib.dir}/httpd-${httpd.server.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
-        <chmod perm="755" dir="${php-target.dir}/httpd-${httpd.server.version}/build" includes="**/*"/>
-        <exec dir="${php-target.dir}/httpd-${httpd.server.version}" executable="sh">
-            <env key="CC" value="${httpd.server.cc}"/>
-            <arg value="configure"/>
-            <arg value="--prefix=${httpd.server.compile.prefix}"/>
-            <arg value="--with-port=${httpd.server.port}"/>
-        </exec>
-        <chmod perm="755" dir="${php-target.dir}/httpd-${httpd.server.version}" includes="install-sh"/>
-        <exec dir="${php-target.dir}/httpd-${httpd.server.version}" executable="make"/>
-        <exec dir="${php-target.dir}/httpd-${httpd.server.version}" executable="make">
-            <arg value="install"/>
-        </exec>
-    </target>
-
-    <!-- ==================================================================== -->
-    <!-- Builds the nginx server binaries                                     -->
-    <!-- ==================================================================== -->
-    <target name="build-nginx-server" if="${nginx.server.build}" description="Builds the nginx server binaries.">
-        <antcall target="get-nginx-server-src"/>
-        <untar src="${lib.dir}/nginx-${nginx.server.version}.tar.gz" dest="${php-target.dir}" compression="gzip"/>
-        <exec dir="${php-target.dir}/nginx-${nginx.server.version}" executable="sh">
-            <env key="CC" value="${nginx.server.cc}"/>
-            <arg value="configure"/>
-            <arg value="--prefix=${nginx.server.compile.prefix}"/>
-            <arg value="--sbin-path=${nginx.server.compile.prefix}/sbin/nginx"/>
-            <arg value="--conf-path=${nginx.server.compile.prefix}/etc/nginx/nginx.conf"/>
-            <arg value="--error-log-path=${nginx.server.compile.prefix}/var/log/nginx/error.log"/>
-            <arg value="--http-log-path=${nginx.server.compile.prefix}/var/log/nginx/access.log"/>
-            <arg value="--pid-path=${nginx.server.compile.prefix}/var/run/nginx.pid"/>
-            <arg value="--lock-path=${nginx.server.compile.prefix}/var/lock/nginx.lock"/>
-            <arg value="--http-client-body-temp-path=${nginx.server.compile.prefix}/var/lib/nginx/body"/>
-            <arg value="--http-proxy-temp-path=${nginx.server.compile.prefix}/var/lib/nginx/proxy"/>
-            <arg value="--http-fastcgi-temp-path=${nginx.server.compile.prefix}/var/lib/nginx/fastcgi"/>
-            <arg value="--http-uwsgi-temp-path=${nginx.server.compile.prefix}/var/lib/nginx/uwsgi"/>
-            <arg value="--http-scgi-temp-path=${nginx.server.compile.prefix}/var/lib/nginx/scgi"/>
-            <arg value="--with-pcre=${php-target.dir}/pcre-${pcre.version}"/>
-        </exec>
-        <chmod perm="755" dir="${php-target.dir}/nginx-${nginx.server.version}" includes="install-sh"/>
-        <exec dir="${php-target.dir}/nginx-${nginx.server.version}" executable="make"/>
-        <exec dir="${php-target.dir}/nginx-${nginx.server.version}" executable="make">
-            <arg value="install"/>
-        </exec>
-        <!-- create temporary directory -->
-        <mkdir dir="${appserver.compile.prefix}/var/lib/nginx" />
-        <!-- delete the unnecessary default html directory -->
-        <delete dir="${appserver.compile.prefix}/html"/>
-    </target>
-
-    <!-- ==================================================================== -->
-    <!-- Builds the redis server binaries                                     -->
-    <!-- ==================================================================== -->
-    <target name="build-redis-server" if="${redis.server.build}" description="Builds the redis server binaries.">
-        <antcall target="get-redis-server-src"/>
-        <unzip src="${lib.dir}/redis-${redis.server.version}.zip" dest="${php-target.dir}"/>
-        <chmod perm="755" dir="${php-target.dir}/redis-${redis.server.version}" includes="**/*"/>
-        <exec dir="${php-target.dir}/redis-${redis.server.version}" executable="make"/>
-        <exec dir="${php-target.dir}/redis-${redis.server.version}" executable="make">
-            <arg value="PREFIX=${appserver.compile.prefix}"/>
-            <arg value="install"/>
-        </exec>
-    </target>
-
-    <!-- ==================================================================== -->
     <!-- Copies the PHP Application Server runtime sources                    -->
     <!-- ==================================================================== -->
     <target name="copy-runtime" description="Copies the PHP Application Server runtime sources.">
@@ -971,10 +828,6 @@
         <antcall target="build-openssl"/>
         <antcall target="build-pcre"/>
         <antcall target="build-libicu"/>
-        <antcall target="build-memcached-server"/>
-        <antcall target="build-nginx-server"/>
-        <antcall target="build-httpd-server"/>
-        <antcall target="build-redis-server"/>
 
     	<!-- prepare the PECL extensions -->
         <antcall target="prepare-pecl-extension"/>

@@ -34,7 +34,6 @@ Depends: libc6,
   make,
   autoconf,
   git,
-  redis-server,
   memcached,
   libldap2-dev,
   libxslt1.1
