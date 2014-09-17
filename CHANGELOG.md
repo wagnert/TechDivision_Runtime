@@ -1,3 +1,30 @@
+# Version 1.0.0
+
+## Bugfixes
+
+* Add --with-mysql-sock=/var/run/mysqld/mysqld.sock to configure statement for linux build in build.linux.properties
+* Set sendmail_path = /usr/sbin/sendmail -t -i as default for Linux/Mac OS X in etc/php.ini
+* Bugfix for message "start-stop-daemon: warning: this system is not able to track process names longer than 15 characters, please use --exec instead of --name." in PHP-FPM start/stop script
+
+## Features
+
+* Add simple test script var/www/sendmail-test.php to test sending mails
+* Update PHP to version 5.5.16
+* Add more detailed description in Debian Linux control file under buildfiles/debian/DEBIAN/control
+* Add possibility to set custom status code for redirects in techdivision/rewritemodule package => analog apache mod_rewrite
+* Add support for relative redirects in techdivision/rewritemodule package => analog apache mod_rewrite
+
+# Version 0.9.1
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Allow bean lookup with short class name only
+* Now use InitialContext class for bean lookup in techdivision/persistencecontainer and techdivision/messagequeue package
+
 # Version 0.9.0
 
 ## Bugfixes
