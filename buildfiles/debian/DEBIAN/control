@@ -41,4 +41,4 @@ Depends: libc6,
 Architecture: ${appserver.architecture}
 Version: ${appserver.version}-${appserver.version.suffix}${build.number}
 Homepage: http://appserver.io
-Description: Multithreaded Application Server for PHP, written in PHP
+Description: appserver.io provides a multithreaded application server for PHP, written in PHP. The package basically provides either a webserver, a servlet-engine, a persistence-container and a message-queue.
