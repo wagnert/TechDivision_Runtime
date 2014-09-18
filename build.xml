@@ -1496,7 +1496,7 @@
     <!-- ==================================================================== -->
     <target name="WIN-prepare-php-src" depends="get-php-src" description="Unzip the PHP source into the development dir.">
         <!-- Unzip the php source into the sdk environment -->
-        <unzip src="${lib.dir}/php-${appserver.php.version}-Win32-VC${win.compiler-version}-${win.os.architecture}.zip" dest="${win.php-buildtree.dir}" failonerror="true" />
+        <unzip src="${lib.dir}/php-${appserver.php.version}-Win32-VC${win.compiler-version}-${win.os.architecture}.zip" dest="${win.php-buildtree.dir}" />
     </target>
 
     <!-- ==================================================================== -->
