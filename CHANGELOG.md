@@ -2,6 +2,7 @@
 
 ## Bugfixes
 
+* Bugfixing invalid upload_tmp_dir setting for Windows in buildfiles/win/appserver/php/php.ini
 * Add --with-mysql-sock=/var/run/mysqld/mysqld.sock to configure statement for linux build in build.linux.properties
 * Set sendmail_path = /usr/sbin/sendmail -t -i as default for Linux/Mac OS X in etc/php.ini
 * Bugfix for message "start-stop-daemon: warning: this system is not able to track process names longer than 15 characters, please use --exec instead of --name." in PHP-FPM start/stop script
