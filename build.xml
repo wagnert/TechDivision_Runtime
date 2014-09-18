@@ -1492,17 +1492,17 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Untar the PHP source into the development dir                        -->
+    <!-- Unzip the PHP source into the development dir                        -->
     <!-- ==================================================================== -->
-    <target name="WIN-prepare-php-src" depends="get-php-src" description="Untar the PHP source into the development dir.">
-        <!-- Untar the php source into the sdk environment -->
+    <target name="WIN-prepare-php-src" depends="get-php-src" description="Unzip the PHP source into the development dir.">
+        <!-- Unzip the php source into the sdk environment -->
         <unzip src="${lib.dir}/php-${appserver.php.version}-Win32-VC${win.compiler-version}-${win.os.architecture}.zip" dest="${win.php-buildtree.dir}" failonerror="true" />
     </target>
 
     <!-- ==================================================================== -->
     <!-- Unzip the php build dependencies into the development dir            -->
     <!-- ==================================================================== -->
-    <target name="WIN-prepare-php-build-deps" depends="WIN-get-php-build-deps,WIN-check-7zip-present" description="Get Windows PHP sources by given version number.">
+    <target name="WIN-prepare-php-build-deps" depends="WIN-get-php-build-deps,WIN-check-7zip-present" description="Unzip the php build dependencies into the development dir.">
         <!-- Unzip the php build dependencies into the sdk environment -->
         <exec dir="${win.build-workspace.dir}" executable="${win.7zip-cmd.dir}/7z">
             <arg line="x deps-${appserver.php.major-version}-vc${win.compiler-version}-${win.os.architecture}.7z -o${win.php-buildtree.dir}"/>
@@ -1604,16 +1604,12 @@
             <arg value="/C"/>
             <arg value="prepare_php_sdk.bat"/>
         </exec>
-        <!-- Download the PHP sources and copy it into the SDK environment -->
-        <antcall target="WIN-prepare-php-src"/>
-        <!-- Download the PHP build dependencies and copy them into the SDK environment -->
-        <antcall target="WIN-prepare-php-build-deps"/>
     </target>
 
     <!-- ==================================================================== -->
     <!-- Will create binaries which cannot be downloaded as .dll. 		      -->
     <!-- ==================================================================== -->
-    <target name="WIN-build-binaries" depends="WIN-prepare-php-sdk, WIN-expand-scripts" description="Will create binaries which cannot be downloaded as .dll.">
+    <target name="WIN-build-binaries" depends="WIN-prepare-php-src, WIN-prepare-php-build-deps, WIN-prepare-php-sdk, WIN-expand-scripts" description="Will create binaries which cannot be downloaded as .dll.">
 
         <!-- Prepare the appserve src as we need it -->
         <antcall target="WIN-prepare-ext-appserver-src"/>
