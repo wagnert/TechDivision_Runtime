@@ -9,15 +9,15 @@
 :: @author Bernhard Wick b.wick@techdivision.com
 
 :: Call the Visual Studio command prompt to set our environment
-cd ${win.native-tools-cmd.dir}
+cd "${win.native-tools-cmd.dir}"
 call "vcvarsall.bat" ${win.os.architecture}
 
 :: Go back to the PHP SDK dir and set the environment there
-cd ${win.php-sdk.dir}\bin
+cd "${win.php-sdk.dir}\bin"
 call "phpsdk_setvars.bat"
 
 :: Go to the PHP src dir and do the actual building
-cd ${win.php-buildtree.dir}\php-${appserver.php.version}
+cd "${win.php-buildtree.dir}\php-${appserver.php.version}"
 call "buildconf"
 call "configure" ${win.binaries.config-string}
 call "nmake"
