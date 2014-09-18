@@ -3,7 +3,5 @@
 /opt/appserver/sbin/appserverctl stop
 /opt/appserver/sbin/appserver-watcherctl stop
 /opt/appserver/sbin/appserver-php5-fpmctl stop
-/opt/appserver/sbin/memcachedctl stop
-/opt/appserver/sbin/redisctl stop
 
 exit 0
