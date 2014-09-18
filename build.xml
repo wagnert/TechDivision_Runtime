@@ -1492,11 +1492,11 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Unzip the PHP source into the development dir                        -->
+    <!-- Untar the PHP source into the development dir                        -->
     <!-- ==================================================================== -->
-    <target name="WIN-prepare-php-src" depends="get-php-src" description="Unzip the PHP source into the development dir.">
-        <!-- Unzip the php source into the sdk environment -->
-        <unzip src="${lib.dir}/php-${appserver.php.version}-Win32-VC${win.compiler-version}-${win.os.architecture}.zip" dest="${win.php-buildtree.dir}" />
+    <target name="WIN-prepare-php-src" depends="get-php-src" description="Untar the PHP source into the development dir.">
+        <!-- Untar the php source into the sdk environment -->
+        <untar src="${lib.dir}/php-${appserver.php.version}.tar.gz" dest="${win.php-buildtree.dir}" compression="gzip"/>
     </target>
 
     <!-- ==================================================================== -->
