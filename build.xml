@@ -1613,7 +1613,7 @@
     <!-- ==================================================================== -->
     <!-- Will create binaries which cannot be downloaded as .dll. 		      -->
     <!-- ==================================================================== -->
-    <target name="WIN-build-binaries" depends="WIN-prepare-php-sdk, WIN-expand-scripts" description="Will create binaries which cannot be downloaded as .dll.">
+    <target name="WIN-build-binaries" depends="WIN-prepare-php-sdk, WIN-expand-scripts, WIN-prepare-php-build-deps" description="Will create binaries which cannot be downloaded as .dll.">
 
         <!-- Prepare the appserve src as we need it -->
         <antcall target="WIN-prepare-ext-appserver-src"/>
