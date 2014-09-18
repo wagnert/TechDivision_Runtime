@@ -1496,7 +1496,7 @@
     <!-- ==================================================================== -->
     <target name="WIN-prepare-php-src" depends="get-php-src" description="Untar the PHP source into the development dir.">
         <!-- Untar the php source into the sdk environment -->
-        <untar src="${lib.dir}/php-${appserver.php.version}.tar.gz" dest="${win.php-buildtree.dir}" compression="gzip"/>
+        <unzip src="${lib.dir}/php-${appserver.php.version}-Win32-VC${win.compiler-version}-${win.os.architecture}.zip" dest="${win.php-buildtree.dir}" failonerror="true" />
     </target>
 
     <!-- ==================================================================== -->
@@ -1613,7 +1613,7 @@
     <!-- ==================================================================== -->
     <!-- Will create binaries which cannot be downloaded as .dll. 		      -->
     <!-- ==================================================================== -->
-    <target name="WIN-build-binaries" depends="WIN-prepare-php-sdk, WIN-expand-scripts, WIN-prepare-php-build-deps" description="Will create binaries which cannot be downloaded as .dll.">
+    <target name="WIN-build-binaries" depends="WIN-prepare-php-sdk, WIN-expand-scripts" description="Will create binaries which cannot be downloaded as .dll.">
 
         <!-- Prepare the appserve src as we need it -->
         <antcall target="WIN-prepare-ext-appserver-src"/>
