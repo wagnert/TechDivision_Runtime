@@ -1,1 +1,0 @@
-/opt/appserver/bin/php /opt/appserver/bin/composer.phar --working-dir=/opt/appserver/app/code $@

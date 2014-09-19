@@ -1115,8 +1115,9 @@
     <!-- Install ApplicationServer packages                                   -->
     <!-- ==================================================================== -->
 	<target name="install-sources" depends="install-composer" description="Install ApplicationServer packages.">
+		<mkdir dir="${php-target.dir}/re${appserver.compile.prefix}" />
         <exec dir="${appserver.compile.prefix}/app/code" executable="${appserver.compile.prefix}/bin/php">
-            <arg line="${appserver.compile.prefix}/bin/composer.phar --no-interaction update"/>
+            <arg line="${appserver.compile.prefix}/bin/composer.phar --no-interaction create-project appserver-io/meta ${php-target.dir}/re${appserver.compile.prefix} 1.0.0-alpha --stability=alpha "/>
         </exec>
 	</target>
 
@@ -1125,7 +1126,7 @@
     <!-- ==================================================================== -->
     <target name="install-demo-project" depends="install-sources" description="Install the ApplicationServer demo project.">
         <exec dir="${appserver.compile.prefix}" executable="${appserver.compile.prefix}/bin/php">
-            <arg line="${appserver.compile.prefix}/bin/composer.phar --no-interaction create-project techdivision/techdivision_applicationserverproject ${appserver.compile.prefix}/webapps/demo dev-master"/>
+            <arg line="${appserver.compile.prefix}/bin/composer.phar --no-interaction create-project techdivision/techdivision_applicationserverproject ${php-target.dir}/re${appserver.compile.prefix}/webapps/demo dev-master"/>
         </exec>
     	<!-- we'll also deliver the default webapps -->
     	<antcall target="deploy-default-webapps" />
@@ -1288,7 +1289,7 @@
     <!-- Copy build files to target directory                                 -->
     <!-- ==================================================================== -->
     <target name="move-build-to-target" description="Copies build files to target directory.">
-        <mkdir dir="${php-target.dir}/re/opt" />
+        <!-- mkdir dir="${php-target.dir}/re/opt" / -->
     	<exec dir="${php-target.dir}" executable="mv">
     		<arg value="${appserver.compile.prefix}"/>
     		<arg value="${php-target.dir}/re/opt"/>
