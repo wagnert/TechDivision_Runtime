@@ -1134,7 +1134,7 @@
     <!-- ==================================================================== -->
     <target name="install-demo-project" unless="${runtime.only}" depends="install-sources" description="Install the ApplicationServer demo project.">
         <exec dir="${appserver.compile.prefix}" executable="${appserver.compile.prefix}/bin/php">
-            <arg line="${appserver.compile.prefix}/bin/composer.phar --no-interaction create-project techdivision/techdivision_applicationserverproject ${php-target.dir}/re${appserver.compile.prefix}/webapps/demo dev-master"/>
+        	<arg line="${appserver.compile.prefix}/bin/composer.phar --no-interaction create-project techdivision/techdivision_applicationserverproject ${appserver.compile.prefix}/webapps/demo dev-master"/>
         </exec>
     	<!-- we'll also deliver the default webapps -->
     	<antcall target="deploy-default-webapps" />
