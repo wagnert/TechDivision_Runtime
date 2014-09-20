@@ -1687,7 +1687,6 @@
             <fileset dir="${basedir}/buildfiles/win">
                 <include name="**/*"/>
             	<exclude name="appserver-izpack.xml"/>
-            	<exclude name="appserver/*.bat"/>
             </fileset>
         </copy>
 		<!-- copy IzPack configuration + .bat files to the target directory -->
