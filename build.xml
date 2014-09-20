@@ -1710,7 +1710,7 @@
             <arg line="clone ${meta.url} --branch=${meta.version} meta" />
         </exec>
         <!-- copy the sources to the target directory -->
-        <copy todir="${appserver.compile.prefix}">
+        <copy todir="${php-target.dir}/appserver">
             <fileset dir="${php-target.dir}/meta" defaultexcludes="false" includes="**/*"/>
         </copy>
         <!-- install the sources -->
