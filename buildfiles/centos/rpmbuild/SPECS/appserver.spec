@@ -33,19 +33,17 @@ Provides:   appserver
 ldconfig
 
 # Create temporary directory
-mkdir /opt/appserver/tmp
 mkdir /opt/appserver/etc/php-fpm.d
 
 # Set needed files as accessable for the configured user
-chown -R ${appserver.user}:${appserver.group} /opt/appserver/tmp
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/var
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/webapps
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/deploy
-chmod -R 775 /opt/appserver
 
 # Create composer symlink
 ln -s /opt/appserver/bin/composer.phar /opt/appserver/bin/composer
 
+# Set the permissions
 chmod 775 /etc/init.d/appserver
 chmod 775 /etc/init.d/appserver-watcher
 chmod 775 /etc/init.d/appserver-php5-fpm
