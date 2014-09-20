@@ -1114,7 +1114,7 @@
     <!-- ==================================================================== -->
     <!-- Install ApplicationServer packages                                   -->
     <!-- ==================================================================== -->
-	<target name="install-sources" unless="runtime.only" depends="install-composer" description="Install ApplicationServer packages.">
+	<target name="install-sources" unless="${runtime.only}" depends="install-composer" description="Install ApplicationServer packages.">
 		<!-- clone the sources from github -->
 		<exec dir="${php-target.dir}" executable="git">
 			<arg line="clone ${meta.url} --branch=${meta.version} meta" />
@@ -1132,7 +1132,7 @@
     <!-- ==================================================================== -->
     <!-- Install the ApplicationServer demo project                           -->
     <!-- ==================================================================== -->
-    <target name="install-demo-project" unless="runtime.only" depends="install-sources" description="Install the ApplicationServer demo project.">
+    <target name="install-demo-project" unless="${runtime.only}" depends="install-sources" description="Install the ApplicationServer demo project.">
         <exec dir="${appserver.compile.prefix}" executable="${appserver.compile.prefix}/bin/php">
             <arg line="${appserver.compile.prefix}/bin/composer.phar --no-interaction create-project techdivision/techdivision_applicationserverproject ${php-target.dir}/re${appserver.compile.prefix}/webapps/demo dev-master"/>
         </exec>
@@ -1143,7 +1143,7 @@
     <!-- ==================================================================== -->
     <!-- Deploys the ApplicationServer default webapps               		  -->
     <!-- ==================================================================== -->
-	<target name="deploy-default-webapps" unless="runtime.only" description="Deploys the ApplicationServer default webapps.">
+	<target name="deploy-default-webapps" unless="${runtime.only}" description="Deploys the ApplicationServer default webapps.">
     	<copy todir="${appserver.compile.prefix}/deploy">
     		<fileset dir="${basedir}/webapps">
     			<include name="*.phar"/>
