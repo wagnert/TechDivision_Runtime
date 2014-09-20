@@ -119,7 +119,7 @@
     <!-- ==================================================================== -->
     <target name="apidoc" description="Generates the API documentation.">
         <exec executable="phpdoc">
-            <arg line="-ct type -ue on -s on -t ${php-target.dir}/docs -o HTML:frames:earthli -d ${php-src.dir}/app/code/core"/>
+            <arg line="-ct type -ue on -s on -t ${php-target.dir}/docs -o HTML:frames:earthli -d ${php-src.dir}/vendor/techdivision"/>
         </exec>
     </target>
 
@@ -1705,9 +1705,17 @@
         <exec dir="${php-target.dir}" executable="${php-target.dir}/appserver/php/php">
             <arg line="installer -- --install-dir ${php-target.dir}/appserver/bin"/>
         </exec>
-		<!-- install appserver libraries with composer -->
-        <exec dir="${php-target.dir}/appserver/app/code" executable="${php-target.dir}/appserver/php/php">
-            <arg line="${php-target.dir}/appserver/bin/composer.phar --no-interaction update"/>
+        <!-- clone the sources from github -->
+        <exec dir="${php-target.dir}" executable="git">
+            <arg line="clone ${meta.url} --branch=${meta.version} meta" />
+        </exec>
+        <!-- copy the sources to the target directory -->
+        <copy todir="${appserver.compile.prefix}">
+            <fileset dir="${php-target.dir}/meta" defaultexcludes="false" includes="**/*"/>
+        </copy>
+        <!-- install the sources -->
+        <exec dir="${php-target.dir}/appserver" executable="${php-target.dir}/appserver/php/php">
+            <arg line="${php-target.dir}/appserver/bin/composer.phar install"/>
         </exec>
 		<!-- install the demo application -->
         <exec dir="${php-target.dir}/appserver" executable="${php-target.dir}/appserver/php/php">

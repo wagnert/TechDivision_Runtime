@@ -1,0 +1,1 @@
+call "php/php bin/composer.phar run-script post-install-cmd"
