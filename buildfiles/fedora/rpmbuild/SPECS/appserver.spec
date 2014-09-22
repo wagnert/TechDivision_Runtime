@@ -33,15 +33,12 @@ Provides:   appserver
 ldconfig
 
 # Create temporary directory
-mkdir /opt/appserver/tmp
 mkdir /opt/appserver/etc/php-fpm.d
 
 # Set needed files as accessable for the configured user
-chown -R ${appserver.user}:${appserver.group} /opt/appserver/tmp
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/var
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/webapps
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/deploy
-chmod -R 755 /opt/appserver
 
 # Make the link to our system systemd file
 ln -s /lib/systemd/system/appserver.service /etc/systemd/system/appserver.service
