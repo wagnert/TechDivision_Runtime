@@ -20,6 +20,13 @@
 		<modifier key="useHeadingPanel" value="yes" />
 	</guiprefs>
 
+    <panels>
+        <panel classname="TargetPanel" />
+        <panel classname="PacksPanel" />
+        <panel classname="InstallPanel" />
+        <panel classname="FinishPanel" />
+    </panels>
+
 	<packs>
 
 		<pack name="Core Files" required="yes">
