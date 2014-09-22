@@ -20,13 +20,6 @@
 		<modifier key="useHeadingPanel" value="yes" />
 	</guiprefs>
 
-	<panels>
-		<panel classname="TargetPanel" />
-		<panel classname="PacksPanel" />
-		<panel classname="InstallPanel" />
-		<panel classname="FinishPanel" />
-	</panels>
-
 	<packs>
 
 		<pack name="Core Files" required="yes">
@@ -34,7 +27,6 @@
 			<fileset dir="appserver" targetdir="${INSTALL_PATH}" override="true">
 				<exclude name="deploy/**" />
 			</fileset>
-			<executable targetfile="$INSTALL_PATH/scripts/postinstall.bat" stage="postinstall" />
 		</pack>
 
 		<pack name="API/Admin" required="no" preselected="yes">
