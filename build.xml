@@ -1364,7 +1364,7 @@
     <!-- ==================================================================== -->
     <target name="create-pkg" depends="install-demo-project" description="Creates a .pkg package with the local ApplicationServer runtime.">
     	<!-- execute the JMeter performance tests -->
-    	<antcall target="jmeter-run"/>
+    	<antcall target="run-performance-tests"/>
         <!-- copy build files to target directory -->
         <antcall target="move-build-to-target" />
         <!-- copy ioncube files to required directory -->
