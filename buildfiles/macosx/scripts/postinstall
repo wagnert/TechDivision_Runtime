@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# Create temporary directory
-mkdir /opt/appserver/etc/php-fpm.d
-
 # Create composer symlink
 ln -s /opt/appserver/bin/composer.phar /opt/appserver/bin/composer
 

@@ -1397,7 +1397,7 @@
             <arg value="${appserver.version}"/>
             <arg value="--identifier"/>
             <arg value="com.techdivision.appserver"/>
-            <arg value="${package.specific-dir}/${package.name}"/>
+            <arg value="${package.specific-dir}${package.name}"/>
         </exec>
     </target>
 
@@ -1421,7 +1421,7 @@
             <arg line="unload ${appserver.compile.prefix}/sbin/plist/io.appserver.appserver.plist"/>
         </exec>
         <exec executable="launchctl">
-            <arg line="unload -w ${appserver.compile.prefix}/sbin/plist/io.appserver.appserver-php5-fpm.plist"/>
+            <arg line="unload ${appserver.compile.prefix}/sbin/plist/io.appserver.appserver-php5-fpm.plist"/>
         </exec>
     </target>
 
