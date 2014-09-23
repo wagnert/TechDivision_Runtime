@@ -1363,6 +1363,8 @@
     <!-- Creates a .pkg package with the local ApplicationServer runtime      -->
     <!-- ==================================================================== -->
     <target name="create-pkg" depends="install-demo-project" description="Creates a .pkg package with the local ApplicationServer runtime.">
+    	<!-- execute the JMeter performance tests -->
+    	<antcall target="run-performance-tests"/>
         <!-- copy build files to target directory -->
         <antcall target="move-build-to-target" />
         <!-- copy ioncube files to required directory -->
@@ -1395,26 +1397,55 @@
             <arg value="${appserver.version}"/>
             <arg value="--identifier"/>
             <arg value="com.techdivision.appserver"/>
-            <arg value="${package.specific-dir}/${package.name}"/>
+            <arg value="${package.specific-dir}${package.name}"/>
         </exec>
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Deploys all packages related to the appserver base to               -->
+    <!-- Starts the recently builded application server instance on Mac OS X  -->
     <!-- ==================================================================== -->
-    <target name="deploy-all">
-        <parallel>
-            <exec dir="${basedir}" executable="ant"><arg value="deploy" /></exec>
-            <exec dir="${basedir}/../TechDivision_ApplicationServer" executable="ant"><arg value="deploy" /></exec>
-            <exec dir="${basedir}/../TechDivision_MessageQueue" executable="ant"><arg value="deploy" /></exec>
-            <exec dir="${basedir}/../TechDivision_MessageQueueClient" executable="ant"><arg value="deploy" /></exec>
-            <exec dir="${basedir}/../TechDivision_PersistenceContainer" executable="ant"><arg value="deploy" /></exec>
-            <exec dir="${basedir}/../TechDivision_PersistenceContainerClient" executable="ant"><arg value="deploy" /></exec>
-            <exec dir="${basedir}/../TechDivision_ServletContainer" executable="ant"><arg value="deploy" /></exec>
-            <exec dir="${basedir}/../TechDivision_Socket" executable="ant"><arg value="deploy" /></exec>
-            <exec dir="${basedir}/../TechDivision_Stream" executable="ant"><arg value="deploy" /></exec>
-       </parallel>
+    <target name="start-appserver-mac" description="Starts the recently builded application server instance on Mac OS X.">
+        <exec executable="launchctl">
+            <arg line="load -w ${appserver.compile.prefix}/sbin/plist/io.appserver.appserver.plist"/>
+        </exec>
+        <exec executable="launchctl">
+            <arg line="load -w ${appserver.compile.prefix}/sbin/plist/io.appserver.appserver-php5-fpm.plist"/>
+        </exec>
+	</target>
+
+    <!-- ==================================================================== -->
+    <!-- Stops the recently builded application server instance on Mac OS X   -->
+    <!-- ==================================================================== -->
+    <target name="stop-appserver-mac" description="Stops the recently builded application server instance on Mac OS X.">
+        <exec executable="launchctl">
+            <arg line="unload ${appserver.compile.prefix}/sbin/plist/io.appserver.appserver.plist"/>
+        </exec>
+        <exec executable="launchctl">
+            <arg line="unload ${appserver.compile.prefix}/sbin/plist/io.appserver.appserver-php5-fpm.plist"/>
+        </exec>
     </target>
+
+    <!-- ==================================================================== -->
+    <!-- Executes the JMeter testsuite of the example application             -->
+    <!-- ==================================================================== -->
+	<target name="run-performance-tests" description="Executes the JMeter testsuite of the example application.">
+		<!-- download and extract JMeter -->
+		<get src="ftp://apache.mirrors.pair.com/jmeter/binaries/apache-jmeter-2.11.tgz" dest="${php-target.dir}"/>
+		<untar src="${php-target.dir}/apache-jmeter-2.11.tgz" dest="${php-target.dir}" compression="gzip"/>
+        <chmod perm="0755" file="${php-target.dir}/apache-jmeter-2.11/bin/jmeter"/>
+        <!-- start the application server instance -->
+        <antcall target="start-appserver-${os.family}"/>
+	    <!-- wait until the application server has been started -->
+		<waitfor maxwait="10" maxwaitunit="minute" checkevery="500" checkeveryunit="millisecond">
+			<socket port="9080" server="127.0.0.1"/>
+		</waitfor>
+		<!-- execute the JMeter testsuite -->
+        <exec executable="${php-target.dir}/apache-jmeter-2.11/bin/jmeter" >
+            <arg line="-n -t ${appserver.compile.prefix}/webapps/example/jmeter/example-testplan.jmx"/>
+        </exec>
+		<!-- stop the application server -->
+        <antcall target="stop-appserver-${os.family}"/>
+	</target>
 
     <!-- ==================================================================== -->
     <!-- Check if Windows PHP binaries has been downloaded yet   		 	  -->
@@ -1619,7 +1650,6 @@
     <!-- Will create binaries which cannot be downloaded as .dll. 		      -->
     <!-- ==================================================================== -->
     <target name="WIN-build-binaries" depends="WIN-prepare-php-src, WIN-prepare-php-build-deps, WIN-prepare-php-sdk, WIN-expand-scripts" description="Will create binaries which cannot be downloaded as .dll.">
-
         <!-- Prepare the appserve src as we need it -->
         <antcall target="WIN-prepare-ext-appserver-src"/>
         <!-- Do the thing -->
@@ -1633,10 +1663,8 @@
                 <include name="**/*.dll" />
             </fileset>
         </copy>
-
         <!-- For some special extensions we have to attach version numbers -->
         <move file="${custom-lib.dir}/php_appserver.dll" tofile="${custom-lib.dir}/php_appserver-${appserver.ext-appserver.version}.dll"/>
-
         <!-- Fail if certain binaries did not get built -->
         <antcall target="WIN-check-ext-appserver-built"/>
     </target>

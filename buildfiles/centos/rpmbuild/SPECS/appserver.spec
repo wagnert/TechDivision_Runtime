@@ -32,9 +32,6 @@ Provides:   appserver
 # Reload shared library list
 ldconfig
 
-# Create temporary directory
-mkdir /opt/appserver/etc/php-fpm.d
-
 # Set needed files as accessable for the configured user
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/var
 chown -R ${appserver.user}:${appserver.group} /opt/appserver/webapps
