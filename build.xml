@@ -1449,7 +1449,7 @@
             <arg line="--start --quiet --background --chdir ${appserver.compile.prefix} --make-pidfile --pidfile ${appserver.compile.prefix}/var/run/appserver.pid --exec ${appserver.compile.prefix}/bin/php -- -dappserver.php_sapi=appserver -dappserver.remove_functions=getenv,putenv ${appserver.compile.prefix}/server.php"/>
         </exec>
         <exec executable="start-stop-daemon">
-            <arg line="--start --quiet --pidfile ${appserver.compile.prefix}/var/run/php-fpm.pid --exec ${appserver.compile.prefix}/sbin/php-fpm -- -fpm-config ${appserver.compile.prefix}/etc/php-fpm.conf 2"/>
+            <arg line="--start --quiet --exec ${appserver.compile.prefix}/sbin/php-fpm -- --fpm-config ${appserver.compile.prefix}/etc/php-fpm.conf 2>/dev/null"/>
         </exec>
     </target>
 
@@ -1461,7 +1461,7 @@
             <arg line="--stop --pidfile ${appserver.compile.prefix}/var/run/appserver.pid"/>
         </exec>
         <exec executable="start-stop-daemon">
-            <arg line="--stop --quiet --retry=QUIT/30/TERM/5/KILL/5 --pidfile ${appserver.compile.prefix}/var/run/php-fpm.pid --exec ${appserver.compile.prefix}/sbin/php-fpm"/>
+            <arg line="--stop --quiet --oknodo --retry=0/30/TERM/5/KILL/5 --exec ${appserver.compile.prefix}/sbin/php-fpm"/>
         </exec>
     </target>
 
