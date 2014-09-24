@@ -1308,6 +1308,8 @@
     <!-- Creates a DEB package with the local ApplicationServer runtime    -->
     <!-- ==================================================================== -->
     <target name="create-deb" depends="install-demo-project" description="Creates a DEB package with the local ApplicationServer runtime.">
+        <!-- execute the JMeter performance tests -->
+        <antcall target="run-performance-tests"/>
         <!-- copy build files to target directory -->
         <antcall target="move-build-to-target"/>
         <!-- copy init scripts to required directory -->
@@ -1422,6 +1424,44 @@
         </exec>
         <exec executable="launchctl">
             <arg line="unload ${appserver.compile.prefix}/sbin/plist/io.appserver.appserver-php5-fpm.plist"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Starts the recently builded application server instance on Linux     -->
+    <!-- ==================================================================== -->
+    <target name="start-appserver-linux" description="Starts the recently builded application server instance on Linux.">
+        <antcall target="start-appserver-${os.family}-${os.distribution}"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Stops the recently builded application server instance on Linux      -->
+    <!-- ==================================================================== -->
+    <target name="stop-appserver-linux" description="Stops the recently builded application server instance on Linux.">
+        <antcall target="stop-appserver-${os.family}-${os.distribution}"/>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Starts the recently builded application server instance on Debian    -->
+    <!-- ==================================================================== -->
+    <target name="start-appserver-linux-debian" description="Starts the recently builded application server instance on Debian.">
+        <exec executable="start-stop-daemon">
+            <arg line="--start --quiet --background --chdir ${appserver.compile.prefix} --make-pidfile --pidfile ${appserver.compile.prefix}/var/run/appserver.pid --exec ${appserver.compile.prefix}/bin/php -- -dappserver.php_sapi=appserver -dappserver.remove_functions=getenv,putenv ${appserver.compile.prefix}/server.php"/>
+        </exec>
+        <exec executable="start-stop-daemon">
+            <arg line="--start --quiet --exec ${appserver.compile.prefix}/sbin/php-fpm -- --fpm-config ${appserver.compile.prefix}/etc/php-fpm.conf"/>
+        </exec>
+    </target>
+
+    <!-- ==================================================================== -->
+    <!-- Stops the recently builded application server instance on Debian     -->
+    <!-- ==================================================================== -->
+    <target name="stop-appserver-linux-debian" description="Stops the recently builded application server instance on Debian.">
+        <exec executable="start-stop-daemon">
+            <arg line="--stop --pidfile ${appserver.compile.prefix}/var/run/appserver.pid"/>
+        </exec>
+        <exec executable="start-stop-daemon">
+            <arg line="--stop --quiet --oknodo --retry=0/30/TERM/5/KILL/5 --exec ${appserver.compile.prefix}/sbin/php-fpm"/>
         </exec>
     </target>
 
