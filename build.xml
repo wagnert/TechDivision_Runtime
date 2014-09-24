@@ -1433,7 +1433,7 @@
     <target name="start-appserver-linux" description="Starts the recently builded application server instance on Linux.">
         <!-- we need to set permissions to enable logging -->
         <chown file="${appserver.compile.prefix}/var" owner="${appserver.user}" type="dir" />
-        <chgrp file="${appserver.compile.prefix}/var" owner="${appserver.group}" type="dir" />
+        <chgrp file="${appserver.compile.prefix}/var" group="${appserver.group}" type="dir" />
     	<!-- start the server with the distribution specific start scripts -->
         <antcall target="start-appserver-${os.family}-${os.distribution}"/>
     </target>
@@ -1446,7 +1446,7 @@
         <antcall target="stop-appserver-${os.family}-${os.distribution}"/>
         <!-- we need to re-set permissions -->
         <chown file="${appserver.compile.prefix}/var" owner="root" type="dir" />
-        <chgrp file="${appserver.compile.prefix}/var" owner="root" type="dir" />
+        <chgrp file="${appserver.compile.prefix}/var" group="root" type="dir" />
     </target>
 
     <!-- ==================================================================== -->
