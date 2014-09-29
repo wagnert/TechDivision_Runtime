@@ -368,6 +368,15 @@
     </target>
 
     <!-- ==================================================================== -->
+    <!-- Get the latest versions of the default webapps                       -->
+    <!-- ==================================================================== -->
+    <target name="get-default-webapps" depends="prepare" description="Get the latest versions of the default webapps">
+        <get src="{webapps.download.baseurl}{webapps.name.admin}-latest.phar" dest="${basedir}/webapps/{webapps.name.admin}.phar" usetimestamp="true"/>
+        <get src="{webapps.download.baseurl}{webapps.name.api}-latest.phar" dest="${basedir}/webapps/{webapps.name.api}.phar" usetimestamp="true"/>
+        <get src="{webapps.download.baseurl}{webapps.name.example}-latest.phar" dest="${basedir}/webapps/{webapps.name.example}.phar" usetimestamp="true"/>
+    </target>
+
+    <!-- ==================================================================== -->
     <!-- Get PHP source package by given version number		  		          -->
     <!-- ==================================================================== -->
     <target name="get-php-src" depends="check-php-src-present,prepare" unless="php-src.present" description="Get PHP source package by given version number">
@@ -1130,20 +1139,9 @@
 	</target>
 
     <!-- ==================================================================== -->
-    <!-- Install the ApplicationServer demo project                           -->
-    <!-- ==================================================================== -->
-    <target name="install-demo-project" unless="${runtime.only}" depends="install-sources" description="Install the ApplicationServer demo project.">
-        <exec dir="${appserver.compile.prefix}" executable="${appserver.compile.prefix}/bin/php">
-        	<arg line="${appserver.compile.prefix}/bin/composer.phar --no-interaction create-project techdivision/techdivision_applicationserverproject ${appserver.compile.prefix}/webapps/demo dev-master"/>
-        </exec>
-    	<!-- we'll also deliver the default webapps -->
-    	<antcall target="deploy-default-webapps" />
-    </target>
-
-    <!-- ==================================================================== -->
     <!-- Deploys the ApplicationServer default webapps               		  -->
     <!-- ==================================================================== -->
-	<target name="deploy-default-webapps" unless="${runtime.only}" description="Deploys the ApplicationServer default webapps.">
+	<target name="deploy-default-webapps" unless="${runtime.only}" depends="get-default-webapps, install-sources" description="Deploys the ApplicationServer default webapps.">
     	<copy todir="${appserver.compile.prefix}/deploy">
     		<fileset dir="${basedir}/webapps">
     			<include name="*.phar"/>
@@ -1307,7 +1305,7 @@
     <!-- ==================================================================== -->
     <!-- Creates a DEB package with the local ApplicationServer runtime    -->
     <!-- ==================================================================== -->
-    <target name="create-deb" depends="install-demo-project" description="Creates a DEB package with the local ApplicationServer runtime.">
+    <target name="create-deb" depends="deploy-default-webapps" description="Creates a DEB package with the local ApplicationServer runtime.">
         <!-- execute the JMeter performance tests -->
         <antcall target="run-performance-tests"/>
         <!-- copy build files to target directory -->
@@ -1339,7 +1337,7 @@
     <!-- ==================================================================== -->
     <!-- Creates a RPM package with the local ApplicationServer runtime       -->
     <!-- ==================================================================== -->
-    <target name="create-rpm" depends="install-demo-project" description="Creates a RPM package with the local ApplicationServer runtime.">
+    <target name="create-rpm" depends="deploy-default-webapps" description="Creates a RPM package with the local ApplicationServer runtime.">
         <!-- copy build files to target directory -->
         <antcall target="move-build-to-target"/>
 		<!-- copy distribution build files -->
@@ -1364,7 +1362,7 @@
     <!-- ==================================================================== -->
     <!-- Creates a .pkg package with the local ApplicationServer runtime      -->
     <!-- ==================================================================== -->
-    <target name="create-pkg" depends="install-demo-project" description="Creates a .pkg package with the local ApplicationServer runtime.">
+    <target name="create-pkg" depends="deploy-default-webapps" description="Creates a .pkg package with the local ApplicationServer runtime.">
     	<!-- execute the JMeter performance tests -->
     	<antcall target="run-performance-tests"/>
         <!-- copy build files to target directory -->
@@ -1404,7 +1402,7 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Starts the recently builded application server instance on Mac OS X  -->
+    <!-- Starts the recently built application server instance on Mac OS X  -->
     <!-- ==================================================================== -->
     <target name="start-appserver-mac" description="Starts the recently builded application server instance on Mac OS X.">
         <exec executable="launchctl">
@@ -1416,7 +1414,7 @@
 	</target>
 
     <!-- ==================================================================== -->
-    <!-- Stops the recently builded application server instance on Mac OS X   -->
+    <!-- Stops the recently built application server instance on Mac OS X   -->
     <!-- ==================================================================== -->
     <target name="stop-appserver-mac" description="Stops the recently builded application server instance on Mac OS X.">
         <exec executable="launchctl">
@@ -1428,7 +1426,7 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Starts the recently builded application server instance on Linux     -->
+    <!-- Starts the recently built application server instance on Linux     -->
     <!-- ==================================================================== -->
     <target name="start-appserver-linux" description="Starts the recently builded application server instance on Linux.">
     	<!-- start the server with the distribution specific start scripts -->
@@ -1440,7 +1438,7 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Stops the recently builded application server instance on Linux      -->
+    <!-- Stops the recently built application server instance on Linux      -->
     <!-- ==================================================================== -->
     <target name="stop-appserver-linux" description="Stops the recently builded application server instance on Linux.">
         <!-- stop the server with the distribution specific start scripts -->
@@ -1452,7 +1450,7 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Starts the recently builded application server instance on Debian    -->
+    <!-- Starts the recently built application server instance on Debian    -->
     <!-- ==================================================================== -->
     <target name="start-appserver-linux-debian" description="Starts the recently builded application server instance on Debian.">
         <exec executable="start-stop-daemon">
@@ -1464,7 +1462,7 @@
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Stops the recently builded application server instance on Debian     -->
+    <!-- Stops the recently built application server instance on Debian     -->
     <!-- ==================================================================== -->
     <target name="stop-appserver-linux-debian" description="Stops the recently builded application server instance on Debian.">
         <exec executable="start-stop-daemon">
