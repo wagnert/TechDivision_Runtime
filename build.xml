@@ -394,7 +394,7 @@
     <!-- Get PECL pthreads source package by given version number		      -->
     <!-- ==================================================================== -->
     <target name="get-pthreads-src" depends="check-pthreads-src-present" unless="pthreads-src.present" description="Get PECL pthreads source package by given version number">
-        <get src="http://pecl.php.net/get/pthreads-${appserver.pthreads.version}.tgz" dest="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" usetimestamp="true"/>
+        <get src="https://github.com/appserver-io/pthreads/archive/v${appserver.pthreads.version}.tar.gz" dest="${lib.dir}/pthreads-${appserver.pthreads.version}.tgz" usetimestamp="true"/>
     </target>
 
     <!-- ==================================================================== -->
