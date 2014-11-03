@@ -1,3 +1,13 @@
+# Version 1.0.1
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Apps included in a default environment will now be downloaded in their latest, or a specified version
+
 # Version 1.0.0
 
 ## Bugfixes
