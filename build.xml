@@ -1478,8 +1478,8 @@
     <!-- ==================================================================== -->
 	<target name="run-performance-tests" description="Executes the JMeter testsuite of the example application.">
 		<!-- download and extract JMeter -->
-		<get src="ftp://apache.mirrors.pair.com/jmeter/binaries/apache-jmeter-2.11.tgz" dest="${php-target.dir}"/>
-		<untar src="${php-target.dir}/apache-jmeter-2.11.tgz" dest="${php-target.dir}" compression="gzip"/>
+		<get src="${jmeter.download.url}" dest="${php-target.dir}"/>
+		<untar src="${php-target.dir}/apache-jmeter-${jmeter.version}.tgz" dest="${php-target.dir}" compression="gzip"/>
         <chmod perm="0755" file="${php-target.dir}/apache-jmeter-2.11/bin/jmeter"/>
         <!-- start the application server instance -->
         <antcall target="start-appserver-${os.family}"/>
