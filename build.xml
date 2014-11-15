@@ -1488,7 +1488,7 @@
 			<socket port="9080" server="127.0.0.1"/>
 		</waitfor>
 		<!-- execute the JMeter testsuite -->
-        <exec executable="${php-target.dir}/apache-jmeter-2.11/bin/jmeter" >
+        <exec executable="${php-target.dir}/apache-jmeter-${jmeter.version}/bin/jmeter" >
             <arg line="-n -t ${appserver.compile.prefix}/webapps/example/jmeter/example-testplan.jmx -Joutput_dir=${php-target.dir}"/>
         </exec>
 		<!-- stop the application server -->
